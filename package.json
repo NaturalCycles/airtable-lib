@@ -1,0 +1,42 @@
+{
+  "name": "@naturalcycles/airtable-lib",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "@naturalcycles/semantic-release": "^1.0.0",
+    "@naturalcycles/shared-module": "^5.10.0",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.4",
+    "jest": "^24.7.1",
+    "jest-junit": "^6.3.0",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.3"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/test",
+    "!src/**/*.test.ts",
+    "!src/**/__snapshots__",
+    "!src/**/__exclude"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NaturalCycles/airtable-lib"
+  },
+  "engines": {
+    "node": ">=10.13"
+  },
+  "version": "0.0.0",
+  "description": "",
+  "author": "Natural Cycles Team",
+  "license": "MIT"
+}
