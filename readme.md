@@ -1,6 +1,6 @@
 ## @naturalcycles/airtable-lib
 
-> Node.js library
+> High-level API and CLI for Airtable.
 
 [![npm](https://img.shields.io/npm/v/@naturalcycles/airtable-lib/latest.svg)](https://www.npmjs.com/package/@naturalcycles/airtable-lib)
 [![](https://circleci.com/gh/NaturalCycles/airtable-lib.svg?style=shield&circle-token=123)](https://circleci.com/gh/NaturalCycles/airtable-lib)

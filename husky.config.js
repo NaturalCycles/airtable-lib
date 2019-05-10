@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@naturalcycles/shared-module/cfg/husky.config'),
+  ...require('@naturalcycles/dev-lib/cfg/husky.config'),
 }

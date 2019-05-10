@@ -1,19 +1,20 @@
 {
   "name": "@naturalcycles/airtable-lib",
   "scripts": {},
-  "dependencies": {},
+  "dependencies": {
+    "@hapi/joi": "^15.0.2",
+    "@naturalcycles/js-lib": "^5.0.1",
+    "@naturalcycles/nodejs-lib": "^5.1.0",
+    "@naturalcycles/promise-lib": "^2.2.0",
+    "airtable": "^0.6.0",
+    "type-fest": "^0.4.1"
+  },
   "devDependencies": {
+    "@naturalcycles/dev-lib": "^7.4.0",
     "@naturalcycles/semantic-release": "^1.0.0",
-    "@naturalcycles/shared-module": "^5.10.0",
-    "@types/jest": "^24.0.11",
-    "@types/node": "^11.13.4",
-    "jest": "^24.7.1",
-    "jest-junit": "^6.3.0",
-    "prettier": "^1.16.4",
-    "ts-jest": "^24.0.2",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.15.0",
-    "typescript": "^3.4.3"
+    "@types/node": "^12.0.0",
+    "dotenv": "^8.0.0",
+    "jest": "^24.7.1"
   },
   "files": [
     "dist",
@@ -36,7 +37,13 @@
     "node": ">=10.13"
   },
   "version": "0.0.0",
-  "description": "",
+  "description": "High-level API and CLI for Airtable",
+  "keywords": [
+    "airtable",
+    "api",
+    "cli",
+    "json"
+  ],
   "author": "Natural Cycles Team",
   "license": "MIT"
 }

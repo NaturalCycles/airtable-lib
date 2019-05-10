@@ -18,11 +18,11 @@ workflows:
   version: 2
   default-workflow:
     jobs:
-      - tools/build-publish-lib-job:
+      - tools/publish-job:
           filters:
             branches:
               only: master
-      - tools/test-lib-job
+      - tools/test-job
 
   nightly-workflow:
     triggers:
@@ -32,4 +32,4 @@ workflows:
             branches:
               only: master
     jobs:
-      - tools/nightly-lib-job
+      - tools/nightly-job
