@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.0.0...v1.1.0) (2019-05-17)
+
+
+### Features
+
+* progress ([e015f20](https://github.com/NaturalCycles/airtable-lib/commit/e015f20))
+
 # 1.0.0 (2019-05-10)
 
 
