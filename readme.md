@@ -16,3 +16,8 @@
 - `main: dist/index.js`: commonjs, es2018
 - `types: dist/index.d.ts`: typescript types
 - `/src` folder with source `*.ts` files included
+
+# todo
+
+- [ ] joi to fill default values (e.g empty array, boolean-false, etc)
+- [ ] CLI: airtable2json, json2airtable (baseSchema with joiValidation though?)

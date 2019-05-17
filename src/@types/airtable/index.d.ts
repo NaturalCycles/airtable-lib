@@ -1,18 +1,18 @@
 declare module 'airtable' {
-  export function base (baseId: string): AirtableLibBase
+  export function base (baseId: string): AirtableApiBase
 
-  export type AirtableLibBase = <T extends object>(tableName: string) => AirtableLibTable<T>
+  export type AirtableApiBase = <T extends object>(tableName: string) => AirtableApiTable<T>
 
-  export interface AirtableLibTable<T> {
-    select (selectOpts?: AirtableSelectOpts<T>): AirtableQuery<T>
+  export interface AirtableApiTable<T> {
+    select (selectOpts?: AirtableApiSelectOpts<T>): AirtableApiQuery<T>
 
-    find (airtableId: string): Promise<AirtableLibRecord<T> | undefined>
+    find (airtableId: string): Promise<AirtableApiRecord<T> | undefined>
 
-    create (record: T): Promise<AirtableLibRecord<T>>
+    create (record: Partial<T>): Promise<AirtableApiRecord<T>>
 
-    update (airtableId: string, patch: Partial<T>): Promise<AirtableLibRecord<T>>
+    update (airtableId: string, patch: Partial<T>): Promise<AirtableApiRecord<T>>
 
-    replace (airtableId: string, patch: Partial<T>): Promise<AirtableLibRecord<T>>
+    replace (airtableId: string, patch: Partial<T>): Promise<AirtableApiRecord<T>>
 
     /**
      * Returns deleted record
@@ -20,12 +20,12 @@ declare module 'airtable' {
     destroy (airtableId: string): Promise<T>
   }
 
-  export interface AirtableSelectOpts<T> {
+  export interface AirtableApiSelectOpts<T> {
     pageSize?: number
     fields?: (keyof T)[]
     maxRecords?: number
     view?: string
-    sort?: AirtableSort<T>[]
+    sort?: AirtableApiSort<T>[]
 
     /**
      * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
@@ -33,7 +33,7 @@ declare module 'airtable' {
     filterByFormula?: string
   }
 
-  export interface AirtableSort<T> {
+  export interface AirtableApiSort<T = any> {
     field: keyof T
 
     /**
@@ -42,11 +42,11 @@ declare module 'airtable' {
     direction?: 'asc' | 'desc'
   }
 
-  export interface AirtableQuery<T> {
-    all (): Promise<AirtableLibRecord<T>[]>
+  export interface AirtableApiQuery<T> {
+    all (): Promise<AirtableApiRecord<T>[]>
   }
 
-  export interface AirtableLibRecord<T> {
+  export interface AirtableApiRecord<T> {
     id: string
     fields: T
     save (): any
