@@ -59,7 +59,7 @@ export interface User extends AirtableRecord {
   category?: Category[] // 1-to-1 looks same as 1-to-many in Airtable. That's a limitation
 }
 
-export const userSchema = objectSchema({
+export const userSchema = objectSchema<User>({
   id: stringSchema,
   email: emailSchema,
   roles: airtableMultipleLinkSchema,
@@ -74,7 +74,7 @@ export interface Permission extends AirtableRecord {
   roles?: Role[]
 }
 
-export const permissionSchema = objectSchema({
+export const permissionSchema = objectSchema<Permission>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
@@ -90,7 +90,7 @@ export interface Role extends AirtableRecord {
   users?: User[]
 }
 
-export const roleSchema = objectSchema({
+export const roleSchema = objectSchema<Role>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
@@ -103,7 +103,7 @@ export interface Category extends AirtableRecord {
   users?: User[]
 }
 
-export const categorySchema = objectSchema({
+export const categorySchema = objectSchema<Category>({
   id: stringSchema,
   users: airtableMultipleLinkSchema,
 }).concat(airtableRecordSchema)

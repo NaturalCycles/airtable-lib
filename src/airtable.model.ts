@@ -6,6 +6,7 @@ import {
   stringSchema,
 } from '@naturalcycles/nodejs-lib'
 import { AirtableApiSort } from 'airtable'
+import { AirtableRecord } from './index'
 
 export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
@@ -15,9 +16,8 @@ export type AirtableId = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
-export const airtableMultipleLinkSchema = arraySchema.items(airtableIdSchema).optional()
-export const airtableSingleLinkSchema = arraySchema
-  .items(airtableIdSchema)
+export const airtableMultipleLinkSchema = arraySchema<AirtableId>(airtableIdSchema).optional()
+export const airtableSingleLinkSchema = arraySchema<AirtableId>(airtableIdSchema)
   .max(1)
   .optional()
 
@@ -39,7 +39,7 @@ export interface AirtableRecord {
   // id: string
 }
 
-export const airtableRecordSchema = objectSchema({
+export const airtableRecordSchema = objectSchema<AirtableRecord>({
   airtableId: airtableIdSchema,
   // id: stringSchema,
 })

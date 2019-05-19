@@ -48,22 +48,15 @@ export class AirtableLib {
   ): Promise<BASE> {
     const { baseId, tableSchemas } = baseSchema
 
-    const base: StringMap<AirtableRecord[]> = await pProps(
-      tableSchemas.reduce((r, tableSchema) => {
-        const { tableName } = tableSchema
-        r[tableName] = this.getDao(baseId, tableSchema).getRecords(opts)
-        return r
-      }, {}),
-    )
-
-    // Sort base by tableNames order
-    return tableSchemas.reduce(
-      (r, tableSchema) => {
-        const { tableName } = tableSchema
-        r[tableName] = base[tableName]
-        return r
-      },
-      {} as BASE,
+    return pProps(
+      tableSchemas.reduce(
+        (r, tableSchema) => {
+          const { tableName } = tableSchema
+          r[tableName] = this.getDao(baseId, tableSchema).getRecords(opts)
+          return r
+        },
+        {} as BASE,
+      ),
     )
   }
 
@@ -148,7 +141,7 @@ export class AirtableLib {
         )
       },
       { concurrency },
-    ) // todo: many
+    )
 
     return Object.keys(idMap).length
   }

@@ -1,4 +1,4 @@
-import * as AirtableApi from 'airtable'
+import '@types/airtable'
 import {
   AIRTABLE_ERROR_CODE,
   AirtableBaseSchema,
@@ -17,7 +17,6 @@ import { AirtableDao } from './airtableDao'
 import { AirtableLib } from './airtableLib'
 
 export {
-  AirtableApi,
   AirtableLib,
   AirtableLibCfg,
   AirtableDao,

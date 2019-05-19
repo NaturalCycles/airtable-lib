@@ -283,9 +283,9 @@
   integrity sha512-mV6T0IYqb0xL1UALPFplXYQmR0twnXG0M6jUswpquqT2sD12BOiCiLy3EvMp/Fy7s3DZElC4/aPjEjo2jeZpvw==
 
 "@hapi/hoek@6.x.x":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-6.2.1.tgz#d3a66329159af879bfdf0b0cff2229c43c5a3451"
-  integrity sha512-+ryw4GU9pjr1uT6lBuErHJg3NYqzwJTvZ75nKuJijEzpd00Uqi6oiawTGDDf5Hl0zWmI7qHfOtaqB0kpQZJQzA==
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-6.2.3.tgz#0abff7ac75d0c5388d2829c464b2aff74d473721"
+  integrity sha512-CtV9cp35+6Sfh6OfB+AYBozNIorZ6npNJjfO8InIyh/iFQI7uBW9bIApYoYf6TWq9w9BArecw2DDJf7oK+VlRw==
 
 "@hapi/joi@^15.0.2":
   version "15.0.3"
@@ -466,16 +466,16 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@naturalcycles/dev-lib@^7.4.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-7.6.0.tgz#483a942d2ed248398ffc8fb5b5b50e4ff88f0b2d"
-  integrity sha512-pgS1HlfidPM04DKjP9rMrfSqTEq8FR8AnZJTZ1A73AttsA5FmzOT4bIhyf5i43AQtbUlQbBrk2FToUTqzU0fDA==
+"@naturalcycles/dev-lib@^7.9.0":
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-7.9.0.tgz#b1cd3192a5f5ed4356f2ffcd8e62448724d74874"
+  integrity sha512-ok9SViqIkGhYb5JEI0O1AEjDvGunx89D8uOQbmwqMYnf7GwF3Y/rqBuEZJwei5f3zssV8HVGGd6LU5FSFxFKgQ==
   dependencies:
     "@commitlint/cli" "^7.6.1"
     "@commitlint/config-conventional" "^7.6.0"
     "@naturalcycles/fs-lib" "^2.0.0"
-    "@naturalcycles/js-lib" "^6.1.0"
-    "@types/fs-extra" "^5.0.4"
+    "@naturalcycles/js-lib" "^7.0.0"
+    "@types/fs-extra" "^7.0.0"
     "@types/jest" "^24.0.6"
     "@types/node" "^12.0.0"
     "@types/yargs" "^13.0.0"
@@ -508,23 +508,22 @@
     move-file "^1.2.0"
     yargs "^13.2.2"
 
-"@naturalcycles/js-lib@^6.0.0", "@naturalcycles/js-lib@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-6.1.0.tgz#d49731c08d9dda2339009a435372ffc1cc4c76e2"
-  integrity sha512-oinDX6J0h/2v6J+HISj3iz1QJmmkRzCZabv8OgdOpAZ3KSojaGDF+yLzVYHt0nEpiQiC79YkmNmK+eLZl1fwiA==
-  dependencies:
-    "@types/luxon" "^1.12.0"
+"@naturalcycles/js-lib@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-7.0.0.tgz#f9b4f8ea7b20fafa8e1256d38ee67678fc69a899"
+  integrity sha512-cnnO3xM7xNKPjTHzBiuWzdkQSEx07xQpJVi0g+5beJg1W3KTbEZJTWQVLEaKQfmrWnLa+gatSAKxB5ZWhtZGxQ==
 
-"@naturalcycles/nodejs-lib@^5.2.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-5.3.0.tgz#6deb6c78e61e685cc80a6046af73e2715d014c43"
-  integrity sha512-JGgWC6oCt5GkgYK4nVyog+aTlVSP7bK1KCcUC/2/GIpAdQDRRTX5b7g85U80tOCALjYB09a+xh1PWwksAtl2vA==
+"@naturalcycles/nodejs-lib@^6.2.0":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-6.3.1.tgz#33bbf486f87934ffb652b216fed2fd36b077cd10"
+  integrity sha512-EqU3siL2WeWi7gIXQMMvsRoMmlG9WnPdTYoOTSQ1QKQqdsDuVKS3cBZU9sZMemGuNMmu4fNOv8FGHq4kkugXSg==
   dependencies:
-    "@naturalcycles/js-lib" "^6.0.0"
+    "@naturalcycles/js-lib" "^7.0.0"
+    "@naturalcycles/time-lib" "^1.0.0"
     "@types/hapi__joi" "^15.0.1"
     "@types/lru-cache" "^5.1.0"
     lru-cache "^5.1.1"
-    luxon "^1.13.2"
+    nanoid "^2.0.2"
 
 "@naturalcycles/promise-lib@^2.1.2", "@naturalcycles/promise-lib@^2.2.0":
   version "2.2.0"
@@ -539,6 +538,13 @@
     "@semantic-release/changelog" "^3.0.1"
     "@semantic-release/git" "^7.0.5"
     semantic-release "^15.10.8"
+
+"@naturalcycles/time-lib@^1.0.0":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/time-lib/-/time-lib-1.0.3.tgz#512f5bd2b2ef405bb7639881b6aeca2a6c22b215"
+  integrity sha512-MIuSl+IKY+oEQcoNYRXEsvww5uUrh0E7cjMsQxESsrXXxG787GEmrTwlxOElw1f3BtdztL/z7/8FBkkOYZZlgg==
+  dependencies:
+    dayjs "^1.8.14"
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
@@ -577,9 +583,9 @@
     universal-user-agent "^2.1.0"
 
 "@octokit/rest@^16.13.1":
-  version "16.25.6"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.25.6.tgz#6bc3a7da834d0c6f6076c384a89158b892dbeb2d"
-  integrity sha512-pUM6n8OKo2lyr8zxdgkeWrqRZvnKhor420KrbcrhD7L2tJJ9VEjE/yVGySfswbMjOKJMcIGWDHfA7b3JuuueEw==
+  version "16.26.0"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.26.0.tgz#5c12b28763219045e1c9a15182e8dfaed10004e8"
+  integrity sha512-NBpzre44ZAQWZhlH+zUYTgqI0pHN+c9rNj4d+pCydGEiKTGc1HKmoTghEUyr9GxazDyoAvmpx9nL0I7QS1Olvg==
   dependencies:
     "@octokit/request" "^4.0.1"
     "@octokit/request-error" "^1.0.2"
@@ -738,10 +744,10 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
-"@types/fs-extra@^5.0.4":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-5.1.0.tgz#2a325ef97901504a3828718c390d34b8426a10a1"
-  integrity sha512-AInn5+UBFIK9FK5xc9yP5e3TQSPNNgjHByqYcj9g5elVBnDQcQL7PlO1CIRy2gWlbwK7UPYqi7vRvFA44dCmYQ==
+"@types/fs-extra@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-7.0.0.tgz#9c4ad9e1339e7448a76698829def1f159c1b636c"
+  integrity sha512-ndoMMbGyuToTy4qB6Lex/inR98nPiNHacsgMPvy+zqMLgSxbt8VtWpDArpGp69h1fEDQHn1KB+9DWD++wgbwYA==
   dependencies:
     "@types/node" "*"
 
@@ -797,11 +803,6 @@
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@types/lru-cache/-/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
   integrity sha512-RaE0B+14ToE4l6UqdarKPnXwVDuigfFv+5j9Dze/Nqr23yyuqdNvzcZi3xB+3Agvi5R4EOgAksfv3lXX4vBt9w==
-
-"@types/luxon@^1.12.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.13.0.tgz#e92338702d0b1b96e8d5ea6fe39d9938891aacd0"
-  integrity sha512-XmDiRVoJWgVdqX9x1a/GU4p9bSgZY7q8SOyMLs3fx1AdQcxLYAPIt/jfZm2e+PBVRWuEx1FqYNJ37kBZ53TMqA==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -1949,6 +1950,11 @@ dateformat@^3.0.0:
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
 
+dayjs@^1.8.14:
+  version "1.8.14"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.14.tgz#43e4f62830c2c3342c3fcd25934dc9162dbe6f38"
+  integrity sha512-AVhDmRTe541iWirnoeFSSDDGvCT6HWaNQ4z2WmmzXMGZj6ph6ydao2teKq/eUtR43GPJXlYFD+C/SotG1P9wUQ==
+
 debug@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
@@ -2426,9 +2432,9 @@ fast-deep-equal@^2.0.1:
   integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
 
 fast-glob@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-2.2.6.tgz#a5d5b697ec8deda468d85a74035290a025a95295"
-  integrity sha512-0BvMaZc1k9F+MeWWMe8pL6YltFzZYcJsYU7D4JyDA6PAczaXvxqQQ/z+mDF7/4Mw01DeUc+i3CTKajnkANkV4w==
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-2.2.7.tgz#6953857c3afa475fff92ee6015d52da70a4cd39d"
+  integrity sha512-g1KuQwHOZAmOZMuBtHdxDtju+T2RT8jgCC9aANsbpdiDDTSnjgfuVsIBNKbUeJI3oKMRExcfNDtJl4OhbffMsw==
   dependencies:
     "@mrmlnc/readdir-enhanced" "^2.2.1"
     "@nodelib/fs.stat" "^1.1.2"
@@ -4538,11 +4544,6 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-luxon@^1.13.2:
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.13.2.tgz#2866c7a7591441aea0004e8cf80d5ca6d917017a"
-  integrity sha512-U7i2AE+/VWeB8PZZkIeEcxJCZvBA8LegCHufaIFYx3qRQdw2UJw3fuaL/Fqi9Q+2MeFYu+gYqIzr5hWOvAMHBQ==
-
 macos-release@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/macos-release/-/macos-release-2.2.0.tgz#ab58d55dd4714f0a05ad4b0e90f4370fef5cdea8"
@@ -4889,6 +4890,11 @@ nan@^2.12.1:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
+
+nanoid@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.0.2.tgz#2163edc84828cd42f9b8e4578979a4b5ffc1bb18"
+  integrity sha512-X4yQ8VHoFvHcykGunT2Jxrsm1c4vH5UKtau7LLJYXO1istCRE3jD8JxDyGCzN+h7dpWBCvWaSYgloRuphKRqUQ==
 
 nanomatch@^1.2.9:
   version "1.2.13"
