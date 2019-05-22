@@ -16,10 +16,13 @@ export type AirtableId = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
-export const airtableMultipleLinkSchema = arraySchema<AirtableId>(airtableIdSchema).optional()
+export const airtableMultipleLinkSchema = arraySchema<AirtableId>(airtableIdSchema)
+  .optional()
+  .default([])
 export const airtableSingleLinkSchema = arraySchema<AirtableId>(airtableIdSchema)
   .max(1)
   .optional()
+  .default([])
 
 export interface AirtableLibCfg {
   apiKey: string
