@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.6.0...v1.7.0) (2019-05-22)
+
+
+### Features
+
+* typed AirtableBaseSchema ([bb5772c](https://github.com/NaturalCycles/airtable-lib/commit/bb5772c))
+
 # [1.6.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.5.0...v1.6.0) (2019-05-22)
 
 
