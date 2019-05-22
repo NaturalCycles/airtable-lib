@@ -12,17 +12,16 @@ export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
 }
 
-export type AirtableId = string
+export type AirtableId<T = any> = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
-export const airtableMultipleLinkSchema = arraySchema<AirtableId>(airtableIdSchema)
-  .optional()
-  .default([])
-export const airtableSingleLinkSchema = arraySchema<AirtableId>(airtableIdSchema)
-  .max(1)
-  .optional()
-  .default([])
+export const airtableMultipleLinkSchema = <T>() =>
+  arraySchema<AirtableId<T>>(airtableIdSchema)
+    .optional()
+    .default([])
+
+export const airtableSingleLinkSchema = <T>() => airtableMultipleLinkSchema<T>().max(1)
 
 export interface AirtableLibCfg {
   apiKey: string

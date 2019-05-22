@@ -62,8 +62,8 @@ export interface User extends AirtableRecord {
 export const userSchema = objectSchema<User>({
   id: stringSchema,
   email: emailSchema,
-  roles: airtableMultipleLinkSchema,
-  category: airtableSingleLinkSchema,
+  roles: airtableMultipleLinkSchema<Role>(),
+  category: airtableSingleLinkSchema<Category>(),
 }).concat(airtableRecordSchema)
 
 export interface Permission extends AirtableRecord {
@@ -78,8 +78,8 @@ export const permissionSchema = objectSchema<Permission>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
-  parent: airtableSingleLinkSchema,
-  roles: airtableMultipleLinkSchema,
+  parent: airtableSingleLinkSchema<Permission>(),
+  roles: airtableMultipleLinkSchema<Role>(),
 }).concat(airtableRecordSchema)
 
 export interface Role extends AirtableRecord {
@@ -94,8 +94,8 @@ export const roleSchema = objectSchema<Role>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
-  permissions: airtableMultipleLinkSchema,
-  users: airtableMultipleLinkSchema,
+  permissions: airtableMultipleLinkSchema<Permission>(),
+  users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
 export interface Category extends AirtableRecord {
@@ -105,7 +105,7 @@ export interface Category extends AirtableRecord {
 
 export const categorySchema = objectSchema<Category>({
   id: stringSchema,
-  users: airtableMultipleLinkSchema,
+  users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
 export function mockBaseSchema (baseId: string): AirtableBaseSchema {
