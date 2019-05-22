@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.7.0...v1.8.0) (2019-05-22)
+
+
+### Features
+
+* treatment of multi-select and attachments ([cefe57d](https://github.com/NaturalCycles/airtable-lib/commit/cefe57d))
+
 # [1.7.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.6.0...v1.7.0) (2019-05-22)
 
 
