@@ -116,7 +116,7 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
-export interface AirtableBaseSchema {
+export interface AirtableBaseSchema<BASE = any> {
   baseId: string
   tableSchemas: AirtableTableSchema[]
 }

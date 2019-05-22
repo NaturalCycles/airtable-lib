@@ -108,7 +108,7 @@ export const categorySchema = objectSchema<Category>({
   users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
-export function mockBaseSchema (baseId: string): AirtableBaseSchema {
+export function mockBaseSchema (baseId: string): AirtableBaseSchema<TestBase> {
   return {
     baseId,
     tableSchemas: [

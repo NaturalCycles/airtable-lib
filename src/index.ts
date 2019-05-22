@@ -1,4 +1,4 @@
-import '@types/airtable'
+import './@types/airtable'
 import {
   AIRTABLE_ERROR_CODE,
   AirtableAttachment,
