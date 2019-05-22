@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.4.0...v1.5.0) (2019-05-22)
+
+
+### Features
+
+* airtableMultipleLinkSchema is a typed function now ([92e26d5](https://github.com/NaturalCycles/airtable-lib/commit/92e26d5))
+
 # [1.4.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.3.0...v1.4.0) (2019-05-22)
 
 
