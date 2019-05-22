@@ -495,14 +495,14 @@
     yargs "^13.2.4"
 
 "@naturalcycles/fs-lib@^2.0.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/fs-lib/-/fs-lib-2.2.0.tgz#d4cc94a1a38a8e68e7d8eefbd15980ccf811f137"
-  integrity sha512-DbzAopr1MXuR0BQmkXe+dX7xMtXcPYrxrfLiAO7H1NP2i8M1fWhtpvksUnuE6NnqiNbj4gBILQarGgpJ9z11MA==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/fs-lib/-/fs-lib-2.3.0.tgz#e697314eb981fd242f15302e7c844b0102da7c6a"
+  integrity sha512-tGAKtfSbfFsnum6F54H+nt2elY3GbiGXLieGI8pQMGrEI7GEmtgr5nAAl/2p70m3uVbaOSein2vZIXZYzeRwFg==
   dependencies:
     "@naturalcycles/promise-lib" "^2.1.2"
     ansi-colors "^3.2.4"
     cp-file "^7.0.0"
-    fs-extra "^7.0.1"
+    fs-extra "^8.0.1"
     globby "^9.1.0"
     loud-rejection "^2.1.0"
     move-file "^1.2.0"
@@ -514,9 +514,9 @@
   integrity sha512-cnnO3xM7xNKPjTHzBiuWzdkQSEx07xQpJVi0g+5beJg1W3KTbEZJTWQVLEaKQfmrWnLa+gatSAKxB5ZWhtZGxQ==
 
 "@naturalcycles/nodejs-lib@^6.2.0":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-6.4.1.tgz#5ee5701b119f83780065b110d7983294cea0b5ec"
-  integrity sha512-APhwYck2vb8IXT62mvLXArqERFM13loxOm5/T80YjlmRsdTP6P91atXGij0Xm4aKJdyz52hIkzjvbSaJuZv0bg==
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-6.5.0.tgz#95cd470e4d224d11ec8c534924a821470ea84c39"
+  integrity sha512-cl++QajHZ1ddVhVI+3iNNcU0WSD0A2kgW+UmW9JnLvhR0N3x3qHmVaOtELTFT2dSk5gmSHJep1/K4fKQL3Rl1Q==
   dependencies:
     "@hapi/joi" "^15.0.2"
     "@naturalcycles/js-lib" "^7.0.0"
@@ -2592,7 +2592,7 @@ from2@^2.1.0, from2@^2.1.1:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-fs-extra@^7.0.0, fs-extra@^7.0.1:
+fs-extra@^7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
   integrity sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
@@ -2601,7 +2601,7 @@ fs-extra@^7.0.0, fs-extra@^7.0.1:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^8.0.0:
+fs-extra@^8.0.0, fs-extra@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.0.1.tgz#90294081f978b1f182f347a440a209154344285b"
   integrity sha512-W+XLrggcDzlle47X/XnS7FXrXu9sDo+Ze9zpndeBxdgv88FHLm1HtmkhEwavruS6koanBjp098rUpHs65EmG7A==

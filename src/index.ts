@@ -1,6 +1,9 @@
 import '@types/airtable'
 import {
   AIRTABLE_ERROR_CODE,
+  AirtableAttachment,
+  airtableAttachmentSchema,
+  airtableAttachmentsSchema,
   AirtableBaseSchema,
   AirtableDaoOptions,
   AirtableId,
@@ -11,6 +14,8 @@ import {
   airtableRecordSchema,
   airtableSingleLinkSchema,
   AirtableTableSchema,
+  AirtableThumbnail,
+  airtableThumbnailSchema,
 } from './airtable.model'
 import { AirtableCache } from './airtableCache'
 import { AirtableDao } from './airtableDao'
@@ -25,8 +30,13 @@ export {
   AIRTABLE_ERROR_CODE,
   AirtableId,
   airtableIdSchema,
+  AirtableThumbnail,
+  AirtableAttachment,
   airtableMultipleLinkSchema,
   airtableSingleLinkSchema,
+  airtableThumbnailSchema,
+  airtableAttachmentSchema,
+  airtableAttachmentsSchema,
   airtableRecordSchema,
   AirtableBaseSchema,
   AirtableTableSchema,
