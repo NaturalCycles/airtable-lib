@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.5.0...v1.6.0) (2019-05-22)
+
+
+### Features
+
+* AirtableAttachment type and schema ([24c2153](https://github.com/NaturalCycles/airtable-lib/commit/24c2153))
+
 # [1.5.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.4.0...v1.5.0) (2019-05-22)
 
 
