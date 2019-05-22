@@ -64,11 +64,11 @@ export const airtableThumbnailSchema = objectSchema<AirtableThumbnail>({
 })
 
 export interface AirtableAttachment {
-  filename: string
   id: string
-  size: number
-  type: string
   url: string
+  filename: string
+  size?: number
+  type?: string
   thumbnails?: {
     full: AirtableThumbnail
     large: AirtableThumbnail
@@ -76,18 +76,25 @@ export interface AirtableAttachment {
   }
 }
 
+export interface AirtableAttachmentUpload {
+  url: string
+  filename?: string
+}
+
 export const airtableAttachmentSchema = objectSchema<AirtableAttachment>({
-  filename: stringSchema,
   id: stringSchema,
-  size: integerSchema,
-  type: stringSchema,
   url: urlSchema(),
+  filename: stringSchema,
+  size: integerSchema.optional(),
+  type: stringSchema.optional(),
   thumbnails: objectSchema({
     full: airtableThumbnailSchema,
     large: airtableThumbnailSchema,
     small: airtableThumbnailSchema,
-  }).optional(),
-})
+  })
+    .options({ stripUnknown: false })
+    .optional(),
+}).options({ stripUnknown: false })
 
 export const airtableAttachmentsSchema = arraySchema<AirtableAttachment>(airtableAttachmentSchema)
   .optional()
@@ -115,6 +122,10 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   airtableId: airtableIdSchema,
   // id: stringSchema,
 })
+
+export interface AirtableBaseMap {
+  [baseName: string]: AirtableBaseSchema
+}
 
 export interface AirtableBaseSchema<BASE = any> {
   baseId: string

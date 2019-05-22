@@ -1,8 +1,16 @@
 import { omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
 import { AirtableLib } from '../../airtableLib'
-import { tmpDir } from '../../paths.cnst'
-import { mockBaseSchema, mockTable1, mockTable2, Table1, Table2, TestBase } from '../airtable.mock'
+import { cacheDir, tmpDir } from '../../paths.cnst'
+import {
+  mockBaseMap,
+  mockBaseSchema,
+  mockTable1,
+  mockTable2,
+  Table1,
+  Table2,
+  TestBase,
+} from '../airtable.mock'
 
 jest.setTimeout(60000)
 
@@ -67,24 +75,25 @@ test('integration: table1, table2', async () => {
   const _records2 = await dao2.createRecords(mocks2)
 })
 
-test('fetchBase', async () => {
-  const base = await airtableLib.fetchBase(mockBaseSchema(AIRTABLE_BASE_ID))
+test('fetchRemoteBase', async () => {
+  const base = await airtableLib.fetchRemoteBase(mockBaseSchema(AIRTABLE_BASE_ID))
   console.log(JSON.stringify(base, null, 2))
 })
 
-test('fetchBaseToJson', async () => {
-  const jsonPath = `${tmpDir}/${AIRTABLE_BASE_ID}.json`
-  await airtableLib.fetchBaseToJson(mockBaseSchema(AIRTABLE_BASE_ID), jsonPath)
+test('fetchRemoteBasesToJson', async () => {
+  await airtableLib.fetchRemoteBasesToJson(mockBaseMap(AIRTABLE_BASE_ID), cacheDir)
 })
 
-test('uploadJsonToBase', async () => {
-  const jsonPath = `${tmpDir}/${AIRTABLE_BASE_ID}.json`
-  await airtableLib.uploadJsonToBase(mockBaseSchema(AIRTABLE_BASE_ID), jsonPath)
-}, 9999999)
+test('uploadJsonToRemoteBases', async () => {
+  await airtableLib.uploadJsonToRemoteBases(mockBaseMap(AIRTABLE_BASE_ID), cacheDir)
+}, 120000)
 
-test('getBaseFromJson', async () => {
+test('getAirtableCacheFromJson', async () => {
   const jsonPath = `${tmpDir}/${AIRTABLE_BASE_ID}.json`
-  const cache = airtableLib.getBaseFromJson<TestBase>(mockBaseSchema(AIRTABLE_BASE_ID), jsonPath)
+  const cache = airtableLib.getAirtableCacheFromJson<TestBase>(
+    mockBaseSchema(AIRTABLE_BASE_ID),
+    jsonPath,
+  )
   // console.log(cache.getBase())
   console.log(cache.getTable('categories'))
   console.log(cache.get('rec4rmK2WLHa23ead'))

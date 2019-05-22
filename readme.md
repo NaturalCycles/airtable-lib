@@ -8,7 +8,16 @@
 
 # Features
 
-- ...
+- Allows high level API access to Airtable contents
+- Allows to download Airtable data to json (backup), upload it back with all links and order
+  preserved (not trivial if using stock low-level api)
+
+# API
+
+- `AirtableLib`: high-level access object
+  - `fetchBase` ...
+- `AirtableDao`: access object for Airtable Table
+- `AirtableCache`: indexed contents of Airtable Base (indexed by airtableId)
 
 # Packaging
 

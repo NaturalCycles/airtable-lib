@@ -1,0 +1,190 @@
+{
+  "categories": [
+    {
+      "airtableId": "rec3OLVUi0CfL9BxS",
+      "id": "category1",
+      "users": ["recUd1e9ba1YofZpB"]
+    },
+    {
+      "airtableId": "recieSiz0rNNadw7n",
+      "id": "category2",
+      "users": ["recGSjlVuWyafhzGl"]
+    },
+    {
+      "airtableId": "recyWldhsUmCxOiyf",
+      "id": "category3",
+      "users": ["recl7AdEINkF1Ctk2"]
+    }
+  ],
+  "permissions": [
+    {
+      "airtableId": "recPuBndcfRb7Ixwp",
+      "descr": "description 1\nlong text",
+      "id": "permission1",
+      "parent": [],
+      "pub": true,
+      "roles": ["recc5YySy7GxnA2ND", "recciTsRJY2yB8ban"]
+    },
+    {
+      "airtableId": "recx8Vv2Ddui3Xd9H",
+      "descr": "description 2\nlong text",
+      "id": "permission2",
+      "parent": ["recPuBndcfRb7Ixwp"],
+      "pub": true,
+      "roles": ["recaXKnseLfHueE7H", "recciTsRJY2yB8ban"]
+    },
+    {
+      "airtableId": "recBWUhjEk5nH2zB1",
+      "descr": "description 3\nlong text",
+      "id": "permission3",
+      "parent": ["recx8Vv2Ddui3Xd9H"],
+      "pub": true,
+      "roles": ["recciTsRJY2yB8ban"]
+    },
+    {
+      "airtableId": "rec8oSA2xVDkS3oL9",
+      "descr": "description 4\nlong text",
+      "id": "permission4",
+      "parent": [],
+      "pub": true,
+      "roles": ["rec2CAhiWzKFfLwH7"]
+    },
+    {
+      "airtableId": "reczDgLFr3vMwftdk",
+      "descr": "description 5\nlong text",
+      "id": "permission5",
+      "parent": ["recBWUhjEk5nH2zB1"],
+      "pub": true,
+      "roles": ["recFeSYWMxSSaXU5h"]
+    },
+    {
+      "airtableId": "recu5Dvo5ioKMpv5q",
+      "descr": "description 6\nlong text",
+      "id": "permission6",
+      "parent": [],
+      "roles": ["recFeSYWMxSSaXU5h"]
+    }
+  ],
+  "roles": [
+    {
+      "airtableId": "recciTsRJY2yB8ban",
+      "id": "role1",
+      "permissions": ["recPuBndcfRb7Ixwp", "recBWUhjEk5nH2zB1", "recx8Vv2Ddui3Xd9H"],
+      "pub": true,
+      "users": ["recUd1e9ba1YofZpB"]
+    },
+    {
+      "airtableId": "rec2CAhiWzKFfLwH7",
+      "id": "role2",
+      "permissions": ["rec8oSA2xVDkS3oL9"],
+      "users": ["recGSjlVuWyafhzGl"]
+    },
+    {
+      "airtableId": "recc5YySy7GxnA2ND",
+      "id": "role3",
+      "permissions": ["recPuBndcfRb7Ixwp"],
+      "pub": true,
+      "users": ["recGSjlVuWyafhzGl"]
+    },
+    {
+      "airtableId": "recFeSYWMxSSaXU5h",
+      "id": "role4",
+      "permissions": ["recu5Dvo5ioKMpv5q", "reczDgLFr3vMwftdk"],
+      "pub": true,
+      "users": []
+    },
+    {
+      "airtableId": "recSJ1fryqxI7nXSo",
+      "id": "role5",
+      "permissions": [],
+      "users": ["rec83AukBB1cWURKn"]
+    },
+    {
+      "airtableId": "recaXKnseLfHueE7H",
+      "id": "role6",
+      "permissions": ["recx8Vv2Ddui3Xd9H"],
+      "users": ["rec3FR1IgCxbZ10E1"]
+    }
+  ],
+  "users": [
+    {
+      "airtableId": "recUd1e9ba1YofZpB",
+      "category": ["rec3OLVUi0CfL9BxS"],
+      "email": "user1@email.com",
+      "id": "user1",
+      "images": [
+        {
+          "id": "attnK9jIGOENzCmlI",
+          "url": "https://dl.airtable.com/.attachments/51b26ced40dd94382b013fde857c5798/aba6ded8/oculus_go_product_and_box.jpg",
+          "filename": "oculus_go_product_and_box.jpg",
+          "size": 18497,
+          "type": "image/jpeg",
+          "thumbnails": {
+            "small": {
+              "url": "https://dl.airtable.com/.attachmentThumbnails/30b2d4a86e95ca09633bcb35decc47a5/7bcb05df",
+              "width": 64,
+              "height": 36
+            },
+            "large": {
+              "url": "https://dl.airtable.com/.attachmentThumbnails/300c6176014e00889685369f57275778/ee809928",
+              "width": 640,
+              "height": 360
+            },
+            "full": {
+              "url": "https://dl.airtable.com/.attachmentThumbnails/c57bab18837d710b997b8b244e56dada/5a9a238a",
+              "width": 3000,
+              "height": 3000
+            }
+          }
+        }
+      ],
+      "roles": ["recciTsRJY2yB8ban"],
+      "tags": ["tag1"]
+    },
+    {
+      "airtableId": "recGSjlVuWyafhzGl",
+      "category": ["recieSiz0rNNadw7n"],
+      "email": "user2@email.com",
+      "id": "user2",
+      "images": [],
+      "roles": ["rec2CAhiWzKFfLwH7", "recc5YySy7GxnA2ND"],
+      "tags": ["tag1", "tag2"]
+    },
+    {
+      "airtableId": "recl7AdEINkF1Ctk2",
+      "category": ["recyWldhsUmCxOiyf"],
+      "email": "user3@email.com",
+      "id": "user3",
+      "images": [],
+      "roles": [],
+      "tags": []
+    },
+    {
+      "airtableId": "rec3FR1IgCxbZ10E1",
+      "category": [],
+      "email": "user4@email.com",
+      "id": "user4",
+      "images": [],
+      "roles": ["recaXKnseLfHueE7H"],
+      "tags": ["tag2"]
+    },
+    {
+      "airtableId": "rec83AukBB1cWURKn",
+      "category": [],
+      "email": "user5@email.com",
+      "id": "user5",
+      "images": [],
+      "roles": ["recSJ1fryqxI7nXSo"],
+      "tags": []
+    },
+    {
+      "airtableId": "recGcWt9iJmacLrbU",
+      "category": [],
+      "email": "user6@email.com",
+      "id": "user6",
+      "images": [],
+      "roles": [],
+      "tags": []
+    }
+  ]
+}

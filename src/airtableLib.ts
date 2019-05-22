@@ -3,6 +3,9 @@ import { pMap, pProps } from '@naturalcycles/promise-lib'
 import * as AirtableApi from 'airtable'
 import * as fs from 'fs-extra'
 import {
+  AirtableAttachment,
+  AirtableAttachmentUpload,
+  AirtableBaseMap,
   AirtableBaseSchema,
   AirtableDaoOptions,
   AirtableLibCfg,
@@ -42,7 +45,7 @@ export class AirtableLib {
   }
 
   @logMethod({ logStart: true, noLogArgs: true })
-  async fetchBase<BASE> (
+  async fetchRemoteBase<BASE> (
     baseSchema: AirtableBaseSchema,
     opts: AirtableDaoOptions = {},
   ): Promise<BASE> {
@@ -60,19 +63,42 @@ export class AirtableLib {
     )
   }
 
-  getBaseFromJson<BASE> (baseSchema: AirtableBaseSchema, jsonPath: string): AirtableCache<BASE> {
-    const json = require(jsonPath) as BASE
-    return new AirtableCache<BASE>(json, baseSchema)
+  async fetchRemoteBaseToJson (
+    baseSchema: AirtableBaseSchema,
+    jsonPath: string,
+    opts: AirtableDaoOptions = {},
+  ): Promise<void> {
+    const base = await this.fetchRemoteBase(baseSchema, opts)
+    await fs.ensureFile(jsonPath)
+    await fs.writeJson(jsonPath, this.sortBase(base), { spaces: 2 })
+  }
+
+  /**
+   * Fetches all remote Airtable Bases to json files.
+   */
+  async fetchRemoteBasesToJson (
+    baseMap: AirtableBaseMap,
+    dir: string,
+    opts?: AirtableDaoOptions,
+  ): Promise<void> {
+    await pMap(
+      Object.keys(baseMap),
+      async baseName => {
+        const jsonPath = `${dir}/${baseName}.json`
+        await this.fetchRemoteBaseToJson(baseMap[baseName], jsonPath, opts)
+      },
+      { concurrency: 1 },
+    )
   }
 
   /**
    * @returns number of records saved
    *
-   * todo: multi-pass
+   * Multi-pass operation:
    * 1. CreateRecords without airtableId and array field, map old ids to newly createdIds
    * 2. UpdateRecords, set array fields to new airtableIds using map from #1
    */
-  async uploadBase<BASE = any> (
+  async uploadBaseToRemote<BASE = any> (
     base: BASE,
     baseSchema: AirtableBaseSchema,
     opts: AirtableDaoOptions = {},
@@ -99,8 +125,11 @@ export class AirtableLib {
 
             let r = { ..._r }
             delete r.airtableId
-            // Set all array values as empty array (to avoid `Record ID xxx does not exist` error)
-            r = transformValues(r, (_k, v) => (Array.isArray(v) ? [] : v))
+            // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
+            r = transformValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
+
+            // Transform Attachments
+            r = transformValues(r, transformAttachments)
 
             const newRecord = await dao.createRecord(r, opts)
             idMap[oldId] = newRecord.airtableId
@@ -123,14 +152,14 @@ export class AirtableLib {
         const records = cache
           .getTable(tableName as keyof BASE)
           // Only records with non-empty array values
-          .filter(r => Object.values(r).some(v => Array.isArray(v) && !!v.length))
+          .filter(r => Object.values(r).some(isArrayOfLinks))
 
         await pMap(
           records,
           async r => {
             const { airtableId } = r
             // only array values
-            let patch = filterObject(r, (_k, v) => Array.isArray(v) && !!v.length)
+            let patch = filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
             patch = transformValues(patch, (_k, v: string[]) => v.map(oldId => idMap[oldId]))
@@ -147,25 +176,40 @@ export class AirtableLib {
   }
 
   @logMethod({ logStart: true, noLogArgs: true })
-  async fetchBaseToJson (
-    baseSchema: AirtableBaseSchema,
-    jsonPath: string,
-    opts: AirtableDaoOptions = {},
-  ): Promise<void> {
-    const base = await this.fetchBase(baseSchema, opts)
-    await fs.ensureFile(jsonPath)
-    await fs.writeJson(jsonPath, this.sortBase(base), { spaces: 2 })
-  }
-
-  @logMethod({ logStart: true, noLogArgs: true })
-  async uploadJsonToBase (
+  async uploadJsonToRemoteBase (
     baseSchema: AirtableBaseSchema,
     jsonPath: string,
     opts: AirtableDaoOptions = {},
     concurrency?: number,
   ): Promise<void> {
     const base = require(jsonPath) as StringMap<AirtableRecord[]>
-    await this.uploadBase(base, baseSchema, opts, concurrency)
+    await this.uploadBaseToRemote(base, baseSchema, opts, concurrency)
+  }
+
+  /**
+   * Uploads all bases from json files to remote Airtable bases.
+   */
+  async uploadJsonToRemoteBases (
+    baseMap: AirtableBaseMap,
+    dir: string,
+    opts?: AirtableDaoOptions,
+  ): Promise<void> {
+    await pMap(
+      Object.keys(baseMap),
+      async baseName => {
+        const jsonPath = `${dir}/${baseName}.json`
+        await this.uploadJsonToRemoteBase(baseMap[baseName], jsonPath, opts)
+      },
+      { concurrency: 1 },
+    )
+  }
+
+  getAirtableCacheFromJson<BASE> (
+    baseSchema: AirtableBaseSchema,
+    jsonPath: string,
+  ): AirtableCache<BASE> {
+    const json = require(jsonPath) as BASE
+    return new AirtableCache<BASE>(json, baseSchema)
   }
 
   /**
@@ -181,37 +225,6 @@ export class AirtableLib {
 
     return newBase
   }
-
-  /**
-   * Mutates the base!
-   */
-  /*
-  private resolveBase (base: StringMap<AirtableRecord[]>): void {
-    const idMap: StringMap<AirtableRecord> = {}
-
-    // First pass: populate idMap
-    Object.values(base).forEach(records => {
-      records.forEach(r => idMap[r.airtableId] = r)
-    })
-
-    // Second pass: resolve using idMap
-    Object.values(base).forEach(records => {
-      records.forEach(r => {
-        filterObject(r, k => !k.startsWith('_'), true)
-        return transformValues(r, (k, v) => {
-          if (Array.isArray(v) && v.length) {
-            // todo: throw on unresolved?..
-            return v.map((airtableId: string) => {
-              if (!idMap[airtableId]) throw new Error(`Cannot resolve ${airtableId}`)
-              return idMap[airtableId]
-            })
-          }
-          return v
-        }, true)
-      })
-    })
-  }
-   */
 }
 
 function sortObjectKeys<T> (o: T): T {
@@ -224,4 +237,29 @@ function sortObjectKeys<T> (o: T): T {
       },
       {} as T,
     )
+}
+
+function isArrayOfLinks (v: any): boolean {
+  return (
+    Array.isArray(v) &&
+    !!v.length &&
+    v.some(item => typeof item === 'string' && item.startsWith('rec'))
+  )
+}
+
+function isArrayOfAttachments (v: any): boolean {
+  return (
+    Array.isArray(v) &&
+    !!v.length &&
+    v.some(item => !!item && typeof item === 'object' && !!item.url)
+  )
+}
+
+function transformAttachments (_k: any, v: AirtableAttachment[]): AirtableAttachmentUpload[] {
+  if (!isArrayOfAttachments(v)) return v
+
+  return v.map(a => ({
+    url: a.url,
+    filename: a.filename,
+  }))
 }

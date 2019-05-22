@@ -1,6 +1,15 @@
 import { arrayRange, filterFalsyValues } from '@naturalcycles/js-lib'
-import { booleanSchema, emailSchema, objectSchema, stringSchema } from '@naturalcycles/nodejs-lib'
 import {
+  arraySchema,
+  booleanSchema,
+  emailSchema,
+  objectSchema,
+  stringSchema,
+} from '@naturalcycles/nodejs-lib'
+import {
+  AirtableAttachment,
+  airtableAttachmentsSchema,
+  AirtableBaseMap,
   AirtableBaseSchema,
   airtableMultipleLinkSchema,
   AirtableRecord,
@@ -55,8 +64,10 @@ export function mockTable2 (): Table2[] {
 export interface User extends AirtableRecord {
   id: string
   email: string
-  roles?: Role[]
-  category?: Category[] // 1-to-1 looks same as 1-to-many in Airtable. That's a limitation
+  roles: Role[]
+  category: Category[] // 1-to-1 looks same as 1-to-many in Airtable. That's a limitation
+  tags: string[]
+  images: AirtableAttachment[]
 }
 
 export const userSchema = objectSchema<User>({
@@ -64,14 +75,18 @@ export const userSchema = objectSchema<User>({
   email: emailSchema,
   roles: airtableMultipleLinkSchema<Role>(),
   category: airtableSingleLinkSchema<Category>(),
+  tags: arraySchema(stringSchema)
+    .optional()
+    .default([]),
+  images: airtableAttachmentsSchema,
 }).concat(airtableRecordSchema)
 
 export interface Permission extends AirtableRecord {
   id: string
   pub?: boolean
   descr?: string
-  parent?: Permission[]
-  roles?: Role[]
+  parent: Permission[]
+  roles: Role[]
 }
 
 export const permissionSchema = objectSchema<Permission>({
@@ -86,8 +101,8 @@ export interface Role extends AirtableRecord {
   id: string
   pub?: boolean
   descr?: string
-  permissions?: Permission[]
-  users?: User[]
+  permissions: Permission[]
+  users: User[]
 }
 
 export const roleSchema = objectSchema<Role>({
@@ -100,13 +115,19 @@ export const roleSchema = objectSchema<Role>({
 
 export interface Category extends AirtableRecord {
   id: string
-  users?: User[]
+  users: User[]
 }
 
 export const categorySchema = objectSchema<Category>({
   id: stringSchema,
   users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
+
+export function mockBaseMap (baseId: string): AirtableBaseMap {
+  return {
+    Test: mockBaseSchema(baseId),
+  }
+}
 
 export function mockBaseSchema (baseId: string): AirtableBaseSchema<TestBase> {
   return {
