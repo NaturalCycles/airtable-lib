@@ -2,7 +2,6 @@
   "name": "@naturalcycles/airtable-lib",
   "scripts": {},
   "dependencies": {
-    "@hapi/joi": "^15.0.2",
     "@naturalcycles/js-lib": "^7.0.0",
     "@naturalcycles/nodejs-lib": "^6.2.0",
     "@naturalcycles/promise-lib": "^2.2.0",

@@ -1,5 +1,5 @@
-import { AnySchema } from '@hapi/joi'
 import {
+  AnySchemaTyped,
   arraySchema,
   JoiValidationError,
   objectSchema,
@@ -51,7 +51,7 @@ export interface AirtableBaseSchema {
 
 export interface AirtableTableSchema<T = any> {
   tableName: string
-  validationSchema?: AnySchema
+  validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]
 }
 
