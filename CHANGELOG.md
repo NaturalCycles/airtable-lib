@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.2.0...v1.3.0) (2019-05-22)
+
+
+### Features
+
+* update deps ([03cd5d2](https://github.com/NaturalCycles/airtable-lib/commit/03cd5d2))
+
 # [1.2.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.1.0...v1.2.0) (2019-05-19)
 
 
