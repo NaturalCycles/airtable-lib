@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.8.0...v1.9.0) (2019-05-24)
+
+
+### Features
+
+* airtableLib.fetchRemoteBases() ([20be07c](https://github.com/NaturalCycles/airtable-lib/commit/20be07c))
+
 # [1.8.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.7.0...v1.8.0) (2019-05-22)
 
 
