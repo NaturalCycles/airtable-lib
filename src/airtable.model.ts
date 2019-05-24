@@ -123,11 +123,16 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
-export interface AirtableBaseSchemaMap {
-  [baseName: string]: AirtableBaseSchema
-}
+export type AirtableBase<BASE = any, V extends AirtableRecord[] = AirtableRecord[]> = Record<
+  keyof BASE,
+  V
+>
 
-export interface AirtableBaseSchema<BASE = any> {
+export type AirtableBaseMap<MAP = any> = Record<keyof MAP, AirtableBase>
+
+export type AirtableBaseSchemaMap<MAP = any> = Record<keyof MAP, AirtableBaseSchema>
+
+export interface AirtableBaseSchema {
   baseId: string
   tableSchemas: AirtableTableSchema[]
 }

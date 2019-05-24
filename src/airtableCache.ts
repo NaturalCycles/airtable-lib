@@ -1,11 +1,11 @@
 import { omit, StringMap } from '@naturalcycles/js-lib'
-import { AirtableBaseSchema, AirtableRecord } from './airtable.model'
+import { AirtableBase, AirtableBaseSchema, AirtableRecord } from './airtable.model'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
  * Provides API to access records.
  */
-export class AirtableCache<BASE = any> {
+export class AirtableCache<BASE extends AirtableBase<BASE>> {
   constructor (private base: BASE, private _baseSchema: AirtableBaseSchema) {
     this.indexBase()
   }
@@ -21,8 +21,8 @@ export class AirtableCache<BASE = any> {
   private indexBase (): void {
     const airtableIndex: StringMap<AirtableRecord> = {}
 
-    Object.values(this.base).forEach((records: AirtableRecord[]) => {
-      records.forEach(r => (airtableIndex[r.airtableId] = r))
+    Object.values(this.base).forEach(records => {
+      ;(records as AirtableRecord[]).forEach(r => (airtableIndex[r.airtableId] = r))
     })
 
     this.airtableIdIndex = airtableIndex
@@ -41,9 +41,7 @@ export class AirtableCache<BASE = any> {
     noAirtableIds = false,
   ): BASE[TABLE_NAME] {
     if (noAirtableIds) {
-      return ((this.base[tableName] as any) as AirtableRecord[]).map(r =>
-        omit(r, ['airtableId']),
-      ) as any
+      return this.base[tableName].map(r => omit(r, ['airtableId'])) as BASE[TABLE_NAME]
     } else {
       return this.base[tableName]
     }

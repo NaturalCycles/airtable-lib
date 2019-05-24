@@ -5,6 +5,8 @@ import * as fs from 'fs-extra'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
+  AirtableBase,
+  AirtableBaseMap,
   AirtableBaseSchema,
   AirtableBaseSchemaMap,
   AirtableDaoOptions,
@@ -45,7 +47,7 @@ export class AirtableLib {
   }
 
   @logMethod({ logStart: true, noLogArgs: true })
-  async fetchRemoteBase<BASE> (
+  async fetchRemoteBase<BASE extends AirtableBase<BASE>> (
     baseSchema: AirtableBaseSchema,
     opts: AirtableDaoOptions = {},
     concurrency = 4,
@@ -59,7 +61,7 @@ export class AirtableLib {
           r[tableName] = this.getDao(baseId, tableSchema).getRecords(opts)
           return r
         },
-        {} as BASE,
+        {} as any,
       ),
       { concurrency },
     )
@@ -68,7 +70,7 @@ export class AirtableLib {
   /**
    * Fetches all remote Airtable Bases.
    */
-  async fetchRemoteBases<BASE_MAP> (
+  async fetchRemoteBases<BASE_MAP extends AirtableBaseMap<BASE_MAP>> (
     baseSchemaMap: AirtableBaseSchemaMap,
     opts?: AirtableDaoOptions,
   ): Promise<BASE_MAP> {
@@ -116,7 +118,7 @@ export class AirtableLib {
    *
    * preserveOrder=true means it will upload one by one: slower, but keeping the original order
    */
-  async uploadBaseToRemote<BASE = any> (
+  async uploadBaseToRemote<BASE extends AirtableBase<BASE>> (
     base: BASE,
     baseSchema: AirtableBaseSchema,
     opts: AirtableDaoOptions = {},
@@ -223,7 +225,7 @@ export class AirtableLib {
     )
   }
 
-  getAirtableCacheFromJson<BASE> (
+  getAirtableCacheFromJson<BASE extends AirtableBase<BASE>> (
     baseSchema: AirtableBaseSchema,
     jsonPath: string,
   ): AirtableCache<BASE> {
@@ -235,11 +237,11 @@ export class AirtableLib {
    * 1. Sorts base by name of the table.
    * 2. Sort all records of all tables by key name.
    */
-  sortBase<BASE> (base: BASE): BASE {
+  sortBase<BASE extends AirtableBase<BASE>> (base: BASE): BASE {
     const newBase = sortObjectKeys(base)
 
     Object.entries(newBase).forEach(([tableName, records]) => {
-      newBase[tableName] = records.map(sortObjectKeys)
+      newBase[tableName] = (records as any[]).map(sortObjectKeys)
     })
 
     return newBase

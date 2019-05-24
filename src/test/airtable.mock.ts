@@ -17,6 +17,10 @@ import {
   airtableSingleLinkSchema,
 } from '../airtable.model'
 
+const _baseMap: Record<string, AirtableRecord[]> = {
+  Test: [],
+}
+
 export interface TestBase {
   table1: Table1[]
   table2: Table2[]
@@ -129,7 +133,7 @@ export function mockBaseMap (baseId: string): AirtableBaseSchemaMap {
   }
 }
 
-export function mockBaseSchema (baseId: string): AirtableBaseSchema<TestBase> {
+export function mockBaseSchema (baseId: string): AirtableBaseSchema {
   return {
     baseId,
     tableSchemas: [
