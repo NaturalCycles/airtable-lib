@@ -9,8 +9,8 @@ import {
 import {
   AirtableAttachment,
   airtableAttachmentsSchema,
-  AirtableBaseMap,
   AirtableBaseSchema,
+  AirtableBaseSchemaMap,
   airtableMultipleLinkSchema,
   AirtableRecord,
   airtableRecordSchema,
@@ -123,7 +123,7 @@ export const categorySchema = objectSchema<Category>({
   users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
-export function mockBaseMap (baseId: string): AirtableBaseMap {
+export function mockBaseMap (baseId: string): AirtableBaseSchemaMap {
   return {
     Test: mockBaseSchema(baseId),
   }

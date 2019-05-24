@@ -123,7 +123,7 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
-export interface AirtableBaseMap {
+export interface AirtableBaseSchemaMap {
   [baseName: string]: AirtableBaseSchema
 }
 

@@ -36,17 +36,24 @@ export class AirtableCache<BASE = any> {
     this.base = base
   }
 
-  getTable<T extends AirtableRecord> (tableName: keyof BASE, noAirtableIds = false): T[] {
+  getTable<TABLE_NAME extends keyof BASE> (
+    tableName: TABLE_NAME,
+    noAirtableIds = false,
+  ): BASE[TABLE_NAME] {
     if (noAirtableIds) {
       return ((this.base[tableName] as any) as AirtableRecord[]).map(r =>
         omit(r, ['airtableId']),
-      ) as T[]
+      ) as any
     } else {
-      return (this.base[tableName] as any) as T[]
+      return this.base[tableName]
     }
   }
 
   get<T extends AirtableRecord> (airtableId: string): T {
     return this.airtableIdIndex[airtableId] as T
+  }
+
+  getByIds<T extends AirtableRecord> (airtableIds: string[]): T[] {
+    return airtableIds.map(id => this.airtableIdIndex[id]) as T[]
   }
 }

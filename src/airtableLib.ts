@@ -5,8 +5,8 @@ import * as fs from 'fs-extra'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
-  AirtableBaseMap,
   AirtableBaseSchema,
+  AirtableBaseSchemaMap,
   AirtableDaoOptions,
   AirtableLibCfg,
   AirtableRecord,
@@ -69,14 +69,14 @@ export class AirtableLib {
    * Fetches all remote Airtable Bases.
    */
   async fetchRemoteBases<BASE_MAP> (
-    baseMap: AirtableBaseMap,
+    baseSchemaMap: AirtableBaseSchemaMap,
     opts?: AirtableDaoOptions,
   ): Promise<BASE_MAP> {
     const bases = {} as BASE_MAP
 
     // Concurrency: 1
-    for await (const baseName of Object.keys(baseMap)) {
-      bases[baseName] = await this.fetchRemoteBase(baseMap[baseName], opts)
+    for await (const baseName of Object.keys(baseSchemaMap)) {
+      bases[baseName] = await this.fetchRemoteBase(baseSchemaMap[baseName], opts)
     }
 
     return bases
@@ -96,14 +96,14 @@ export class AirtableLib {
    * Fetches all remote Airtable Bases to json files.
    */
   async fetchRemoteBasesToJson (
-    baseMap: AirtableBaseMap,
+    baseSchemaMap: AirtableBaseSchemaMap,
     dir: string,
     opts?: AirtableDaoOptions,
   ): Promise<void> {
     // Concurrency: 1
-    for await (const baseName of Object.keys(baseMap)) {
+    for await (const baseName of Object.keys(baseSchemaMap)) {
       const jsonPath = `${dir}/${baseName}.json`
-      await this.fetchRemoteBaseToJson(baseMap[baseName], jsonPath, opts)
+      await this.fetchRemoteBaseToJson(baseSchemaMap[baseName], jsonPath, opts)
     }
   }
 
@@ -209,15 +209,15 @@ export class AirtableLib {
    * Uploads all bases from json files to remote Airtable bases.
    */
   async uploadJsonToRemoteBases (
-    baseMap: AirtableBaseMap,
+    baseSchemaMap: AirtableBaseSchemaMap,
     dir: string,
     opts?: AirtableDaoOptions,
   ): Promise<void> {
     await pMap(
-      Object.keys(baseMap),
+      Object.keys(baseSchemaMap),
       async baseName => {
         const jsonPath = `${dir}/${baseName}.json`
-        await this.uploadJsonToRemoteBase(baseMap[baseName], jsonPath, opts)
+        await this.uploadJsonToRemoteBase(baseSchemaMap[baseName], jsonPath, opts)
       },
       { concurrency: 1 },
     )
