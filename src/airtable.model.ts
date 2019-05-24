@@ -152,4 +152,11 @@ export interface AirtableDaoOptions {
   throwOnValidationError?: boolean
 
   onValidationError?: (err: JoiValidationError) => any
+
+  /**
+   * Applies only to "upload to remote Airtable" tasks.
+   * `true` means it will upload rows concurrently and the order will NOT be preserved.
+   * Otherwise order is preserved, but upload is sequential and slower.
+   */
+  skipPreservingOrder?: boolean
 }

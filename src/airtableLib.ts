@@ -48,6 +48,7 @@ export class AirtableLib {
   async fetchRemoteBase<BASE> (
     baseSchema: AirtableBaseSchema,
     opts: AirtableDaoOptions = {},
+    concurrency = 4,
   ): Promise<BASE> {
     const { baseId, tableSchemas } = baseSchema
 
@@ -60,7 +61,25 @@ export class AirtableLib {
         },
         {} as BASE,
       ),
+      { concurrency },
     )
+  }
+
+  /**
+   * Fetches all remote Airtable Bases.
+   */
+  async fetchRemoteBases<BASE_MAP> (
+    baseMap: AirtableBaseMap,
+    opts?: AirtableDaoOptions,
+  ): Promise<BASE_MAP> {
+    const bases = {} as BASE_MAP
+
+    // Concurrency: 1
+    for await (const baseName of Object.keys(baseMap)) {
+      bases[baseName] = await this.fetchRemoteBase(baseMap[baseName], opts)
+    }
+
+    return bases
   }
 
   async fetchRemoteBaseToJson (
@@ -81,14 +100,11 @@ export class AirtableLib {
     dir: string,
     opts?: AirtableDaoOptions,
   ): Promise<void> {
-    await pMap(
-      Object.keys(baseMap),
-      async baseName => {
-        const jsonPath = `${dir}/${baseName}.json`
-        await this.fetchRemoteBaseToJson(baseMap[baseName], jsonPath, opts)
-      },
-      { concurrency: 1 },
-    )
+    // Concurrency: 1
+    for await (const baseName of Object.keys(baseMap)) {
+      const jsonPath = `${dir}/${baseName}.json`
+      await this.fetchRemoteBaseToJson(baseMap[baseName], jsonPath, opts)
+    }
   }
 
   /**
@@ -97,6 +113,8 @@ export class AirtableLib {
    * Multi-pass operation:
    * 1. CreateRecords without airtableId and array field, map old ids to newly createdIds
    * 2. UpdateRecords, set array fields to new airtableIds using map from #1
+   *
+   * preserveOrder=true means it will upload one by one: slower, but keeping the original order
    */
   async uploadBaseToRemote<BASE = any> (
     base: BASE,
@@ -104,6 +122,7 @@ export class AirtableLib {
     opts: AirtableDaoOptions = {},
     concurrency = 4,
   ): Promise<number> {
+    const { skipPreservingOrder } = opts
     const { baseId, tableSchemas } = baseSchema
     const cache = new AirtableCache<BASE>(base, baseSchema)
     // map from old airtableId to newly-created airtableId
@@ -134,7 +153,7 @@ export class AirtableLib {
             const newRecord = await dao.createRecord(r, opts)
             idMap[oldId] = newRecord.airtableId
           },
-          { concurrency: 1 },
+          { concurrency: skipPreservingOrder ? concurrency : 1 },
         )
       },
       { concurrency },

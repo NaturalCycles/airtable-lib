@@ -79,13 +79,16 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
   /**
    * Warning:
    * Order of records is not preserved if `concurrency` is set to higher than 1!
+   * Or if opts.skipPreservingOrder=true
    */
   @logMethod()
   async createRecords (
     records: Omit<T, 'airtableId'>[],
     opts: AirtableDaoOptions = {},
-    concurrency = 1,
+    concurrency?: number,
   ): Promise<T[]> {
+    concurrency = concurrency || (opts.skipPreservingOrder ? 4 : 1)
+
     return pMap(
       records,
       async record => {
