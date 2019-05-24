@@ -6,7 +6,7 @@ import { AirtableBase, AirtableBaseSchema, AirtableRecord } from './airtable.mod
  * Provides API to access records.
  */
 export class AirtableCache<BASE extends AirtableBase<BASE>> {
-  constructor (private base: BASE, private _baseSchema: AirtableBaseSchema) {
+  constructor (private base: BASE, private _baseSchema: AirtableBaseSchema<BASE>) {
     this.indexBase()
   }
 

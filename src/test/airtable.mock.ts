@@ -133,7 +133,7 @@ export function mockBaseMap (baseId: string): AirtableBaseSchemaMap {
   }
 }
 
-export function mockBaseSchema (baseId: string): AirtableBaseSchema {
+export function mockBaseSchema (baseId: string): AirtableBaseSchema<TestBase> {
   return {
     baseId,
     tableSchemas: [

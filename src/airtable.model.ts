@@ -132,7 +132,7 @@ export type AirtableBaseMap<MAP = any> = Record<keyof MAP, AirtableBase>
 
 export type AirtableBaseSchemaMap<MAP = any> = Record<keyof MAP, AirtableBaseSchema>
 
-export interface AirtableBaseSchema {
+export interface AirtableBaseSchema<BASE extends AirtableBase<BASE> = any> {
   baseId: string
   tableSchemas: AirtableTableSchema[]
 }

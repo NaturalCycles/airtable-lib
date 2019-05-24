@@ -48,7 +48,7 @@ export class AirtableLib {
 
   @logMethod({ logStart: true, noLogArgs: true })
   async fetchRemoteBase<BASE extends AirtableBase<BASE>> (
-    baseSchema: AirtableBaseSchema,
+    baseSchema: AirtableBaseSchema<BASE>,
     opts: AirtableDaoOptions = {},
     concurrency = 4,
   ): Promise<BASE> {
@@ -120,7 +120,7 @@ export class AirtableLib {
    */
   async uploadBaseToRemote<BASE extends AirtableBase<BASE>> (
     base: BASE,
-    baseSchema: AirtableBaseSchema,
+    baseSchema: AirtableBaseSchema<BASE>,
     opts: AirtableDaoOptions = {},
     concurrency = 4,
   ): Promise<number> {
@@ -226,7 +226,7 @@ export class AirtableLib {
   }
 
   getAirtableCacheFromJson<BASE extends AirtableBase<BASE>> (
-    baseSchema: AirtableBaseSchema,
+    baseSchema: AirtableBaseSchema<BASE>,
     jsonPath: string,
   ): AirtableCache<BASE> {
     const json = require(jsonPath) as BASE
