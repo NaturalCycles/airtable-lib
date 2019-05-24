@@ -1,3 +1,11 @@
+# [1.10.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.9.0...v1.10.0) (2019-05-24)
+
+
+### Features
+
+* AirtableCache.getByIds(), renames ([0a672d7](https://github.com/NaturalCycles/airtable-lib/commit/0a672d7))
+* improve typings (not sure) ([a144a6a](https://github.com/NaturalCycles/airtable-lib/commit/a144a6a))
+
 # [1.9.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.8.0...v1.9.0) (2019-05-24)
 
 
