@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.10.0...v1.11.0) (2019-05-24)
+
+
+### Features
+
+* types ([d4e19b8](https://github.com/NaturalCycles/airtable-lib/commit/d4e19b8))
+
 # [1.10.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.9.0...v1.10.0) (2019-05-24)
 
 
