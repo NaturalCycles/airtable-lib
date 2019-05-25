@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.13.0...v1.13.1) (2019-05-25)
+
+
+### Bug Fixes
+
+* export airtableApi differently ([96f43d0](https://github.com/NaturalCycles/airtable-lib/commit/96f43d0))
+
 # [1.13.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.12.0...v1.13.0) (2019-05-25)
 
 
