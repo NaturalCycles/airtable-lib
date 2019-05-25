@@ -7,7 +7,7 @@ import {
   stringSchema,
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AirtableApiSort } from 'airtable'
+import { AirtableApiSort } from './airtable.api'
 import { AirtableRecord } from './index'
 
 export enum AIRTABLE_ERROR_CODE {

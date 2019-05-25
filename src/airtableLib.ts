@@ -1,7 +1,7 @@
 import { filterObject, logMethod, memo, StringMap, transformValues } from '@naturalcycles/js-lib'
 import { pMap, pProps } from '@naturalcycles/promise-lib'
-import * as AirtableApi from 'airtable'
 import * as fs from 'fs-extra'
+import { AirtableApi } from './airtable.api'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
@@ -25,18 +25,18 @@ export class AirtableLib {
   }
 
   @memo()
-  api (): typeof AirtableApi {
+  api (): AirtableApi {
     // lazy-loading the library
-    const airtableLib = require('airtable') as typeof AirtableApi
+    const airtableApi = require('airtable') as AirtableApi
 
     const { apiKey } = this.airtableServiceCfg
 
-    airtableLib.configure({
+    airtableApi.configure({
       endpointURL: 'https://api.airtable.com',
       apiKey,
       // requestTimeout: 300000,
     })
-    return airtableLib
+    return airtableApi
   }
 
   getDao<T extends AirtableRecord = AirtableRecord> (
@@ -46,6 +46,9 @@ export class AirtableLib {
     return new AirtableDao<T>(this.api(), baseId, tableSchema)
   }
 
+  /**
+   * Returned base is sorted.
+   */
   @logMethod({ logStart: true, noLogArgs: true })
   async fetchRemoteBase<BASE extends AirtableBaseType<BASE>> (
     baseSchema: AirtableBaseSchemaType<BASE>,
@@ -54,17 +57,19 @@ export class AirtableLib {
   ): Promise<BASE> {
     const { baseId, tableSchemas } = baseSchema
 
-    return pProps(
+    const base = await pProps(
       tableSchemas.reduce(
         (r, tableSchema) => {
           const { tableName } = tableSchema
           r[tableName] = this.getDao(baseId, tableSchema).getRecords(opts)
           return r
         },
-        {} as any,
+        {} as BASE,
       ),
       { concurrency },
     )
+
+    return sortAirtableBase(base)
   }
 
   /**
@@ -91,7 +96,7 @@ export class AirtableLib {
   ): Promise<void> {
     const base = await this.fetchRemoteBase(baseSchema, opts)
     await fs.ensureFile(jsonPath)
-    await fs.writeJson(jsonPath, sortAirtableBase(base), { spaces: 2 })
+    await fs.writeJson(jsonPath, base, { spaces: 2 })
   }
 
   /**
