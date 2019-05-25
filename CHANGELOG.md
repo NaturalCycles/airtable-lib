@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.12.0...v1.13.0) (2019-05-25)
+
+
+### Features
+
+* rename clashing types ([d0c3320](https://github.com/NaturalCycles/airtable-lib/commit/d0c3320))
+
 # [1.12.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.11.0...v1.12.0) (2019-05-25)
 
 
