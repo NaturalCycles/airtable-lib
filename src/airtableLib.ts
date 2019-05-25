@@ -5,14 +5,14 @@ import * as fs from 'fs-extra'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
-  AirtableBase,
-  AirtableBaseMap,
-  AirtableBaseSchema,
-  AirtableBaseSchemaMap,
+  AirtableBaseMapType,
+  AirtableBaseSchemaMapType,
+  AirtableBaseSchemaType,
+  AirtableBaseType,
   AirtableDaoOptions,
   AirtableLibCfg,
   AirtableRecord,
-  AirtableTableSchema,
+  AirtableTableSchemaType,
 } from './airtable.model'
 import { AirtableCache } from './airtableCache'
 import { AirtableDao } from './airtableDao'
@@ -41,14 +41,14 @@ export class AirtableLib {
 
   getDao<T extends AirtableRecord = AirtableRecord> (
     baseId: string,
-    tableSchema: AirtableTableSchema,
+    tableSchema: AirtableTableSchemaType,
   ): AirtableDao<T> {
     return new AirtableDao<T>(this.api(), baseId, tableSchema)
   }
 
   @logMethod({ logStart: true, noLogArgs: true })
-  async fetchRemoteBase<BASE extends AirtableBase<BASE>> (
-    baseSchema: AirtableBaseSchema<BASE>,
+  async fetchRemoteBase<BASE extends AirtableBaseType<BASE>> (
+    baseSchema: AirtableBaseSchemaType<BASE>,
     opts: AirtableDaoOptions = {},
     concurrency = 4,
   ): Promise<BASE> {
@@ -70,8 +70,8 @@ export class AirtableLib {
   /**
    * Fetches all remote Airtable Bases.
    */
-  async fetchRemoteBases<BASE_MAP extends AirtableBaseMap<BASE_MAP>> (
-    baseSchemaMap: AirtableBaseSchemaMap,
+  async fetchRemoteBases<BASE_MAP extends AirtableBaseMapType<BASE_MAP>> (
+    baseSchemaMap: AirtableBaseSchemaMapType,
     opts?: AirtableDaoOptions,
   ): Promise<BASE_MAP> {
     const bases = {} as BASE_MAP
@@ -85,7 +85,7 @@ export class AirtableLib {
   }
 
   async fetchRemoteBaseToJson (
-    baseSchema: AirtableBaseSchema,
+    baseSchema: AirtableBaseSchemaType,
     jsonPath: string,
     opts: AirtableDaoOptions = {},
   ): Promise<void> {
@@ -98,7 +98,7 @@ export class AirtableLib {
    * Fetches all remote Airtable Bases to json files.
    */
   async fetchRemoteBasesToJson (
-    baseSchemaMap: AirtableBaseSchemaMap,
+    baseSchemaMap: AirtableBaseSchemaMapType,
     dir: string,
     opts?: AirtableDaoOptions,
   ): Promise<void> {
@@ -118,9 +118,9 @@ export class AirtableLib {
    *
    * preserveOrder=true means it will upload one by one: slower, but keeping the original order
    */
-  async uploadBaseToRemote<BASE extends AirtableBase<BASE>> (
+  async uploadBaseToRemote<BASE extends AirtableBaseType<BASE>> (
     base: BASE,
-    baseSchema: AirtableBaseSchema<BASE>,
+    baseSchema: AirtableBaseSchemaType<BASE>,
     opts: AirtableDaoOptions = {},
     concurrency = 4,
   ): Promise<number> {
@@ -198,7 +198,7 @@ export class AirtableLib {
 
   @logMethod({ logStart: true, noLogArgs: true })
   async uploadJsonToRemoteBase (
-    baseSchema: AirtableBaseSchema,
+    baseSchema: AirtableBaseSchemaType,
     jsonPath: string,
     opts: AirtableDaoOptions = {},
     concurrency?: number,
@@ -211,7 +211,7 @@ export class AirtableLib {
    * Uploads all bases from json files to remote Airtable bases.
    */
   async uploadJsonToRemoteBases (
-    baseSchemaMap: AirtableBaseSchemaMap,
+    baseSchemaMap: AirtableBaseSchemaMapType,
     dir: string,
     opts?: AirtableDaoOptions,
   ): Promise<void> {
@@ -225,8 +225,8 @@ export class AirtableLib {
     )
   }
 
-  getAirtableCacheFromJson<BASE extends AirtableBase<BASE>> (
-    baseSchema: AirtableBaseSchema<BASE>,
+  getAirtableCacheFromJson<BASE extends AirtableBaseType<BASE>> (
+    baseSchema: AirtableBaseSchemaType<BASE>,
     jsonPath: string,
   ): AirtableCache<BASE> {
     const json = require(jsonPath) as BASE
@@ -238,7 +238,7 @@ export class AirtableLib {
  * 1. Sorts base by name of the table.
  * 2. Sort all records of all tables by key name.
  */
-export function sortAirtableBase<BASE extends AirtableBase<BASE>> (base: BASE): BASE {
+export function sortAirtableBase<BASE extends AirtableBaseType<BASE>> (base: BASE): BASE {
   const newBase = sortObjectKeys(base)
 
   Object.entries(newBase).forEach(([tableName, records]) => {

@@ -123,21 +123,21 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
-export type AirtableBase<BASE = any, V extends AirtableRecord[] = AirtableRecord[]> = Record<
+export type AirtableBaseType<BASE = any, V extends AirtableRecord[] = AirtableRecord[]> = Record<
   keyof BASE,
   V
 >
 
-export type AirtableBaseMap<MAP = any> = Record<keyof MAP, AirtableBase>
+export type AirtableBaseMapType<MAP = any> = Record<keyof MAP, AirtableBaseType>
 
-export type AirtableBaseSchemaMap<MAP = any> = Record<keyof MAP, AirtableBaseSchema>
+export type AirtableBaseSchemaMapType<MAP = any> = Record<keyof MAP, AirtableBaseSchemaType>
 
-export interface AirtableBaseSchema<BASE extends AirtableBase<BASE> = any> {
+export interface AirtableBaseSchemaType<BASE extends AirtableBaseType<BASE> = any> {
   baseId: string
-  tableSchemas: AirtableTableSchema[]
+  tableSchemas: AirtableTableSchemaType[]
 }
 
-export interface AirtableTableSchema<T = any> {
+export interface AirtableTableSchemaType<T = any> {
   tableName: string
   validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]

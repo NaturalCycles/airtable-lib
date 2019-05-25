@@ -8,14 +8,14 @@ import {
   AIRTABLE_ERROR_CODE,
   AirtableDaoOptions,
   AirtableRecord,
-  AirtableTableSchema,
+  AirtableTableSchemaType,
 } from './airtable.model'
 
 export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements InstanceId {
   constructor (
     api: typeof AirtableApi,
     public baseId: string,
-    public tableSchema: AirtableTableSchema,
+    public tableSchema: AirtableTableSchemaType,
   ) {
     const { tableName } = tableSchema
     this.table = api.base(baseId)<T>(tableName)

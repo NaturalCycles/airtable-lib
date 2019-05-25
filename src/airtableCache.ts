@@ -1,5 +1,5 @@
 import { omit, StringMap } from '@naturalcycles/js-lib'
-import { AirtableBase, AirtableBaseSchema, AirtableRecord } from './airtable.model'
+import { AirtableBaseSchemaType, AirtableBaseType, AirtableRecord } from './airtable.model'
 import { sortAirtableBase } from './airtableLib'
 
 /**
@@ -8,8 +8,8 @@ import { sortAirtableBase } from './airtableLib'
  * Order of rows is preserved as is.
  * Provides API to access records.
  */
-export class AirtableCache<BASE extends AirtableBase<BASE>> {
-  constructor (base: BASE, private _baseSchema: AirtableBaseSchema<BASE>) {
+export class AirtableCache<BASE extends AirtableBaseType<BASE>> {
+  constructor (base: BASE, private _baseSchema: AirtableBaseSchemaType<BASE>) {
     this.setBase(base)
   }
 
