@@ -1,14 +1,19 @@
 import { omit, StringMap } from '@naturalcycles/js-lib'
 import { AirtableBase, AirtableBaseSchema, AirtableRecord } from './airtable.model'
+import { sortAirtableBase } from './airtableLib'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
+ * Base is sorted (deterministic order of tables and record keys).
+ * Order of rows is preserved as is.
  * Provides API to access records.
  */
 export class AirtableCache<BASE extends AirtableBase<BASE>> {
-  constructor (private base: BASE, private _baseSchema: AirtableBaseSchema<BASE>) {
-    this.indexBase()
+  constructor (base: BASE, private _baseSchema: AirtableBaseSchema<BASE>) {
+    this.setBase(base)
   }
+
+  private base!: BASE
 
   /**
    * Map from airtableId to Record
@@ -33,7 +38,8 @@ export class AirtableCache<BASE extends AirtableBase<BASE>> {
   }
 
   setBase (base: BASE): void {
-    this.base = base
+    this.base = sortAirtableBase(base)
+    this.indexBase()
   }
 
   getTable<TABLE_NAME extends keyof BASE> (

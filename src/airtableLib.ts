@@ -91,7 +91,7 @@ export class AirtableLib {
   ): Promise<void> {
     const base = await this.fetchRemoteBase(baseSchema, opts)
     await fs.ensureFile(jsonPath)
-    await fs.writeJson(jsonPath, this.sortBase(base), { spaces: 2 })
+    await fs.writeJson(jsonPath, sortAirtableBase(base), { spaces: 2 })
   }
 
   /**
@@ -232,20 +232,20 @@ export class AirtableLib {
     const json = require(jsonPath) as BASE
     return new AirtableCache<BASE>(json, baseSchema)
   }
+}
 
-  /**
-   * 1. Sorts base by name of the table.
-   * 2. Sort all records of all tables by key name.
-   */
-  sortBase<BASE extends AirtableBase<BASE>> (base: BASE): BASE {
-    const newBase = sortObjectKeys(base)
+/**
+ * 1. Sorts base by name of the table.
+ * 2. Sort all records of all tables by key name.
+ */
+export function sortAirtableBase<BASE extends AirtableBase<BASE>> (base: BASE): BASE {
+  const newBase = sortObjectKeys(base)
 
-    Object.entries(newBase).forEach(([tableName, records]) => {
-      newBase[tableName] = (records as any[]).map(sortObjectKeys)
-    })
+  Object.entries(newBase).forEach(([tableName, records]) => {
+    newBase[tableName] = (records as any[]).map(sortObjectKeys)
+  })
 
-    return newBase
-  }
+  return newBase
 }
 
 function sortObjectKeys<T> (o: T): T {

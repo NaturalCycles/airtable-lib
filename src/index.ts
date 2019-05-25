@@ -3,7 +3,10 @@ import {
   AirtableAttachment,
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
+  AirtableBase,
+  AirtableBaseMap,
   AirtableBaseSchema,
+  AirtableBaseSchemaMap,
   AirtableDaoOptions,
   AirtableId,
   airtableIdSchema,
@@ -18,7 +21,7 @@ import {
 } from './airtable.model'
 import { AirtableCache } from './airtableCache'
 import { AirtableDao } from './airtableDao'
-import { AirtableLib } from './airtableLib'
+import { AirtableLib, sortAirtableBase } from './airtableLib'
 
 export {
   AirtableLib,
@@ -40,4 +43,8 @@ export {
   AirtableBaseSchema,
   AirtableTableSchema,
   AirtableDaoOptions,
+  AirtableBase,
+  AirtableBaseMap,
+  AirtableBaseSchemaMap,
+  sortAirtableBase,
 }
