@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.14.0...v1.15.0) (2019-05-26)
+
+
+### Features
+
+* refactor to AirtableBaseDao ([5a840f7](https://github.com/NaturalCycles/airtable-lib/commit/5a840f7))
+
 # [1.14.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.13.1...v1.14.0) (2019-05-26)
 
 
