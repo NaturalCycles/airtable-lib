@@ -6,24 +6,31 @@ import {
   objectSchema,
   stringSchema,
 } from '@naturalcycles/nodejs-lib'
+import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
   airtableAttachmentsSchema,
-  AirtableBaseSchemaMapType,
-  AirtableBaseSchemaType,
   airtableMultipleLinkSchema,
   AirtableRecord,
   airtableRecordSchema,
   airtableSingleLinkSchema,
 } from '../airtable.model'
+import { AirtableBaseDao } from '../airtableBaseDao'
+import { AirtableBasesDao } from '../airtableBasesDao'
+import { AirtableTableDao } from '../airtableTableDao'
+import { cacheDir } from '../paths.cnst'
 
 const _baseMap: Record<string, AirtableRecord[]> = {
   Test: [],
 }
 
+export interface BaseMap {
+  TestBase: TestBase
+}
+
 export interface TestBase {
-  table1: Table1[]
-  table2: Table2[]
+  // table1: Table1[]
+  // table2: Table2[]
   users: User[]
   roles: Role[]
   permissions: Permission[]
@@ -127,21 +134,33 @@ export const categorySchema = objectSchema<Category>({
   users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
-export function mockBaseMap (baseId: string): AirtableBaseSchemaMapType {
-  return {
-    Test: mockBaseSchema(baseId),
-  }
+export function mockTableDao1 (api: AirtableApi, baseId: string): AirtableTableDao<Table1> {
+  return new AirtableTableDao<Table1>(api, baseId, 'table1', {
+    sort: [{ field: 'name' }],
+  })
 }
 
-export function mockBaseSchema (baseId: string): AirtableBaseSchemaType<TestBase> {
-  return {
+export function mockTableDao2 (api: AirtableApi, baseId: string): AirtableTableDao<Table2> {
+  return new AirtableTableDao<Table2>(api, baseId, 'table2', {
+    sort: [{ field: 'name' }],
+  })
+}
+
+export function mockBaseDao (api: AirtableApi, baseId: string): AirtableBaseDao<TestBase> {
+  return new AirtableBaseDao<TestBase>(api, {
     baseId,
     baseName: 'Test',
-    tableSchemas: [
-      { tableName: 'users', sort: [{ field: 'id' }], validationSchema: userSchema },
-      { tableName: 'roles', sort: [{ field: 'id' }], validationSchema: roleSchema },
-      { tableName: 'permissions', sort: [{ field: 'id' }], validationSchema: permissionSchema },
-      { tableName: 'categories', sort: [{ field: 'id' }], validationSchema: categorySchema },
-    ],
-  }
+    cacheDir,
+    tableSchemaMap: {
+      users: { sort: [{ field: 'id' }], validationSchema: userSchema },
+      roles: { sort: [{ field: 'id' }], validationSchema: roleSchema },
+      permissions: { sort: [{ field: 'id' }], validationSchema: permissionSchema },
+      categories: { sort: [{ field: 'id' }], validationSchema: categorySchema },
+    },
+  })
+}
+
+export function mockBasesDao (api: AirtableApi, baseId: string): AirtableBasesDao<BaseMap> {
+  const baseDao = mockBaseDao(api, baseId)
+  return new AirtableBasesDao<BaseMap>([baseDao])
 }

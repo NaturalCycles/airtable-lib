@@ -1,5 +1,4 @@
 import {
-  AnySchemaTyped,
   arraySchema,
   integerSchema,
   JoiValidationError,
@@ -7,7 +6,6 @@ import {
   stringSchema,
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AirtableApiSort } from './airtable.api'
 import { AirtableRecord } from './index'
 
 export enum AIRTABLE_ERROR_CODE {
@@ -123,27 +121,6 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
-export type AirtableBaseType<BASE = any, V extends AirtableRecord[] = AirtableRecord[]> = Record<
-  keyof BASE,
-  V
->
-
-export type AirtableBaseMapType<MAP = any> = Record<keyof MAP, AirtableBaseType>
-
-export type AirtableBaseSchemaMapType<MAP = any> = Record<keyof MAP, AirtableBaseSchemaType>
-
-export interface AirtableBaseSchemaType<BASE extends AirtableBaseType<BASE> = any> {
-  baseId: string
-  baseName: string
-  tableSchemas: AirtableTableSchemaType[]
-}
-
-export interface AirtableTableSchemaType<T = any> {
-  tableName: string
-  validationSchema?: AnySchemaTyped<T>
-  sort?: AirtableApiSort<T>[]
-}
-
 export interface AirtableDaoOptions {
   /**
    * @default false
@@ -165,4 +142,16 @@ export interface AirtableDaoOptions {
    * Otherwise order is preserved, but upload is sequential and slower.
    */
   skipPreservingOrder?: boolean
+
+  /**
+   * Use given concurrency instead of default concurrency for given method (differs per method).
+   */
+  concurrency?: number
+
+  /**
+   * Cache fetched results inside AirtableBaseDao (applicable to AirtableBaseDao methods that fetch data,
+   * not applicable to AirtableTableDao methods).
+   * @default false
+   */
+  cache?: boolean
 }

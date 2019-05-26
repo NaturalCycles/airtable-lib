@@ -1,15 +1,16 @@
 import { AppError } from '@naturalcycles/js-lib'
 import { AIRTABLE_ERROR_CODE } from './airtable.model'
 import { AirtableLib } from './airtableLib'
+import { mockTableDao1 } from './test/airtable.mock'
 
 test('wrong apiKey should throw', async () => {
-  const airtableService = new AirtableLib({
+  const airtableLib = new AirtableLib({
     apiKey: 'apiKey123',
   })
-  const dao = airtableService.getDao('someBaseId', { tableName: 'someTable' })
+  const tableDao = mockTableDao1(airtableLib.api(), 'someBaseId')
 
   // await expect(airtableService.getRecords('someBaseId.someTable')).rejects.toThrow(AppError)
-  const err = await dao.getRecords().catch(e => e)
+  const err = await tableDao.getRecords().catch(e => e)
   expect(err).toBeInstanceOf(AppError)
   expect(err).toMatchObject({
     message: expect.any(String),
@@ -20,14 +21,12 @@ test('wrong apiKey should throw', async () => {
   })
 })
 
-test('test1', async () => {
-  const airtableService = new AirtableLib({
+test('api', async () => {
+  const airtableLib = new AirtableLib({
     apiKey: 'apiKey123',
   })
 
-  airtableService.init() // for coverage
-  const airtableLib = airtableService.api()
-
-  console.log(airtableLib)
-  expect(airtableLib).not.toBeUndefined()
+  const api = airtableLib.api()
+  // console.log(api)
+  expect(api).not.toBeUndefined()
 })

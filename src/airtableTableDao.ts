@@ -1,28 +1,29 @@
 import { anyToErrorMessage, AppError, InstanceId, logMethod } from '@naturalcycles/js-lib'
-import { getValidationResult } from '@naturalcycles/nodejs-lib'
+import { AnySchemaTyped, getValidationResult } from '@naturalcycles/nodejs-lib'
 import { pMap } from '@naturalcycles/promise-lib'
 import { Omit } from 'type-fest'
 import {
   AirtableApi,
   AirtableApiRecord,
   AirtableApiSelectOpts,
+  AirtableApiSort,
   AirtableApiTable,
 } from './airtable.api'
-import {
-  AIRTABLE_ERROR_CODE,
-  AirtableDaoOptions,
-  AirtableRecord,
-  AirtableTableSchemaType,
-} from './airtable.model'
+import { AIRTABLE_ERROR_CODE, AirtableDaoOptions, AirtableRecord } from './airtable.model'
 
-export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements InstanceId {
+export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
+  validationSchema?: AnySchemaTyped<T>
+  sort?: AirtableApiSort<T>[]
+}
+
+export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
   constructor (
-    api: AirtableApi,
-    public baseId: string,
-    public tableSchema: AirtableTableSchemaType,
+    airtableApi: AirtableApi,
+    baseId: string,
+    private tableName: string,
+    private cfg: AirtableTableDaoCfg<T>,
   ) {
-    const { tableName } = tableSchema
-    this.table = api.base(baseId)<T>(tableName)
+    this.table = airtableApi.base(baseId)<T>(tableName)
     this.instanceId = [baseId, tableName].join('_')
   }
 
@@ -38,7 +39,7 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
     opts: AirtableDaoOptions = {},
     selectOpts: AirtableApiSelectOpts<T> = {},
   ): Promise<T[]> {
-    const { sort } = this.tableSchema
+    const { sort } = this.cfg
 
     const records = await this.table
       .select({
@@ -89,9 +90,8 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
   async createRecords (
     records: Omit<T, 'airtableId'>[],
     opts: AirtableDaoOptions = {},
-    concurrency?: number,
   ): Promise<T[]> {
-    concurrency = concurrency || (opts.skipPreservingOrder ? 4 : 1)
+    const concurrency = opts.concurrency || (opts.skipPreservingOrder ? 4 : 1)
 
     return pMap(
       records,
@@ -141,7 +141,8 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
   }
 
   @logMethod()
-  async replaceRecords (records: T[], opts: AirtableDaoOptions = {}, concurrency = 4): Promise<T[]> {
+  async replaceRecords (records: T[], opts: AirtableDaoOptions = {}): Promise<T[]> {
+    const concurrency = opts.concurrency || 4
     return pMap(
       records,
       async r => {
@@ -195,10 +196,10 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
   }
 
   private validate<R> (record: R, opts: AirtableDaoOptions = {}): R {
-    const { validationSchema, tableName } = this.tableSchema
+    const { validationSchema } = this.cfg
     const { skipValidation, onValidationError, throwOnValidationError } = opts
 
-    const { value, error } = getValidationResult(record, validationSchema, tableName)
+    const { value, error } = getValidationResult(record, validationSchema, this.tableName)
 
     if (error && !skipValidation) {
       if (onValidationError) onValidationError(error)
@@ -236,7 +237,7 @@ export class AirtableDao<T extends AirtableRecord = AirtableRecord> implements I
     // Wrap as AppError with code
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
-    const { tableName } = this.tableSchema
+    const { tableName } = this
     const msg = `${tableName}: ${anyToErrorMessage(err)}`
     throw new AppError(msg, {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,

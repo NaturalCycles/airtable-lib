@@ -3,10 +3,6 @@ import {
   AirtableAttachment,
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
-  AirtableBaseMapType,
-  AirtableBaseSchemaMapType,
-  AirtableBaseSchemaType,
-  AirtableBaseType,
   AirtableDaoOptions,
   AirtableId,
   airtableIdSchema,
@@ -15,19 +11,20 @@ import {
   AirtableRecord,
   airtableRecordSchema,
   airtableSingleLinkSchema,
-  AirtableTableSchemaType,
   AirtableThumbnail,
   airtableThumbnailSchema,
 } from './airtable.model'
-import { AirtableCache } from './airtableCache'
-import { AirtableDao } from './airtableDao'
-import { AirtableLib, sortAirtableBase } from './airtableLib'
+import { AirtableBaseDao, AirtableBaseDaoCfg, sortAirtableBase } from './airtableBaseDao'
+import { AirtableBasesDao } from './airtableBasesDao'
+import { AirtableLib } from './airtableLib'
+import { AirtableTableDao, AirtableTableDaoCfg } from './airtableTableDao'
 
 export {
   AirtableLib,
   AirtableLibCfg,
-  AirtableDao,
-  AirtableCache,
+  AirtableTableDao,
+  AirtableBaseDao,
+  AirtableBasesDao,
   AirtableRecord,
   AIRTABLE_ERROR_CODE,
   AirtableId,
@@ -40,11 +37,8 @@ export {
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
   airtableRecordSchema,
-  AirtableBaseSchemaType,
-  AirtableTableSchemaType,
   AirtableDaoOptions,
-  AirtableBaseType,
-  AirtableBaseMapType,
-  AirtableBaseSchemaMapType,
   sortAirtableBase,
+  AirtableTableDaoCfg,
+  AirtableBaseDaoCfg,
 }

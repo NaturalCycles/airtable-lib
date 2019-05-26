@@ -1,15 +1,13 @@
 import { omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
 import { AirtableLib } from '../../airtableLib'
-import { cacheDir, tmpDir } from '../../paths.cnst'
 import {
-  mockBaseMap,
-  mockBaseSchema,
+  mockBaseDao,
+  mockBasesDao,
   mockTable1,
   mockTable2,
-  Table1,
-  Table2,
-  TestBase,
+  mockTableDao1,
+  mockTableDao2,
 } from '../airtable.mock'
 
 jest.setTimeout(60000)
@@ -29,34 +27,31 @@ test('delete, create, update, get', async () => {
   const records = mockTable1()
   const [rec1] = records
 
-  const dao = airtableLib.getDao<Table1>(AIRTABLE_BASE_ID, {
-    tableName: 'table1',
-    sort: [{ field: 'name' }],
-  })
+  const tableDao = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
 
-  const deleteResult = await dao.deleteRecord('nonExistingId')
+  const deleteResult = await tableDao.deleteRecord('nonExistingId')
   expect(deleteResult).toBe(false)
 
-  await dao.deleteAllRecords()
+  await tableDao.deleteAllRecords()
 
-  const rec1Created = await dao.createRecord(rec1)
+  const rec1Created = await tableDao.createRecord(rec1)
   console.log({ rec1Created })
   expect(rec1Created).toHaveProperty('airtableId', expect.any(String))
   expect(rec1Created).toMatchObject(rec1)
 
-  expect(await dao.getRecord(rec1Created.airtableId)).toEqual(rec1Created)
+  expect(await tableDao.getRecord(rec1Created.airtableId)).toEqual(rec1Created)
 
-  expect(await dao.deleteRecord(rec1Created.airtableId)).toBe(true)
+  expect(await tableDao.deleteRecord(rec1Created.airtableId)).toBe(true)
 
-  expect(await dao.getRecord(rec1Created.airtableId)).toBeUndefined()
+  expect(await tableDao.getRecord(rec1Created.airtableId)).toBeUndefined()
 
-  const recordsCreated = await dao.createRecords(records)
+  const recordsCreated = await tableDao.createRecords(records)
   // console.log({recordsCreated})
   recordsCreated.forEach(record => expect(record).toHaveProperty('airtableId', expect.any(String)))
   const recordsWithoutAirtableId = recordsCreated.map(r => omit(r, ['airtableId']))
   expect(recordsWithoutAirtableId).toEqual(records)
 
-  const recordsLoaded = await dao.getRecords()
+  const recordsLoaded = await tableDao.getRecords()
   // console.log({recordsLoaded})
   expect(recordsLoaded).toEqual(recordsCreated)
 })
@@ -65,37 +60,39 @@ test('integration: table1, table2', async () => {
   const mocks1 = mockTable1()
   const mocks2 = mockTable2()
 
-  const dao1 = airtableLib.getDao<Table1>(AIRTABLE_BASE_ID, { tableName: 'table1' })
-  const dao2 = airtableLib.getDao<Table2>(AIRTABLE_BASE_ID, { tableName: 'table2' })
+  const tableDao1 = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
+  const tableDao2 = mockTableDao2(airtableLib.api(), AIRTABLE_BASE_ID)
 
-  await dao1.deleteAllRecords()
-  await dao2.deleteAllRecords()
+  await tableDao1.deleteAllRecords()
+  await tableDao2.deleteAllRecords()
 
-  const _records1 = await dao1.createRecords(mocks1)
-  const _records2 = await dao2.createRecords(mocks2)
+  const _records1 = await tableDao1.createRecords(mocks1)
+  const _records2 = await tableDao2.createRecords(mocks2)
 })
 
 test('fetchRemoteBase', async () => {
-  const base = await airtableLib.fetchRemoteBase(mockBaseSchema(AIRTABLE_BASE_ID))
+  const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  const base = await baseDao.fetchFromRemote()
   console.log(JSON.stringify(base, null, 2))
 })
 
 test('fetchRemoteBasesToJson', async () => {
-  await airtableLib.fetchRemoteBasesToJson(mockBaseMap(AIRTABLE_BASE_ID), cacheDir)
+  const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  await basesDao.fetchAllFromRemoteToJson()
 })
 
 test('uploadJsonToRemoteBases', async () => {
-  await airtableLib.uploadJsonToRemoteBases(mockBaseMap(AIRTABLE_BASE_ID), cacheDir)
+  const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  basesDao.loadAllFromJson()
+  await basesDao.uploadAllToRemote()
 }, 120000)
 
 test('getAirtableCacheFromJson', async () => {
-  const jsonPath = `${tmpDir}/${AIRTABLE_BASE_ID}.json`
-  const cache = airtableLib.getAirtableCacheFromJson<TestBase>(
-    mockBaseSchema(AIRTABLE_BASE_ID),
-    jsonPath,
-  )
+  const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  baseDao.loadFromJson()
+
   // console.log(cache.getBase())
-  console.log(cache.getTable('categories'))
-  console.log(cache.getById('recKD4dQ5UVWxBFhT'))
-  console.log(cache.getByIds(['recKD4dQ5UVWxBFhT', 'recL8ZPFiCjTivovL']))
+  console.log(baseDao.getTableRecords('categories'))
+  console.log(baseDao.getById('recKD4dQ5UVWxBFhT'))
+  console.log(baseDao.getByIds(['recKD4dQ5UVWxBFhT', 'recL8ZPFiCjTivovL']))
 })
