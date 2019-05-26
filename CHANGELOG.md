@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.13.1...v1.14.0) (2019-05-26)
+
+
+### Features
+
+* cache.get > getById, requireById ([e1b2b5c](https://github.com/NaturalCycles/airtable-lib/commit/e1b2b5c))
+
 ## [1.13.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.13.0...v1.13.1) (2019-05-25)
 
 
