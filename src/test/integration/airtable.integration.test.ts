@@ -96,6 +96,6 @@ test('getAirtableCacheFromJson', async () => {
   )
   // console.log(cache.getBase())
   console.log(cache.getTable('categories'))
-  console.log(cache.get('recKD4dQ5UVWxBFhT'))
+  console.log(cache.getById('recKD4dQ5UVWxBFhT'))
   console.log(cache.getByIds(['recKD4dQ5UVWxBFhT', 'recL8ZPFiCjTivovL']))
 })

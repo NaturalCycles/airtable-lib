@@ -136,6 +136,7 @@ export function mockBaseMap (baseId: string): AirtableBaseSchemaMapType {
 export function mockBaseSchema (baseId: string): AirtableBaseSchemaType<TestBase> {
   return {
     baseId,
+    baseName: 'Test',
     tableSchemas: [
       { tableName: 'users', sort: [{ field: 'id' }], validationSchema: userSchema },
       { tableName: 'roles', sort: [{ field: 'id' }], validationSchema: roleSchema },

@@ -134,6 +134,7 @@ export type AirtableBaseSchemaMapType<MAP = any> = Record<keyof MAP, AirtableBas
 
 export interface AirtableBaseSchemaType<BASE extends AirtableBaseType<BASE> = any> {
   baseId: string
+  baseName: string
   tableSchemas: AirtableTableSchemaType[]
 }
 

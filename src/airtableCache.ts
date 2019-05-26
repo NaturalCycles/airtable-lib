@@ -9,7 +9,7 @@ import { sortAirtableBase } from './airtableLib'
  * Provides API to access records.
  */
 export class AirtableCache<BASE extends AirtableBaseType<BASE>> {
-  constructor (base: BASE, private _baseSchema: AirtableBaseSchemaType<BASE>) {
+  constructor (base: BASE, private baseSchema: AirtableBaseSchemaType<BASE>) {
     this.setBase(base)
   }
 
@@ -53,11 +53,19 @@ export class AirtableCache<BASE extends AirtableBaseType<BASE>> {
     }
   }
 
-  get<T extends AirtableRecord> (airtableId: string): T {
-    return this.airtableIdIndex[airtableId] as T
+  getById<T extends AirtableRecord> (airtableId?: string): T | undefined {
+    return this.airtableIdIndex[airtableId!] as T
   }
 
-  getByIds<T extends AirtableRecord> (airtableIds: string[]): T[] {
+  requireById<T extends AirtableRecord> (airtableId: string): T {
+    const r = this.airtableIdIndex[airtableId] as T
+    if (!r) {
+      throw new Error(`requireById ${this.baseSchema.baseName}.${airtableId} not found`)
+    }
+    return r
+  }
+
+  getByIds<T extends AirtableRecord> (airtableIds: string[] = []): T[] {
     return airtableIds.map(id => this.airtableIdIndex[id]) as T[]
   }
 }
