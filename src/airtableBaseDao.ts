@@ -28,7 +28,7 @@ import { AirtableTableDao } from './airtableTableDao'
  */
 export class AirtableBaseDao<BASE = any> implements InstanceId {
   constructor (
-    private airtableApi: AirtableApi,
+    protected airtableApi: AirtableApi,
     public cfg: AirtableBaseDaoCfg<BASE>,
     cache?: BASE,
   ) {
@@ -49,17 +49,17 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   lastUpdated?: number
 
-  private cache!: BASE
+  protected cache!: BASE
 
   /**
    * Map from airtableId to Record
    */
-  private airtableIdIndex!: StringMap<AirtableRecord>
+  protected airtableIdIndex!: StringMap<AirtableRecord>
 
   /**
    * Indexes `this.cache` by `airtableId`
    */
-  private indexCache (): void {
+  protected indexCache (): void {
     const airtableIndex: StringMap<AirtableRecord> = {}
 
     Object.values(this.cache).forEach(records => {
