@@ -12,25 +12,11 @@ import { AirtableApi } from './airtable.api'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
+  AirtableBaseDaoCfg,
   AirtableDaoOptions,
   AirtableRecord,
 } from './airtable.model'
-import { AirtableTableDao, AirtableTableDaoCfg } from './airtableTableDao'
-
-export interface AirtableBaseDaoCfg<BASE = any> {
-  baseId: string
-  baseName: string
-  tableSchemaMap: {
-    // [tableName in keyof BASE]: AirtableTableDaoCfg<BASE[tableName]>
-    [tableName in keyof BASE]: AirtableTableDaoCfg
-  }
-
-  /**
-   * Directory where json cache is stored.
-   * Will be stored as `${cacheDir}/${baseName}.json`
-   */
-  cacheDir: string
-}
+import { AirtableTableDao } from './airtableTableDao'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
@@ -169,6 +155,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     )
 
     if (opts.cache) {
+      this.lastUpdated = Math.floor(Date.now() / 1000)
       this.setCache(base)
     }
 

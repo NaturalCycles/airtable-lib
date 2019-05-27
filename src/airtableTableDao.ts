@@ -1,20 +1,19 @@
 import { anyToErrorMessage, AppError, InstanceId, logMethod } from '@naturalcycles/js-lib'
-import { AnySchemaTyped, getValidationResult } from '@naturalcycles/nodejs-lib'
+import { getValidationResult } from '@naturalcycles/nodejs-lib'
 import { pMap } from '@naturalcycles/promise-lib'
 import { Omit } from 'type-fest'
 import {
   AirtableApi,
   AirtableApiRecord,
   AirtableApiSelectOpts,
-  AirtableApiSort,
   AirtableApiTable,
 } from './airtable.api'
-import { AIRTABLE_ERROR_CODE, AirtableDaoOptions, AirtableRecord } from './airtable.model'
-
-export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
-  validationSchema?: AnySchemaTyped<T>
-  sort?: AirtableApiSort<T>[]
-}
+import {
+  AIRTABLE_ERROR_CODE,
+  AirtableDaoOptions,
+  AirtableRecord,
+  AirtableTableDaoCfg,
+} from './airtable.model'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
   constructor (

@@ -1,4 +1,5 @@
 import {
+  AnySchemaTyped,
   arraySchema,
   integerSchema,
   JoiValidationError,
@@ -6,7 +7,8 @@ import {
   stringSchema,
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AirtableRecord } from './index'
+import { AirtableApiSort } from './airtable.api'
+import { AirtableRecord, AirtableTableDaoCfg } from './index'
 
 export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
@@ -154,4 +156,21 @@ export interface AirtableDaoOptions {
    * @default false
    */
   cache?: boolean
+}
+
+export interface AirtableBaseDaoCfg<BASE = any> {
+  baseId: string
+  baseName: string
+  tableSchemaMap: { [tableName in keyof BASE]: AirtableTableDaoCfg }
+
+  /**
+   * Directory where json cache is stored.
+   * Will be stored as `${cacheDir}/${baseName}.json`
+   */
+  cacheDir: string
+}
+
+export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
+  validationSchema?: AnySchemaTyped<T>
+  sort?: AirtableApiSort<T>[]
 }

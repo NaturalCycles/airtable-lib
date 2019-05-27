@@ -1,3 +1,4 @@
+import { StringMap } from '@naturalcycles/js-lib'
 import { AirtableDaoOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
@@ -12,11 +13,26 @@ export class AirtableBasesDao<BASE_MAP = any> {
   }
 
   getCacheMap (): BASE_MAP {
-    const baseMap = {} as BASE_MAP
+    return this.baseDaos.reduce(
+      (baseMap, baseDao) => {
+        baseMap[baseDao.cfg.baseName] = baseDao.getCache()
+        return baseMap
+      },
+      {} as BASE_MAP,
+    )
+  }
 
-    this.baseDaos.forEach(baseDao => (baseMap[baseDao.cfg.baseName] = baseDao.getCache()))
-
-    return baseMap
+  /**
+   * @returns map from baseName to unix timestamp of last updated (or undefined)
+   */
+  getLastUpdatedMap (): StringMap<number | undefined> {
+    return this.baseDaos.reduce(
+      (baseMap, baseDao) => {
+        baseMap[baseDao.cfg.baseName] = baseDao.lastUpdated
+        return baseMap
+      },
+      {} as StringMap<number | undefined>,
+    )
   }
 
   /**

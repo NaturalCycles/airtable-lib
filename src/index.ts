@@ -3,6 +3,7 @@ import {
   AirtableAttachment,
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
+  AirtableBaseDaoCfg,
   AirtableDaoOptions,
   AirtableId,
   airtableIdSchema,
@@ -11,13 +12,14 @@ import {
   AirtableRecord,
   airtableRecordSchema,
   airtableSingleLinkSchema,
+  AirtableTableDaoCfg,
   AirtableThumbnail,
   airtableThumbnailSchema,
 } from './airtable.model'
-import { AirtableBaseDao, AirtableBaseDaoCfg, sortAirtableBase } from './airtableBaseDao'
+import { AirtableBaseDao, sortAirtableBase } from './airtableBaseDao'
 import { AirtableBasesDao } from './airtableBasesDao'
 import { AirtableLib } from './airtableLib'
-import { AirtableTableDao, AirtableTableDaoCfg } from './airtableTableDao'
+import { AirtableTableDao } from './airtableTableDao'
 
 export {
   AirtableLib,
