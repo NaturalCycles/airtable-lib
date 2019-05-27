@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.15.0...v1.16.0) (2019-05-27)
+
+
+### Features
+
+* BasesDao.getCacheMap() ([e782801](https://github.com/NaturalCycles/airtable-lib/commit/e782801))
+
 # [1.15.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.14.0...v1.15.0) (2019-05-26)
 
 
