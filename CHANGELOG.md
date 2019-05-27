@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.17.0...v1.18.0) (2019-05-27)
+
+
+### Features
+
+* AirtableBaseDao allows extension ([05701f0](https://github.com/NaturalCycles/airtable-lib/commit/05701f0))
+
 # [1.17.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.16.0...v1.17.0) (2019-05-27)
 
 
