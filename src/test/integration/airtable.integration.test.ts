@@ -79,6 +79,10 @@ test('fetchRemoteBase', async () => {
 test('fetchRemoteBasesToJson', async () => {
   const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
   await basesDao.fetchAllFromRemoteToJson()
+
+  basesDao.loadAllFromJson()
+  const baseMap = basesDao.getCacheMap()
+  console.log(JSON.stringify(baseMap, null, 2))
 })
 
 test('uploadJsonToRemoteBases', async () => {

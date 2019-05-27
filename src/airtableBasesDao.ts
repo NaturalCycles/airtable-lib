@@ -11,6 +11,14 @@ export class AirtableBasesDao<BASE_MAP = any> {
     this.baseDaos.forEach(baseDao => baseDao.loadFromJson())
   }
 
+  getCacheMap (): BASE_MAP {
+    const baseMap = {} as BASE_MAP
+
+    this.baseDaos.forEach(baseDao => (baseMap[baseDao.cfg.baseName] = baseDao.getCache()))
+
+    return baseMap
+  }
+
   /**
    * Fetches all remote Airtable Bases.
    */
