@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.18.0...v1.19.0) (2019-05-28)
+
+
+### Features
+
+* refactor to use Connector interface ([7c1acd3](https://github.com/NaturalCycles/airtable-lib/commit/7c1acd3))
+
 # [1.18.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.17.0...v1.18.0) (2019-05-27)
 
 
