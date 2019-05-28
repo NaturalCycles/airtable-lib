@@ -1,4 +1,5 @@
-import { StringMap } from '@naturalcycles/js-lib'
+import { logMethod, StringMap } from '@naturalcycles/js-lib'
+import { pMap } from '@naturalcycles/promise-lib'
 import { AirtableDaoOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
@@ -8,65 +9,60 @@ import { AirtableBaseDao } from './airtableBaseDao'
 export class AirtableBasesDao<BASE_MAP = any> {
   constructor (private baseDaos: AirtableBaseDao<any>[]) {}
 
-  loadAllFromJson (): void {
-    this.baseDaos.forEach(baseDao => baseDao.loadFromJson())
-  }
-
   getCacheMap (): BASE_MAP {
-    return this.baseDaos.reduce(
-      (baseMap, baseDao) => {
-        baseMap[baseDao.cfg.baseName] = baseDao.getCache()
-        return baseMap
-      },
-      {} as BASE_MAP,
-    )
+    const cacheMap = {} as BASE_MAP
+
+    this.baseDaos.forEach(baseDao => {
+      cacheMap[baseDao.cfg.baseName] = baseDao.getCache()
+    })
+
+    return cacheMap
   }
 
   /**
    * @returns map from baseName to unix timestamp of last updated (or undefined)
    */
-  getLastUpdatedMap (): StringMap<number | undefined> {
-    return this.baseDaos.reduce(
-      (baseMap, baseDao) => {
-        baseMap[baseDao.cfg.baseName] = baseDao.lastUpdated
-        return baseMap
-      },
-      {} as StringMap<number | undefined>,
-    )
+  getLastUpdatedMap (connectorType: symbol): StringMap<number | undefined> {
+    const lastUpdatedMap = {}
+
+    this.baseDaos.forEach(baseDao => {
+      lastUpdatedMap[baseDao.cfg.baseName] = baseDao.lastUpdatedMap.get(connectorType)
+    })
+
+    return lastUpdatedMap
   }
 
-  /**
-   * Fetches all remote Airtable Bases.
-   */
-  async fetchAllFromRemote (opts?: AirtableDaoOptions): Promise<BASE_MAP> {
+  @logMethod({ logStart: true })
+  async fetchAll (
+    connectorType: symbol,
+    opts: AirtableDaoOptions = {},
+    concurrency = 1,
+  ): Promise<BASE_MAP> {
     const bases = {} as BASE_MAP
 
-    // Concurrency: 1
-    for await (const baseDao of this.baseDaos) {
-      const { baseName } = baseDao.cfg
-      bases[baseName] = await baseDao.fetchFromRemote(opts)
-    }
+    await pMap(
+      this.baseDaos,
+      async baseDao => {
+        bases[baseDao.cfg.baseName] = await baseDao.fetch(connectorType, opts)
+      },
+      { concurrency },
+    )
 
     return bases
   }
 
-  /**
-   * Fetches all remote Airtable Bases to json files.
-   */
-  async fetchAllFromRemoteToJson (opts?: AirtableDaoOptions): Promise<void> {
-    // Concurrency: 1
-    for await (const baseDao of this.baseDaos) {
-      await baseDao.fetchFromRemoteToJson(opts)
-    }
-  }
-
-  /**
-   * Uploads all bases from json files to remote Airtable bases.
-   */
-  async uploadAllToRemote (opts?: AirtableDaoOptions): Promise<void> {
-    // Concurrency: 1
-    for await (const baseDao of this.baseDaos) {
-      await baseDao.uploadToRemote(opts)
-    }
+  @logMethod({ logStart: true })
+  async uploadAll (
+    connectorType: symbol,
+    opts?: AirtableDaoOptions,
+    concurrency = 1,
+  ): Promise<void> {
+    await pMap(
+      this.baseDaos,
+      async baseDao => {
+        await baseDao.upload(connectorType, opts)
+      },
+      { concurrency },
+    )
   }
 }

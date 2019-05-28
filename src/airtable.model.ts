@@ -123,10 +123,11 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
+/**
+ * All properties default to undefined (treated as false).
+ */
 export interface AirtableDaoOptions {
   /**
-   * @default false
-   *
    * Will still _transform_ the value.
    */
   skipValidation?: boolean
@@ -151,26 +152,31 @@ export interface AirtableDaoOptions {
   concurrency?: number
 
   /**
-   * Cache fetched results inside AirtableBaseDao (applicable to AirtableBaseDao methods that fetch data,
-   * not applicable to AirtableTableDao methods).
-   * @default false
+   * By default AirtableBaseDao caches everything that is fetched from Connector.
+   * Settings this to `true` skips caching.
+   * Applicable to AirtableBaseDao methods that fetch data, not applicable to AirtableTableDao methods.
    */
-  cache?: boolean
+  noCache?: boolean
+
+  /**
+   * If set to true - preserves `lastUpdated` field.
+   */
+  preserveLastUpdated?: boolean
 }
 
 export interface AirtableBaseDaoCfg<BASE = any> {
   baseId: string
   baseName: string
-  tableSchemaMap: { [tableName in keyof BASE]: AirtableTableDaoCfg }
-
-  /**
-   * Directory where json cache is stored.
-   * Will be stored as `${cacheDir}/${baseName}.json`
-   */
-  cacheDir: string
+  connectors: AirtableBaseConnector<BASE>[]
 }
 
 export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
   validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]
+}
+
+export interface AirtableBaseConnector<BASE = any> {
+  TYPE: symbol
+  fetch (opts?: AirtableDaoOptions): Promise<BASE>
+  upload (base: BASE, opts?: AirtableDaoOptions): Promise<void>
 }

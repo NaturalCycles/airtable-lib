@@ -3,6 +3,7 @@ import {
   AirtableAttachment,
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
+  AirtableBaseConnector,
   AirtableBaseDaoCfg,
   AirtableDaoOptions,
   AirtableId,
@@ -16,10 +17,21 @@ import {
   AirtableThumbnail,
   airtableThumbnailSchema,
 } from './airtable.model'
-import { AirtableBaseDao, sortAirtableBase } from './airtableBaseDao'
+import { sortAirtableBase } from './airtable.util'
+import { AirtableBaseDao } from './airtableBaseDao'
 import { AirtableBasesDao } from './airtableBasesDao'
 import { AirtableLib } from './airtableLib'
 import { AirtableTableDao } from './airtableTableDao'
+import {
+  AIRTABLE_CONNECTOR_JSON,
+  AirtableJsonBaseConnector,
+  AirtableJsonBaseConnectorCfg,
+} from './connector/airtableJsonBaseConnector'
+import {
+  AIRTABLE_CONNECTOR_REMOTE,
+  AirtableRemoteBaseConnector,
+  AirtableRemoteBaseConnectorCfg,
+} from './connector/airtableRemoteBaseConnector'
 
 export {
   AirtableLib,
@@ -43,4 +55,11 @@ export {
   sortAirtableBase,
   AirtableTableDaoCfg,
   AirtableBaseDaoCfg,
+  AirtableBaseConnector,
+  AirtableJsonBaseConnector,
+  AIRTABLE_CONNECTOR_JSON,
+  AirtableJsonBaseConnectorCfg,
+  AIRTABLE_CONNECTOR_REMOTE,
+  AirtableRemoteBaseConnectorCfg,
+  AirtableRemoteBaseConnector,
 }

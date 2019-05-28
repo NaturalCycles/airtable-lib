@@ -1,5 +1,6 @@
 import { omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
+import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../..'
 import { AirtableLib } from '../../airtableLib'
 import {
   mockBaseDao,
@@ -72,28 +73,29 @@ test('integration: table1, table2', async () => {
 
 test('fetchRemoteBase', async () => {
   const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
-  const base = await baseDao.fetchFromRemote()
+  const base = await baseDao.fetch(AIRTABLE_CONNECTOR_REMOTE)
   console.log(JSON.stringify(base, null, 2))
 })
 
 test('fetchRemoteBasesToJson', async () => {
   const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
-  await basesDao.fetchAllFromRemoteToJson()
+  await basesDao.fetchAll(AIRTABLE_CONNECTOR_REMOTE)
+  await basesDao.uploadAll(AIRTABLE_CONNECTOR_JSON)
 
-  basesDao.loadAllFromJson()
+  await basesDao.fetchAll(AIRTABLE_CONNECTOR_JSON)
   const baseMap = basesDao.getCacheMap()
   console.log(JSON.stringify(baseMap, null, 2))
 })
 
 test('uploadJsonToRemoteBases', async () => {
   const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
-  basesDao.loadAllFromJson()
-  await basesDao.uploadAllToRemote()
+  await basesDao.fetchAll(AIRTABLE_CONNECTOR_JSON)
+  await basesDao.uploadAll(AIRTABLE_CONNECTOR_REMOTE)
 }, 120000)
 
 test('getAirtableCacheFromJson', async () => {
   const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
-  baseDao.loadFromJson()
+  await baseDao.fetch(AIRTABLE_CONNECTOR_JSON)
 
   // console.log(cache.getBase())
   console.log(baseDao.getTableRecords('categories'))

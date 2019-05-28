@@ -1,22 +1,11 @@
+import { InstanceId, logMethod, omit, StringMap } from '@naturalcycles/js-lib'
 import {
-  filterObject,
-  InstanceId,
-  logMethod,
-  omit,
-  StringMap,
-  transformValues,
-} from '@naturalcycles/js-lib'
-import { pMap, pProps } from '@naturalcycles/promise-lib'
-import * as fs from 'fs-extra'
-import { AirtableApi } from './airtable.api'
-import {
-  AirtableAttachment,
-  AirtableAttachmentUpload,
+  AirtableBaseConnector,
   AirtableBaseDaoCfg,
   AirtableDaoOptions,
   AirtableRecord,
 } from './airtable.model'
-import { AirtableTableDao } from './airtableTableDao'
+import { sortAirtableBase } from './airtable.util'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
@@ -27,27 +16,30 @@ import { AirtableTableDao } from './airtableTableDao'
  * Call .loadFromJson() to loads json cache from cacheDir.
  */
 export class AirtableBaseDao<BASE = any> implements InstanceId {
-  constructor (
-    protected airtableApi: AirtableApi,
-    public cfg: AirtableBaseDaoCfg<BASE>,
-    cache?: BASE,
-  ) {
+  constructor (public cfg: AirtableBaseDaoCfg<BASE>, cache?: BASE) {
     if (cache) {
       this.setCache(cache)
     }
 
-    this.jsonPath = `${this.cfg.cacheDir}/${this.cfg.baseName}.json`
+    this.connectorMap = new Map<symbol, AirtableBaseConnector<BASE>>()
+    this.lastUpdatedMap = new Map<symbol, number | undefined>()
+
+    cfg.connectors.forEach(c => {
+      this.connectorMap.set(c.TYPE, c)
+      this.lastUpdatedMap.set(c.TYPE, undefined)
+    })
+
     this.instanceId = this.cfg.baseName
   }
 
-  instanceId!: string
+  private connectorMap!: Map<symbol, AirtableBaseConnector<BASE>>
 
-  jsonPath!: string
+  instanceId!: string
 
   /**
    * Unix timestamp of when this Base was last updated.
    */
-  lastUpdated?: number
+  lastUpdatedMap!: Map<symbol, number | undefined>
 
   protected cache!: BASE
 
@@ -62,15 +54,11 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   protected indexCache (): void {
     const airtableIndex: StringMap<AirtableRecord> = {}
 
-    Object.values(this.cache).forEach(records => {
-      ;(records as AirtableRecord[]).forEach(r => (airtableIndex[r.airtableId] = r))
+    Object.values(this.cache).forEach((records: AirtableRecord[]) => {
+      records.forEach(r => (airtableIndex[r.airtableId] = r))
     })
 
     this.airtableIdIndex = airtableIndex
-  }
-
-  init (): void {
-    this.getCache()
   }
 
   getCache (): BASE {
@@ -121,184 +109,37 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     }) as T[]
   }
 
-  getTableDao<T extends AirtableRecord = AirtableRecord> (
-    tableName: keyof BASE,
-  ): AirtableTableDao<T> {
-    return new AirtableTableDao<T>(
-      this.airtableApi,
-      this.cfg.baseId,
-      tableName as string,
-      this.cfg.tableSchemaMap[tableName],
-    )
-  }
-
-  loadFromJson (): void {
-    this.setCache(require(this.jsonPath))
+  private getConnector (connectorType: symbol): AirtableBaseConnector<BASE> {
+    const connector = this.connectorMap.get(connectorType)
+    if (!connector) {
+      throw new Error(`Connector not found by type: ${String(connectorType)}`)
+    }
+    return connector
   }
 
   /**
-   * Returned base is sorted.
+   * Fetches from Connector.
+   *
+   * If `opts.cache` is true - saves to cache.
    */
-  @logMethod({ logStart: true, noLogArgs: true })
-  async fetchFromRemote (opts: AirtableDaoOptions = {}): Promise<BASE> {
-    const { tableSchemaMap } = this.cfg
+  @logMethod({ logStart: true })
+  async fetch (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
+    const base = await this.getConnector(connectorType).fetch(opts)
 
-    const base: BASE = await pProps(
-      Object.keys(tableSchemaMap).reduce(
-        (r, tableName) => {
-          r[tableName] = this.getTableDao(tableName as keyof BASE).getRecords(opts)
-          return r
-        },
-        {} as BASE,
-      ),
-      { concurrency: opts.concurrency || 4 },
-    )
+    if (!opts.preserveLastUpdated) {
+      this.lastUpdatedMap.set(connectorType, Math.floor(Date.now() / 1000))
+    }
 
-    if (opts.cache) {
-      this.lastUpdated = Math.floor(Date.now() / 1000)
+    if (!opts.noCache) {
       this.setCache(base)
+      return this.cache // return here to avoid calling sortAirtableBase twice
     }
 
     return sortAirtableBase(base)
   }
 
-  async fetchFromRemoteToJson (opts: AirtableDaoOptions = {}): Promise<void> {
-    const base = await this.fetchFromRemote(opts)
-
-    await fs.ensureFile(this.jsonPath)
-    await fs.writeJson(this.jsonPath, base, { spaces: 2 })
+  @logMethod({ logStart: true })
+  async upload (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
+    await this.getConnector(connectorType).upload(this.cache, opts)
   }
-
-  // todo: override baseId (for backup)? Or create new AirtableBaseDao with baseId of backup base
-  /**
-   * @returns number of records saved
-   *
-   * Multi-pass operation:
-   * 1. CreateRecords without airtableId and array field, map old ids to newly createdIds
-   * 2. UpdateRecords, set array fields to new airtableIds using map from #1
-   *
-   * preserveOrder=true means it will upload one by one: slower, but keeping the original order
-   */
-  async uploadToRemote (opts: AirtableDaoOptions = {}): Promise<number> {
-    const concurrency = opts.concurrency || 4
-    const { tableSchemaMap } = this.cfg
-    // map from old airtableId to newly-created airtableId
-    const idMap: StringMap = {}
-    const tableNames = Object.keys(tableSchemaMap) as (keyof BASE)[]
-
-    // First pass - insert records, populate idMap
-    await pMap(
-      tableNames,
-      async tableName => {
-        const dao = this.getTableDao(tableName)
-        await dao.deleteAllRecords(concurrency)
-
-        // One-by-one to preserve order
-        await pMap(
-          (this.getTableRecords(tableName) as any) as AirtableRecord[],
-          async _r => {
-            const oldId = _r.airtableId
-
-            let r = { ..._r }
-            delete r.airtableId
-            // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
-            r = transformValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
-
-            // Transform Attachments
-            r = transformValues(r, transformAttachments)
-
-            const newRecord = await dao.createRecord(r, opts)
-            idMap[oldId] = newRecord.airtableId
-          },
-          { concurrency: opts.skipPreservingOrder ? concurrency : 1 },
-        )
-      },
-      { concurrency },
-    )
-
-    // console.log({idMap})
-
-    // Second pass, update records to set correct airtableIds from idMap
-    await pMap(
-      tableNames,
-      async tableName => {
-        const dao = this.getTableDao(tableName)
-
-        const records = ((this.getTableRecords(tableName) as any) as AirtableRecord[])
-          // Only records with non-empty array values
-          .filter(r => Object.values(r).some(isArrayOfLinks))
-
-        await pMap(
-          records,
-          async r => {
-            const { airtableId } = r
-            // only array values
-            let patch = filterObject(r, (_k, v) => isArrayOfLinks(v))
-            // console.log({patch1: patch})
-            // use idMap
-            patch = transformValues(patch, (_k, v: string[]) => v.map(oldId => idMap[oldId]))
-            // console.log({patch2: patch})
-            await dao.updateRecord(idMap[airtableId], patch, opts)
-          },
-          { concurrency },
-        )
-      },
-      { concurrency },
-    )
-
-    // todo: check if this.cache needs to be updated with new airtableIds
-
-    return Object.keys(idMap).length
-  }
-}
-
-function isArrayOfLinks (v: any): boolean {
-  return (
-    Array.isArray(v) &&
-    !!v.length &&
-    v.some(item => typeof item === 'string' && item.startsWith('rec'))
-  )
-}
-
-function isArrayOfAttachments (v: any): boolean {
-  return (
-    Array.isArray(v) &&
-    !!v.length &&
-    v.some(item => !!item && typeof item === 'object' && !!item.url)
-  )
-}
-
-function transformAttachments (_k: any, v: AirtableAttachment[]): AirtableAttachmentUpload[] {
-  if (!isArrayOfAttachments(v)) return v
-
-  return v.map(a => ({
-    url: a.url,
-    filename: a.filename,
-  }))
-}
-
-/**
- * 1. Sorts base by name of the table.
- * 2. Sort all records of all tables by key name.
- */
-export function sortAirtableBase<BASE> (base: BASE): BASE {
-  const newBase = sortObjectKeys(base)
-
-  Object.entries(newBase).forEach(([tableName, records]) => {
-    newBase[tableName] = (records as any[]).map(sortObjectKeys)
-  })
-
-  return newBase
-}
-
-function sortObjectKeys<T> (o: T): T {
-  return Object.keys(o)
-    .sort()
-    .reduce(
-      (r, k) => {
-        r[k] = o[k]
-        return r
-      },
-      {} as T,
-    )
 }
