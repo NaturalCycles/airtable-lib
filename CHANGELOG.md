@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.19.0...v1.20.0) (2019-05-28)
+
+
+### Features
+
+* renames ([0a4e2ef](https://github.com/NaturalCycles/airtable-lib/commit/0a4e2ef))
+
 # [1.19.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.18.0...v1.19.0) (2019-05-28)
 
 
