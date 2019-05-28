@@ -175,6 +175,11 @@ export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
   sort?: AirtableApiSort<T>[]
 }
 
+export type AirtableTableSchemaMap<BASE = any> = {
+  // [tableName in keyof BASE]: AirtableTableDaoCfg<BASE[tableName]>
+  [tableName in keyof BASE]: AirtableTableDaoCfg
+}
+
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
   fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<BASE>

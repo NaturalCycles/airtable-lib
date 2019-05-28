@@ -14,6 +14,7 @@ import {
   airtableRecordSchema,
   airtableSingleLinkSchema,
   AirtableTableDaoCfg,
+  AirtableTableSchemaMap,
   AirtableThumbnail,
   airtableThumbnailSchema,
 } from './airtable.model'
@@ -53,6 +54,7 @@ export {
   airtableRecordSchema,
   AirtableDaoOptions,
   sortAirtableBase,
+  AirtableTableSchemaMap,
   AirtableTableDaoCfg,
   AirtableBaseDaoCfg,
   AirtableConnector,

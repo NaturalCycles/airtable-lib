@@ -8,14 +8,14 @@ import {
   AirtableConnector,
   AirtableDaoOptions,
   AirtableRecord,
-  AirtableTableDaoCfg,
+  AirtableTableSchemaMap,
 } from '../airtable.model'
 import { AirtableTableDao } from '../airtableTableDao'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 
 export interface AirtableRemoteConnectorCfg<BASE> {
-  tableSchemaMap: { [tableName in keyof BASE]: AirtableTableDaoCfg }
+  tableSchemaMap: AirtableTableSchemaMap<BASE>
 }
 
 export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BASE> {
