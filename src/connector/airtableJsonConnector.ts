@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra'
-import { AirtableBaseConnector, AirtableDaoOptions } from '../airtable.model'
+import { AirtableConnector, AirtableDaoOptions } from '../airtable.model'
 
 export const AIRTABLE_CONNECTOR_JSON = Symbol('AIRTABLE_CONNECTOR_JSON')
 
@@ -13,7 +13,7 @@ export interface AirtableJsonConnectorCfg {
   cacheDir: string
 }
 
-export class AirtableJsonConnector<BASE = any> implements AirtableBaseConnector<BASE> {
+export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE> {
   constructor (cfg: AirtableJsonConnectorCfg) {
     this.jsonPath = `${cfg.cacheDir}/${cfg.baseName}.json`
   }

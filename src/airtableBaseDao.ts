@@ -1,7 +1,7 @@
 import { InstanceId, logMethod, omit, StringMap } from '@naturalcycles/js-lib'
 import {
-  AirtableBaseConnector,
   AirtableBaseDaoCfg,
+  AirtableConnector,
   AirtableDaoOptions,
   AirtableRecord,
 } from './airtable.model'
@@ -21,7 +21,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
       this.setCache(cache)
     }
 
-    this.connectorMap = new Map<symbol, AirtableBaseConnector<BASE>>()
+    this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastUpdatedMap = new Map<symbol, number | undefined>()
 
     cfg.connectors.forEach(c => {
@@ -32,7 +32,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     this.instanceId = this.cfg.baseName
   }
 
-  private connectorMap!: Map<symbol, AirtableBaseConnector<BASE>>
+  private connectorMap!: Map<symbol, AirtableConnector<BASE>>
 
   instanceId!: string
 
@@ -109,7 +109,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     }) as T[]
   }
 
-  private getConnector (connectorType: symbol): AirtableBaseConnector<BASE> {
+  private getConnector (connectorType: symbol): AirtableConnector<BASE> {
     const connector = this.connectorMap.get(connectorType)
     if (!connector) {
       throw new Error(`Connector not found by type: ${String(connectorType)}`)

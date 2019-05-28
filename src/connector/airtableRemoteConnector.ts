@@ -4,7 +4,7 @@ import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
   AirtableAttachmentUpload,
-  AirtableBaseConnector,
+  AirtableConnector,
   AirtableDaoOptions,
   AirtableRecord,
   AirtableTableDaoCfg,
@@ -18,7 +18,7 @@ export interface AirtableRemoteConnectorCfg<BASE> {
   tableSchemaMap: { [tableName in keyof BASE]: AirtableTableDaoCfg }
 }
 
-export class AirtableRemoteConnector<BASE = any> implements AirtableBaseConnector<BASE> {
+export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BASE> {
   constructor (private airtableApi: AirtableApi, private cfg: AirtableRemoteConnectorCfg<BASE>) {}
 
   readonly TYPE = AIRTABLE_CONNECTOR_REMOTE

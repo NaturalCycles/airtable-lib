@@ -167,7 +167,7 @@ export interface AirtableDaoOptions {
 export interface AirtableBaseDaoCfg<BASE = any> {
   baseId: string
   baseName: string
-  connectors: AirtableBaseConnector<BASE>[]
+  connectors: AirtableConnector<BASE>[]
 }
 
 export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
@@ -175,7 +175,7 @@ export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
   sort?: AirtableApiSort<T>[]
 }
 
-export interface AirtableBaseConnector<BASE = any> {
+export interface AirtableConnector<BASE = any> {
   TYPE: symbol
   fetch (opts?: AirtableDaoOptions): Promise<BASE>
   upload (base: BASE, opts?: AirtableDaoOptions): Promise<void>
