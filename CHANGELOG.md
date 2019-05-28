@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.21.0...v1.22.0) (2019-05-28)
+
+
+### Features
+
+* improve connector interface ([3d7f73c](https://github.com/NaturalCycles/airtable-lib/commit/3d7f73c))
+
 # [1.21.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.20.0...v1.21.0) (2019-05-28)
 
 
