@@ -3,7 +3,7 @@ import { AirtableBaseConnector, AirtableDaoOptions } from '../airtable.model'
 
 export const AIRTABLE_CONNECTOR_JSON = Symbol('AIRTABLE_CONNECTOR_JSON')
 
-export interface AirtableJsonBaseConnectorCfg {
+export interface AirtableJsonConnectorCfg {
   baseName: string
 
   /**
@@ -13,8 +13,8 @@ export interface AirtableJsonBaseConnectorCfg {
   cacheDir: string
 }
 
-export class AirtableJsonBaseConnector<BASE = any> implements AirtableBaseConnector<BASE> {
-  constructor (cfg: AirtableJsonBaseConnectorCfg) {
+export class AirtableJsonConnector<BASE = any> implements AirtableBaseConnector<BASE> {
+  constructor (cfg: AirtableJsonConnectorCfg) {
     this.jsonPath = `${cfg.cacheDir}/${cfg.baseName}.json`
   }
 

@@ -24,14 +24,14 @@ import { AirtableLib } from './airtableLib'
 import { AirtableTableDao } from './airtableTableDao'
 import {
   AIRTABLE_CONNECTOR_JSON,
-  AirtableJsonBaseConnector,
-  AirtableJsonBaseConnectorCfg,
-} from './connector/airtableJsonBaseConnector'
+  AirtableJsonConnector,
+  AirtableJsonConnectorCfg,
+} from './connector/airtableJsonConnector'
 import {
   AIRTABLE_CONNECTOR_REMOTE,
-  AirtableRemoteBaseConnector,
-  AirtableRemoteBaseConnectorCfg,
-} from './connector/airtableRemoteBaseConnector'
+  AirtableRemoteConnector,
+  AirtableRemoteConnectorCfg,
+} from './connector/airtableRemoteConnector'
 
 export {
   AirtableLib,
@@ -56,10 +56,10 @@ export {
   AirtableTableDaoCfg,
   AirtableBaseDaoCfg,
   AirtableBaseConnector,
-  AirtableJsonBaseConnector,
+  AirtableJsonConnector,
   AIRTABLE_CONNECTOR_JSON,
-  AirtableJsonBaseConnectorCfg,
+  AirtableJsonConnectorCfg,
   AIRTABLE_CONNECTOR_REMOTE,
-  AirtableRemoteBaseConnectorCfg,
-  AirtableRemoteBaseConnector,
+  AirtableRemoteConnectorCfg,
+  AirtableRemoteConnector,
 }

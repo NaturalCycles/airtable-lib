@@ -13,16 +13,13 @@ import { AirtableTableDao } from '../airtableTableDao'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 
-export interface AirtableRemoteBaseConnectorCfg<BASE> {
+export interface AirtableRemoteConnectorCfg<BASE> {
   baseId: string
   tableSchemaMap: { [tableName in keyof BASE]: AirtableTableDaoCfg }
 }
 
-export class AirtableRemoteBaseConnector<BASE = any> implements AirtableBaseConnector<BASE> {
-  constructor (
-    private airtableApi: AirtableApi,
-    private cfg: AirtableRemoteBaseConnectorCfg<BASE>,
-  ) {}
+export class AirtableRemoteConnector<BASE = any> implements AirtableBaseConnector<BASE> {
+  constructor (private airtableApi: AirtableApi, private cfg: AirtableRemoteConnectorCfg<BASE>) {}
 
   readonly TYPE = AIRTABLE_CONNECTOR_REMOTE
 
