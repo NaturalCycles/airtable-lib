@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.22.0...v1.23.0) (2019-05-28)
+
+
+### Features
+
+* AirtableTableSchemaMap ([febdba3](https://github.com/NaturalCycles/airtable-lib/commit/febdba3))
+
 # [1.22.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.21.0...v1.22.0) (2019-05-28)
 
 
