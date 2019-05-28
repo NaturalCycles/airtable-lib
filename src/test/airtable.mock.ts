@@ -154,9 +154,8 @@ export function mockBaseDao (api: AirtableApi, baseId: string): AirtableBaseDao<
     baseId,
     baseName,
     connectors: [
-      new AirtableJsonConnector<TestBase>({ baseName, cacheDir }),
+      new AirtableJsonConnector<TestBase>({ cacheDir }),
       new AirtableRemoteConnector<TestBase>(api, {
-        baseId,
         tableSchemaMap: {
           users: { sort: [{ field: 'id' }], validationSchema: userSchema },
           roles: { sort: [{ field: 'id' }], validationSchema: roleSchema },

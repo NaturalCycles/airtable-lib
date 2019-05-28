@@ -124,7 +124,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   @logMethod({ logStart: true })
   async fetch (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
-    const base = await this.getConnector(connectorType).fetch(opts)
+    const base = await this.getConnector(connectorType).fetch(this.cfg, opts)
 
     if (!opts.preserveLastUpdated) {
       this.lastUpdatedMap.set(connectorType, Math.floor(Date.now() / 1000))
@@ -140,6 +140,6 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
 
   @logMethod({ logStart: true })
   async upload (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
-    await this.getConnector(connectorType).upload(this.cache, opts)
+    await this.getConnector(connectorType).upload(this.cache, this.cfg, opts)
   }
 }

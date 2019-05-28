@@ -177,6 +177,6 @@ export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
 
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
-  fetch (opts?: AirtableDaoOptions): Promise<BASE>
-  upload (base: BASE, opts?: AirtableDaoOptions): Promise<void>
+  fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<BASE>
+  upload (base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<void>
 }
