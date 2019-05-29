@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.23.0...v1.24.0) (2019-05-29)
+
+
+### Features
+
+* basesDao.getDao() ([93d46dd](https://github.com/NaturalCycles/airtable-lib/commit/93d46dd))
+
 # [1.23.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.22.0...v1.23.0) (2019-05-28)
 
 
