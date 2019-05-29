@@ -12,15 +12,10 @@ import { sortAirtableBase } from './airtable.util'
  * Base is sorted (deterministic order of tables and record keys).
  * Order of rows is preserved as is.
  * Provides API to access records.
- *
- * Call .loadFromJson() to loads json cache from cacheDir.
+ * Provides API to fetch or upload records via provided Connectors (e.g Json, Remote).
  */
 export class AirtableBaseDao<BASE = any> implements InstanceId {
-  constructor (public cfg: AirtableBaseDaoCfg<BASE>, cache?: BASE) {
-    if (cache) {
-      this.setCache(cache)
-    }
-
+  constructor (public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastUpdatedMap = new Map<symbol, number | undefined>()
 

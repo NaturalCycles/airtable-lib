@@ -7,7 +7,13 @@ import { AirtableBaseDao } from './airtableBaseDao'
  * Allows to perform operations with MANY bases at once, e.g fetch from all bases, upload all bases, etc.
  */
 export class AirtableBasesDao<BASE_MAP = any> {
-  constructor (private baseDaos: AirtableBaseDao<any>[]) {}
+  constructor (public baseDaos: AirtableBaseDao<any>[]) {}
+
+  getDao<BASE = any> (baseName: string): AirtableBaseDao<BASE> {
+    const dao = this.baseDaos.find(dao => dao.cfg.baseName === baseName)
+    if (!dao) throw new Error(`AirtableBaseDao not found for base: ${baseName}`)
+    return dao
+  }
 
   getCacheMap (): BASE_MAP {
     const cacheMap = {} as BASE_MAP
