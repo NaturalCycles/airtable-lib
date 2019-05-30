@@ -1,3 +1,10 @@
+## [1.26.2](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.1...v1.26.2) (2019-05-30)
+
+
+### Bug Fixes
+
+* setCache(undefined) case ([426fd92](https://github.com/NaturalCycles/airtable-lib/commit/426fd92))
+
 ## [1.26.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.0...v1.26.1) (2019-05-30)
 
 
