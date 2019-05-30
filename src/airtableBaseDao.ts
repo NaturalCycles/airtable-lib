@@ -6,6 +6,7 @@ import {
   AirtableRecord,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
+import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
@@ -18,6 +19,9 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   constructor (public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastUpdatedMap = new Map<symbol, number | undefined>()
+
+    // Default to JSON
+    this.cfg.lazyConnectorType = this.cfg.lazyConnectorType || AIRTABLE_CONNECTOR_JSON
 
     cfg.connectors.forEach(c => {
       this.connectorMap.set(c.TYPE, c)

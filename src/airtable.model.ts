@@ -168,6 +168,10 @@ export interface AirtableBaseDaoCfg<BASE = any> {
   baseId: string
   baseName: string
   connectors: AirtableConnector<BASE>[]
+
+  /**
+   * @default AIRTABLE_CONNECTOR_JSON
+   */
   lazyConnectorType?: symbol
 }
 
