@@ -178,6 +178,12 @@ export interface AirtableBaseDaoCfg<BASE = any> {
 export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
   validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]
+
+  /**
+   * @default 'Grid view'
+   * Without view - airtable api returns records in wrongly sorted order (sorted by airtableId), not in the view order.
+   */
+  view?: string
 }
 
 export type AirtableTableSchemaMap<BASE = any> = {

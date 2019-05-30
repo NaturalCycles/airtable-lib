@@ -44,6 +44,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       .select({
         // defaults
         pageSize: 100,
+        view: this.cfg.view || 'Grid view',
         ...(sort && sort.length && { sort }),
         ...selectOpts,
       })
