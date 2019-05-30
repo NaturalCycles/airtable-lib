@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.25.0...v1.26.0) (2019-05-30)
+
+
+### Features
+
+* default lazyConnector to JSON ([e412158](https://github.com/NaturalCycles/airtable-lib/commit/e412158))
+
 # [1.25.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.24.0...v1.25.0) (2019-05-30)
 
 
