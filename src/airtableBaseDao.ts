@@ -36,33 +36,44 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   lastUpdatedMap!: Map<symbol, number | undefined>
 
-  protected cache!: BASE
+  private _cache?: BASE
 
   /**
    * Map from airtableId to Record
    */
-  protected airtableIdIndex!: StringMap<AirtableRecord>
-
-  /**
-   * Indexes `this.cache` by `airtableId`
-   */
-  protected indexCache (): void {
-    const airtableIndex: StringMap<AirtableRecord> = {}
-
-    Object.values(this.cache).forEach((records: AirtableRecord[]) => {
-      records.forEach(r => (airtableIndex[r.airtableId] = r))
-    })
-
-    this.airtableIdIndex = airtableIndex
-  }
+  private _airtableIdIndex?: StringMap<AirtableRecord>
 
   getCache (): BASE {
-    return this.cache
+    if (!this._cache) {
+      if (!this.cfg.lazyConnectorType) {
+        throw new Error(`lazyConnectorType not defined for ${this.instanceId}`)
+      }
+
+      this.setCache(this.getConnector(this.cfg.lazyConnectorType).fetchSync(this.cfg))
+    }
+
+    return this._cache!
   }
 
   setCache (cache: BASE): void {
-    this.cache = sortAirtableBase(cache)
-    this.indexCache()
+    this._cache = sortAirtableBase(cache)
+
+    // Index cache
+    const airtableIndex: StringMap<AirtableRecord> = {}
+
+    Object.values(this._cache).forEach((records: AirtableRecord[]) => {
+      records.forEach(r => (airtableIndex[r.airtableId] = r))
+    })
+
+    this._airtableIdIndex = airtableIndex
+  }
+
+  private getAirtableIndex (): StringMap<AirtableRecord> {
+    if (!this._airtableIdIndex) {
+      this.getCache()
+    }
+
+    return this._airtableIdIndex!
   }
 
   getTableRecords<TABLE_NAME extends keyof BASE> (
@@ -70,20 +81,20 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     noAirtableIds = false,
   ): BASE[TABLE_NAME] {
     if (noAirtableIds) {
-      return ((this.cache[tableName] as any) || []).map((r: AirtableRecord) =>
+      return ((this.getCache()[tableName] as any) || []).map((r: AirtableRecord) =>
         omit(r, ['airtableId']),
       )
     } else {
-      return (this.cache[tableName] as any) || []
+      return (this.getCache()[tableName] as any) || []
     }
   }
 
   getById<T extends AirtableRecord> (airtableId?: string): T | undefined {
-    return this.airtableIdIndex[airtableId!] as T
+    return this.getAirtableIndex()[airtableId!] as T
   }
 
   requireById<T extends AirtableRecord> (airtableId: string): T {
-    const r = this.airtableIdIndex[airtableId] as T
+    const r = this.getAirtableIndex()[airtableId] as T
     if (!r) {
       throw new Error(`requireById ${this.cfg.baseName}.${airtableId} not found`)
     }
@@ -91,12 +102,12 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   }
 
   getByIds<T extends AirtableRecord> (airtableIds: string[] = []): T[] {
-    return airtableIds.map(id => this.airtableIdIndex[id]) as T[]
+    return airtableIds.map(id => this.getAirtableIndex()[id]) as T[]
   }
 
   requireByIds<T extends AirtableRecord> (airtableIds: string[] = []): T[] {
     return airtableIds.map(id => {
-      const r = this.airtableIdIndex[id]
+      const r = this.getAirtableIndex()[id]
       if (!r) {
         throw new Error(`requireByIds ${this.cfg.baseName}.${id} not found`)
       }
@@ -127,7 +138,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
 
     if (!opts.noCache) {
       this.setCache(base)
-      return this.cache // return here to avoid calling sortAirtableBase twice
+      return this._cache! // return here to avoid calling sortAirtableBase twice
     }
 
     return sortAirtableBase(base)
@@ -135,6 +146,6 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
 
   @logMethod({ logStart: true })
   async upload (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
-    await this.getConnector(connectorType).upload(this.cache, this.cfg, opts)
+    await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opts)
   }
 }

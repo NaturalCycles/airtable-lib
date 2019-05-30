@@ -168,6 +168,7 @@ export interface AirtableBaseDaoCfg<BASE = any> {
   baseId: string
   baseName: string
   connectors: AirtableConnector<BASE>[]
+  lazyConnectorType?: symbol
 }
 
 export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
@@ -183,5 +184,6 @@ export type AirtableTableSchemaMap<BASE = any> = {
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
   fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<BASE>
+  fetchSync (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): BASE
   upload (base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<void>
 }

@@ -119,7 +119,11 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     )
   }
 
-  getTableDao<T extends AirtableRecord = AirtableRecord> (
+  fetchSync (): never {
+    throw new Error('fetchSync not supported for AirtableRemoteConnector')
+  }
+
+  private getTableDao<T extends AirtableRecord = AirtableRecord> (
     tableName: keyof BASE,
     baseId: string,
   ): AirtableTableDao<T> {

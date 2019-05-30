@@ -25,6 +25,11 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
     return fs.readJson(jsonPath)
   }
 
+  fetchSync (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): BASE {
+    const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
+    return require(jsonPath)
+  }
+
   async upload (base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>): Promise<void> {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     await fs.ensureFile(jsonPath)
