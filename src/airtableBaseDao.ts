@@ -60,6 +60,13 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   }
 
   setCache (cache: BASE): void {
+    if (!cache) {
+      console.warn(`${this.instanceId} setCache to undefined`)
+      this._cache = undefined
+      this._airtableIdIndex = undefined
+      return
+    }
+
     this._cache = sortAirtableBase(cache)
 
     // Index cache
