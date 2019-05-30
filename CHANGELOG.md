@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.0...v1.26.1) (2019-05-30)
+
+
+### Bug Fixes
+
+* records order due to magic 'view' property ([cd61c0c](https://github.com/NaturalCycles/airtable-lib/commit/cd61c0c))
+
 # [1.26.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.25.0...v1.26.0) (2019-05-30)
 
 
