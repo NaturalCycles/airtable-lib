@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.24.0...v1.25.0) (2019-05-30)
+
+
+### Features
+
+* lazy load from lazyConnector, fetchSync ([7c29872](https://github.com/NaturalCycles/airtable-lib/commit/7c29872))
+
 # [1.24.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.23.0...v1.24.0) (2019-05-29)
 
 
