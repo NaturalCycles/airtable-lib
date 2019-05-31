@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.2...v1.27.0) (2019-05-31)
+
+
+### Features
+
+* refactor tableCfgMap ([a128038](https://github.com/NaturalCycles/airtable-lib/commit/a128038))
+
 ## [1.26.2](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.1...v1.26.2) (2019-05-30)
 
 
