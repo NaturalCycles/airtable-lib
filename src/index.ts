@@ -13,8 +13,8 @@ import {
   AirtableRecord,
   airtableRecordSchema,
   airtableSingleLinkSchema,
-  AirtableTableDaoCfg,
-  AirtableTableSchemaMap,
+  AirtableTableCfg,
+  AirtableTableCfgMap,
   AirtableThumbnail,
   airtableThumbnailSchema,
 } from './airtable.model'
@@ -31,7 +31,6 @@ import {
 import {
   AIRTABLE_CONNECTOR_REMOTE,
   AirtableRemoteConnector,
-  AirtableRemoteConnectorCfg,
 } from './connector/airtableRemoteConnector'
 
 export {
@@ -54,14 +53,13 @@ export {
   airtableRecordSchema,
   AirtableDaoOptions,
   sortAirtableBase,
-  AirtableTableSchemaMap,
-  AirtableTableDaoCfg,
+  AirtableTableCfgMap,
+  AirtableTableCfg,
   AirtableBaseDaoCfg,
   AirtableConnector,
   AirtableJsonConnector,
   AIRTABLE_CONNECTOR_JSON,
   AirtableJsonConnectorCfg,
   AIRTABLE_CONNECTOR_REMOTE,
-  AirtableRemoteConnectorCfg,
   AirtableRemoteConnector,
 }

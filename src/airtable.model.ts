@@ -8,7 +8,7 @@ import {
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
 import { AirtableApiSort } from './airtable.api'
-import { AirtableRecord, AirtableTableDaoCfg } from './index'
+import { AirtableRecord, AirtableTableCfg } from './index'
 
 export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
@@ -173,9 +173,11 @@ export interface AirtableBaseDaoCfg<BASE = any> {
    * @default AIRTABLE_CONNECTOR_JSON
    */
   lazyConnectorType?: symbol
+
+  tableCfgMap: AirtableTableCfgMap<BASE>
 }
 
-export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
+export interface AirtableTableCfg<T extends AirtableRecord = any> {
   validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]
 
@@ -186,9 +188,9 @@ export interface AirtableTableDaoCfg<T extends AirtableRecord = any> {
   view?: string
 }
 
-export type AirtableTableSchemaMap<BASE = any> = {
+export type AirtableTableCfgMap<BASE = any> = {
   // [tableName in keyof BASE]: AirtableTableDaoCfg<BASE[tableName]>
-  [tableName in keyof BASE]: AirtableTableDaoCfg
+  [tableName in keyof BASE]: AirtableTableCfg
 }
 
 export interface AirtableConnector<BASE = any> {

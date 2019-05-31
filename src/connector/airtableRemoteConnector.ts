@@ -8,30 +8,25 @@ import {
   AirtableConnector,
   AirtableDaoOptions,
   AirtableRecord,
-  AirtableTableSchemaMap,
 } from '../airtable.model'
 import { AirtableTableDao } from '../airtableTableDao'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 
-export interface AirtableRemoteConnectorCfg<BASE> {
-  tableSchemaMap: AirtableTableSchemaMap<BASE>
-}
+// export interface AirtableRemoteConnectorCfg<BASE> {}
 
 export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BASE> {
-  constructor (private airtableApi: AirtableApi, private cfg: AirtableRemoteConnectorCfg<BASE>) {}
+  constructor (private airtableApi: AirtableApi) {}
 
   readonly TYPE = AIRTABLE_CONNECTOR_REMOTE
 
   async fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
-    const { tableSchemaMap } = this.cfg
+    const { tableCfgMap } = baseDaoCfg
 
     return pProps(
-      Object.keys(tableSchemaMap).reduce(
+      Object.keys(tableCfgMap).reduce(
         (r, tableName) => {
-          r[tableName] = this.getTableDao(tableName as keyof BASE, baseDaoCfg.baseId).getRecords(
-            opts,
-          )
+          r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opts)
           return r
         },
         {} as BASE,
@@ -53,16 +48,16 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     opts: AirtableDaoOptions = {},
   ): Promise<void> {
     const concurrency = opts.concurrency || 4
-    const { tableSchemaMap } = this.cfg
+    const { tableCfgMap } = baseDaoCfg
     // map from old airtableId to newly-created airtableId
     const idMap: StringMap = {}
-    const tableNames = Object.keys(tableSchemaMap) as (keyof BASE)[]
+    const tableNames = Object.keys(tableCfgMap) as (keyof BASE)[]
 
     // First pass - insert records, populate idMap
     await pMap(
       tableNames,
       async tableName => {
-        const dao = this.getTableDao(tableName, baseDaoCfg.baseId)
+        const dao = this.getTableDao(baseDaoCfg, tableName)
         await dao.deleteAllRecords(concurrency)
 
         // One-by-one to preserve order
@@ -94,7 +89,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     await pMap(
       tableNames,
       async tableName => {
-        const dao = this.getTableDao(tableName, baseDaoCfg.baseId)
+        const dao = this.getTableDao(baseDaoCfg, tableName)
 
         const records = ((base[tableName] as any) as AirtableRecord[])
           // Only records with non-empty array values
@@ -124,14 +119,14 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   }
 
   private getTableDao<T extends AirtableRecord = AirtableRecord> (
+    baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     tableName: keyof BASE,
-    baseId: string,
   ): AirtableTableDao<T> {
     return new AirtableTableDao<T>(
       this.airtableApi,
-      baseId,
+      baseDaoCfg.baseId,
       tableName as string,
-      this.cfg.tableSchemaMap[tableName],
+      baseDaoCfg.tableCfgMap[tableName],
     )
   }
 }

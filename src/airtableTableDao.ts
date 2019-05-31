@@ -12,7 +12,7 @@ import {
   AIRTABLE_ERROR_CODE,
   AirtableDaoOptions,
   AirtableRecord,
-  AirtableTableDaoCfg,
+  AirtableTableCfg,
 } from './airtable.model'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
@@ -20,7 +20,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     airtableApi: AirtableApi,
     baseId: string,
     private tableName: string,
-    private cfg: AirtableTableDaoCfg<T>,
+    private cfg: AirtableTableCfg<T>,
   ) {
     this.table = airtableApi.base(baseId)<T>(tableName)
     this.instanceId = [baseId, tableName].join('_')
