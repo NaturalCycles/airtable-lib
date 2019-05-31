@@ -3,6 +3,7 @@
  * 2. Sort all records of all tables by key name.
  */
 export function sortAirtableBase<BASE> (base: BASE): BASE {
+  if (!base) return base
   const newBase = sortObjectKeys(base)
 
   Object.entries(newBase).forEach(([tableName, records]) => {

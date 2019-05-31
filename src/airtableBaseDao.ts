@@ -61,7 +61,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
 
   setCache (cache: BASE): void {
     if (!cache) {
-      console.warn(`${this.instanceId} setCache to undefined`)
+      console.warn(`AirtableBaseDao.${this.instanceId} setCache to undefined`)
       this._cache = undefined
       this._airtableIdIndex = undefined
       return
@@ -142,6 +142,11 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   @logMethod({ logStart: true })
   async fetch (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
     const base = await this.getConnector(connectorType).fetch(this.cfg, opts)
+
+    if (!base) {
+      console.warn(`AirtableBaseDao.${this.instanceId}.fetch returned empty base`)
+      return undefined as any
+    }
 
     if (!opts.preserveLastUpdated) {
       this.lastUpdatedMap.set(connectorType, Math.floor(Date.now() / 1000))
