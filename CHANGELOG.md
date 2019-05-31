@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.27.0...v1.27.1) (2019-05-31)
+
+
+### Bug Fixes
+
+* handle fetch of undefined base ([6514b64](https://github.com/NaturalCycles/airtable-lib/commit/6514b64))
+
 # [1.27.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.26.2...v1.27.0) (2019-05-31)
 
 
