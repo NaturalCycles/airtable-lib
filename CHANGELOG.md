@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.27.1...v2.0.0) (2019-07-01)
+
+
+### Features
+
+* allow to rxjs-subscribe to base changes ([33546ab](https://github.com/NaturalCycles/airtable-lib/commit/33546ab))
+
+
+### BREAKING CHANGES
+
+* lastUpdatedMap > lastFetchedMap, lastChanged
+
 ## [1.27.1](https://github.com/NaturalCycles/airtable-lib/compare/v1.27.0...v1.27.1) (2019-05-31)
 
 
