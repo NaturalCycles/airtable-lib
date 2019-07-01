@@ -100,6 +100,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
       return
     }
 
+    const cacheWasDefined = !!this._cache
     this._cache = cache
     this.contentHash = newContentHash
 
@@ -113,7 +114,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     this._airtableIdIndex = airtableIndex
 
     // Update
-    if (!opts.preserveLastChanged) {
+    if (!opts.preserveLastChanged && cacheWasDefined) {
       this.lastChanged = Math.floor(Date.now() / 1000)
     }
     this.cacheUpdated$.next(this._cache)
