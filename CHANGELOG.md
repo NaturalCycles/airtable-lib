@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.0.0...v2.0.1) (2019-07-01)
+
+
+### Bug Fixes
+
+* don't consider base changed when lazy-loaded ([1da0cea](https://github.com/NaturalCycles/airtable-lib/commit/1da0cea))
+
 # [2.0.0](https://github.com/NaturalCycles/airtable-lib/compare/v1.27.1...v2.0.0) (2019-07-01)
 
 
