@@ -72,7 +72,9 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
         throw new Error(`lazyConnectorType not defined for ${this.instanceId}`)
       }
 
-      this.setCache(this.getConnector(this.cfg.lazyConnectorType).fetchSync(this.cfg))
+      this.setCache(this.getConnector(this.cfg.lazyConnectorType).fetchSync(this.cfg), {
+        preserveLastChanged: true,
+      })
     }
 
     return this._cache!

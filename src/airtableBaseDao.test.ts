@@ -22,7 +22,7 @@ test('getCache', async () => {
 
   expect(cache).toMatchSnapshot()
 
-  expect(baseDao.lastChanged).toBe(MOCK_TS_2018_06_21)
+  expect(baseDao.lastChanged).toBeUndefined() // accessing the cache and lazy-loading it is not considered as "changed"
 })
 
 test('cacheUpdated$', async () => {
@@ -42,6 +42,7 @@ test('cacheUpdated$', async () => {
   const fakeCache: any = { table1: [{ airtableId: 'asd' }] }
   baseDao.setCache(fakeCache) // trigger
   expect(updatedTimes).toBe(2)
+  expect(baseDao.lastChanged).toBe(MOCK_TS_2018_06_21)
 
   baseDao.setCache(fakeCache) // NOT trigger (data is the same)
   expect(updatedTimes).toBe(2)
