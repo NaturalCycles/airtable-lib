@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.0.1...v2.0.2) (2019-07-01)
+
+
+### Bug Fixes
+
+* don't update lastChanged when cache was undefined ([9a679f3](https://github.com/NaturalCycles/airtable-lib/commit/9a679f3))
+
 ## [2.0.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.0.0...v2.0.1) (2019-07-01)
 
 
