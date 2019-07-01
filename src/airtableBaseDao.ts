@@ -78,7 +78,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._cache!
   }
 
-  setCache (cache: BASE, opts: AirtableDaoOptions = {}): void {
+  setCache (cache?: BASE, opts: AirtableDaoOptions = {}): void {
     if (!cache) {
       console.warn(`AirtableBaseDao.${this.instanceId} setCache to undefined`)
       this._cache = undefined

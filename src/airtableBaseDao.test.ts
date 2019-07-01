@@ -45,6 +45,9 @@ test('cacheUpdated$', async () => {
 
   baseDao.setCache(fakeCache) // NOT trigger (data is the same)
   expect(updatedTimes).toBe(2)
+
+  baseDao.setCache(undefined) // trigger
+  expect(updatedTimes).toBe(3)
 })
 
 // todo: getById should lazyLoad
