@@ -26,16 +26,29 @@ export class AirtableBasesDao<BASE_MAP = any> {
   }
 
   /**
-   * @returns map from baseName to unix timestamp of last updated (or undefined)
+   * @returns map from baseName to unix timestamp of last fetched (or undefined)
    */
-  getLastUpdatedMap (connectorType: symbol): StringMap<number | undefined> {
-    const lastUpdatedMap = {}
+  getLastFetchedMap (connectorType: symbol): StringMap<number | undefined> {
+    const map = {}
 
     this.baseDaos.forEach(baseDao => {
-      lastUpdatedMap[baseDao.cfg.baseName] = baseDao.lastUpdatedMap.get(connectorType)
+      map[baseDao.cfg.baseName] = baseDao.lastFetchedMap.get(connectorType)
     })
 
-    return lastUpdatedMap
+    return map
+  }
+
+  /**
+   * @returns map from baseName to unix timestamp of when it's cache was last changed
+   */
+  getLastChangedMap (): StringMap<number | undefined> {
+    const map = {}
+
+    this.baseDaos.forEach(baseDao => {
+      map[baseDao.cfg.baseName] = baseDao.lastChanged
+    })
+
+    return map
   }
 
   @logMethod({ logStart: true })

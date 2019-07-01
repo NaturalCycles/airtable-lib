@@ -1,4 +1,6 @@
 import { InstanceId, logMethod, omit, StringMap } from '@naturalcycles/js-lib'
+import { md5 } from '@naturalcycles/nodejs-lib'
+import { Subject } from 'rxjs'
 import {
   AirtableBaseDaoCfg,
   AirtableConnector,
@@ -18,14 +20,14 @@ import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
 export class AirtableBaseDao<BASE = any> implements InstanceId {
   constructor (public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
-    this.lastUpdatedMap = new Map<symbol, number | undefined>()
+    this.lastFetchedMap = new Map<symbol, number | undefined>()
 
     // Default to JSON
     this.cfg.lazyConnectorType = this.cfg.lazyConnectorType || AIRTABLE_CONNECTOR_JSON
 
     cfg.connectors.forEach(c => {
       this.connectorMap.set(c.TYPE, c)
-      this.lastUpdatedMap.set(c.TYPE, undefined)
+      this.lastFetchedMap.set(c.TYPE, undefined)
     })
 
     this.instanceId = this.cfg.baseName
@@ -36,11 +38,28 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   instanceId!: string
 
   /**
-   * Unix timestamp of when this Base was last updated.
+   * Unix timestamp of when this Base was last fetched (for given Connector).
    */
-  lastUpdatedMap!: Map<symbol, number | undefined>
+  lastFetchedMap!: Map<symbol, number | undefined>
+
+  /**
+   * Unix timestamp of when the cache of this Base was last changed. Initially `undefined`.
+   */
+  lastChanged?: number
+
+  /**
+   * Fires every time when Cache is changed (including when it's set to `undefined`, including the very first fetch).
+   */
+  cacheUpdated$ = new Subject<BASE>()
 
   private _cache?: BASE
+
+  /**
+   * Deterministic hash of BASE content. Should NOT change if content is the same, should change otherwise.
+   * `undefined` for empty BASE.
+   * Used to detect change of content and fire `cacheUpdated$` when changed.
+   */
+  private contentHash?: string
 
   /**
    * Map from airtableId to Record
@@ -59,15 +78,28 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._cache!
   }
 
-  setCache (cache: BASE): void {
+  setCache (cache: BASE, opts: AirtableDaoOptions = {}): void {
     if (!cache) {
       console.warn(`AirtableBaseDao.${this.instanceId} setCache to undefined`)
       this._cache = undefined
       this._airtableIdIndex = undefined
+      this.contentHash = undefined
+      this.cacheUpdated$.next(undefined)
       return
     }
 
-    this._cache = sortAirtableBase(cache)
+    cache = sortAirtableBase(cache)
+    const newContentHash = md5(JSON.stringify(cache))
+
+    if (newContentHash === this.contentHash) {
+      console.log(
+        `AirtableBaseDao.${this.instanceId} setCache: contentHash unchanged (${newContentHash})`,
+      )
+      return
+    }
+
+    this._cache = cache
+    this.contentHash = newContentHash
 
     // Index cache
     const airtableIndex: StringMap<AirtableRecord> = {}
@@ -77,6 +109,12 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     })
 
     this._airtableIdIndex = airtableIndex
+
+    // Update
+    if (!opts.preserveLastChanged) {
+      this.lastChanged = Math.floor(Date.now() / 1000)
+    }
+    this.cacheUpdated$.next(this._cache)
   }
 
   private getAirtableIndex (): StringMap<AirtableRecord> {
@@ -148,16 +186,16 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
       return undefined as any
     }
 
-    if (!opts.preserveLastUpdated) {
-      this.lastUpdatedMap.set(connectorType, Math.floor(Date.now() / 1000))
+    if (opts.noCache) {
+      return sortAirtableBase(base)
     }
 
-    if (!opts.noCache) {
-      this.setCache(base)
-      return this._cache! // return here to avoid calling sortAirtableBase twice
+    if (!opts.preserveLastFetched) {
+      this.lastFetchedMap.set(connectorType, Math.floor(Date.now() / 1000))
     }
 
-    return sortAirtableBase(base)
+    this.setCache(base, opts)
+    return this._cache!
   }
 
   @logMethod({ logStart: true })

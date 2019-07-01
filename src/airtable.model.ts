@@ -159,9 +159,14 @@ export interface AirtableDaoOptions {
   noCache?: boolean
 
   /**
-   * If set to true - preserves `lastUpdated` field.
+   * If set to true - preserves `lastChanged` field.
    */
-  preserveLastUpdated?: boolean
+  preserveLastChanged?: boolean
+
+  /**
+   * If set to true - preserves `lastFetched` field.
+   */
+  preserveLastFetched?: boolean
 }
 
 export interface AirtableBaseDaoCfg<BASE = any> {
