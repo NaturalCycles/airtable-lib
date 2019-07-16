@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.1.0...v2.1.1) (2019-07-16)
+
+
+### Bug Fixes
+
+* js-lib ([93e8b0e](https://github.com/NaturalCycles/airtable-lib/commit/93e8b0e))
+
 # [2.1.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.0.2...v2.1.0) (2019-07-16)
 
 
