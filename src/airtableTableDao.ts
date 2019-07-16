@@ -1,7 +1,6 @@
 import { anyToErrorMessage, AppError, InstanceId, logMethod } from '@naturalcycles/js-lib'
 import { getValidationResult } from '@naturalcycles/nodejs-lib'
 import { pMap } from '@naturalcycles/promise-lib'
-import { Omit } from 'type-fest'
 import {
   AirtableApi,
   AirtableApiRecord,
@@ -72,7 +71,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * @returns created record (with generated `airtableId`)
    */
   @logMethod()
-  async createRecord (record: Omit<T, 'airtableId'>, opts: AirtableDaoOptions = {}): Promise<T> {
+  async createRecord (record: Exclude<T, 'airtableId'>, opts: AirtableDaoOptions = {}): Promise<T> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.table
       .create(record as Partial<T>)
@@ -88,7 +87,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    */
   @logMethod()
   async createRecords (
-    records: Omit<T, 'airtableId'>[],
+    records: Exclude<T, 'airtableId'>[],
     opts: AirtableDaoOptions = {},
   ): Promise<T[]> {
     const concurrency = opts.concurrency || (opts.skipPreservingOrder ? 4 : 1)
@@ -130,7 +129,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   @logMethod()
   async replaceRecord (
     airtableId: string,
-    record: Omit<T, 'airtableId'>,
+    record: Exclude<T, 'airtableId'>,
     opts: AirtableDaoOptions = {},
   ): Promise<T> {
     const raw = await this.table

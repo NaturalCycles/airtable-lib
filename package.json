@@ -2,13 +2,12 @@
   "name": "@naturalcycles/airtable-lib",
   "scripts": {},
   "dependencies": {
-    "@naturalcycles/js-lib": "^7.0.0",
+    "@naturalcycles/js-lib": "^8.0.0",
     "@naturalcycles/nodejs-lib": "^6.2.0",
     "@naturalcycles/promise-lib": "^2.2.0",
     "airtable": "^0.6.0",
     "fs-extra": "^8.0.0",
-    "rxjs": "^6.5.2",
-    "type-fest": "^0.5.0"
+    "rxjs": "^6.5.2"
   },
   "devDependencies": {
     "@naturalcycles/dev-lib": "^7.9.0",

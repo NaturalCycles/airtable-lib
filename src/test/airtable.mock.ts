@@ -1,4 +1,4 @@
-import { arrayRange, filterFalsyValues } from '@naturalcycles/js-lib'
+import { _range, filterFalsyValues } from '@naturalcycles/js-lib'
 import {
   arraySchema,
   booleanSchema,
@@ -53,7 +53,7 @@ export interface Table2 extends AirtableRecord {
 }
 
 export function mockTable1 (): Table1[] {
-  return arrayRange(1, 10).map(
+  return _range(1, 10).map(
     num =>
       ({
         name: `name_${num}`,
@@ -64,7 +64,7 @@ export function mockTable1 (): Table1[] {
 }
 
 export function mockTable2 (): Table2[] {
-  return arrayRange(1, 10).map(num =>
+  return _range(1, 10).map(num =>
     filterFalsyValues({
       name: `name2_${num}`,
       field3: `val3 ${num}`,
