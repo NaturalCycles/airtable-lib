@@ -1,4 +1,4 @@
-import { InstanceId, logMethod, omit, StringMap } from '@naturalcycles/js-lib'
+import { _omit, InstanceId, logMethod, StringMap } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import { Subject } from 'rxjs'
 import {
@@ -134,7 +134,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   ): BASE[TABLE_NAME] {
     if (noAirtableIds) {
       return ((this.getCache()[tableName] as any) || []).map((r: AirtableRecord) =>
-        omit(r, ['airtableId']),
+        _omit(r, ['airtableId']),
       )
     } else {
       return (this.getCache()[tableName] as any) || []

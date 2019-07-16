@@ -1,4 +1,4 @@
-import { omit } from '@naturalcycles/js-lib'
+import { _omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
 import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../..'
 import { AirtableLib } from '../../airtableLib'
@@ -49,7 +49,7 @@ test('delete, create, update, get', async () => {
   const recordsCreated = await tableDao.createRecords(records)
   // console.log({recordsCreated})
   recordsCreated.forEach(record => expect(record).toHaveProperty('airtableId', expect.any(String)))
-  const recordsWithoutAirtableId = recordsCreated.map(r => omit(r, ['airtableId']))
+  const recordsWithoutAirtableId = recordsCreated.map(r => _omit(r, ['airtableId']))
   expect(recordsWithoutAirtableId).toEqual(records)
 
   const recordsLoaded = await tableDao.getRecords()
