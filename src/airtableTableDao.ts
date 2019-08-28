@@ -1,6 +1,5 @@
-import { anyToErrorMessage, AppError, InstanceId, logMethod } from '@naturalcycles/js-lib'
+import { anyToErrorMessage, AppError, InstanceId, logMethod, pMap } from '@naturalcycles/js-lib'
 import { getValidationResult } from '@naturalcycles/nodejs-lib'
-import { pMap } from '@naturalcycles/promise-lib'
 import {
   AirtableApi,
   AirtableApiRecord,

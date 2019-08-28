@@ -1,5 +1,4 @@
-import { filterObject, StringMap, transformValues } from '@naturalcycles/js-lib'
-import { pMap, pProps } from '@naturalcycles/promise-lib'
+import { _mapValues, filterObject, pMap, pProps, StringMap } from '@naturalcycles/js-lib'
 import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
@@ -69,10 +68,10 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             let r = { ..._r }
             delete r.airtableId
             // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
-            r = transformValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
+            r = _mapValues(r, v => (isArrayOfLinks(v) ? [] : v))
 
             // Transform Attachments
-            r = transformValues(r, transformAttachments)
+            r = _mapValues(r, v => transformAttachments(v as any))
 
             const newRecord = await dao.createRecord(r, opts)
             idMap[oldId] = newRecord.airtableId
@@ -103,7 +102,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             let patch = filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
-            patch = transformValues(patch, (_k, v: string[]) => v.map(oldId => idMap[oldId]))
+            patch = _mapValues(patch, v => ((v as any) as string[]).map(oldId => idMap[oldId]))
             // console.log({patch2: patch})
             await dao.updateRecord(idMap[airtableId], patch, opts)
           },
@@ -147,7 +146,7 @@ function isArrayOfAttachments (v: any): boolean {
   )
 }
 
-function transformAttachments (_k: any, v: AirtableAttachment[]): AirtableAttachmentUpload[] {
+function transformAttachments (v: AirtableAttachment[]): AirtableAttachmentUpload[] {
   if (!isArrayOfAttachments(v)) return v
 
   return v.map(a => ({
