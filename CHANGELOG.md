@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.0...v2.2.1) (2019-08-29)
+
+
+### Bug Fixes
+
+* typescript 3.6 compatible ([0d1b696](https://github.com/NaturalCycles/airtable-lib/commit/0d1b696))
+
 # [2.2.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.1.1...v2.2.0) (2019-08-28)
 
 
