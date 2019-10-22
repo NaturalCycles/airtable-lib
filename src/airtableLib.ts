@@ -3,10 +3,10 @@ import { AirtableApi } from './airtable.api'
 import { AirtableLibCfg } from './airtable.model'
 
 export class AirtableLib {
-  constructor (public airtableServiceCfg: AirtableLibCfg) {}
+  constructor(public airtableServiceCfg: AirtableLibCfg) {}
 
   @memo()
-  api (): AirtableApi {
+  api(): AirtableApi {
     // lazy-loading the library
     const airtableApi = require('airtable') as AirtableApi
 

@@ -52,7 +52,7 @@ export interface Table2 extends AirtableRecord {
   // _linkTable1?: Table1[]
 }
 
-export function mockTable1 (): Table1[] {
+export function mockTable1(): Table1[] {
   return _range(1, 10).map(
     num =>
       ({
@@ -63,7 +63,7 @@ export function mockTable1 (): Table1[] {
   )
 }
 
-export function mockTable2 (): Table2[] {
+export function mockTable2(): Table2[] {
   return _range(1, 10).map(num =>
     filterFalsyValues({
       name: `name2_${num}`,
@@ -135,19 +135,19 @@ export const categorySchema = objectSchema<Category>({
   users: airtableMultipleLinkSchema<User>(),
 }).concat(airtableRecordSchema)
 
-export function mockTableDao1 (api: AirtableApi, baseId: string): AirtableTableDao<Table1> {
+export function mockTableDao1(api: AirtableApi, baseId: string): AirtableTableDao<Table1> {
   return new AirtableTableDao<Table1>(api, baseId, 'table1', {
     sort: [{ field: 'name' }],
   })
 }
 
-export function mockTableDao2 (api: AirtableApi, baseId: string): AirtableTableDao<Table2> {
+export function mockTableDao2(api: AirtableApi, baseId: string): AirtableTableDao<Table2> {
   return new AirtableTableDao<Table2>(api, baseId, 'table2', {
     sort: [{ field: 'name' }],
   })
 }
 
-export function mockBaseDao (api: AirtableApi, baseId: string): AirtableBaseDao<TestBase> {
+export function mockBaseDao(api: AirtableApi, baseId: string): AirtableBaseDao<TestBase> {
   const baseName = 'Test'
 
   return new AirtableBaseDao<TestBase>({
@@ -166,7 +166,7 @@ export function mockBaseDao (api: AirtableApi, baseId: string): AirtableBaseDao<
   })
 }
 
-export function mockBasesDao (api: AirtableApi, baseId: string): AirtableBasesDao<BaseMap> {
+export function mockBasesDao(api: AirtableApi, baseId: string): AirtableBasesDao<BaseMap> {
   const baseDao = mockBaseDao(api, baseId)
   return new AirtableBasesDao<BaseMap>([baseDao])
 }

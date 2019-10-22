@@ -15,11 +15,11 @@ export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 // export interface AirtableRemoteConnectorCfg<BASE> {}
 
 export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BASE> {
-  constructor (private airtableApi: AirtableApi) {}
+  constructor(private airtableApi: AirtableApi) {}
 
   readonly TYPE = AIRTABLE_CONNECTOR_REMOTE
 
-  async fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
+  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
     const { tableCfgMap } = baseDaoCfg
 
     return pProps(
@@ -41,7 +41,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
    *
    * preserveOrder=true means it will upload one by one: slower, but keeping the original order
    */
-  async upload (
+  async upload(
     base: BASE,
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     opts: AirtableDaoOptions = {},
@@ -113,11 +113,11 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     )
   }
 
-  fetchSync (): never {
+  fetchSync(): never {
     throw new Error('fetchSync not supported for AirtableRemoteConnector')
   }
 
-  private getTableDao<T extends AirtableRecord = AirtableRecord> (
+  private getTableDao<T extends AirtableRecord = AirtableRecord>(
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     tableName: keyof BASE,
   ): AirtableTableDao<T> {
@@ -130,7 +130,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   }
 }
 
-function isArrayOfLinks (v: any): boolean {
+function isArrayOfLinks(v: any): boolean {
   return (
     Array.isArray(v) &&
     !!v.length &&
@@ -138,7 +138,7 @@ function isArrayOfLinks (v: any): boolean {
   )
 }
 
-function isArrayOfAttachments (v: any): boolean {
+function isArrayOfAttachments(v: any): boolean {
   return (
     Array.isArray(v) &&
     !!v.length &&
@@ -146,7 +146,7 @@ function isArrayOfAttachments (v: any): boolean {
   )
 }
 
-function transformAttachments (v: AirtableAttachment[]): AirtableAttachmentUpload[] {
+function transformAttachments(v: AirtableAttachment[]): AirtableAttachmentUpload[] {
   if (!isArrayOfAttachments(v)) return v
 
   return v.map(a => ({

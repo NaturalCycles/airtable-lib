@@ -6,15 +6,15 @@ import { AirtableBaseDao } from './airtableBaseDao'
  * Allows to perform operations with MANY bases at once, e.g fetch from all bases, upload all bases, etc.
  */
 export class AirtableBasesDao<BASE_MAP = any> {
-  constructor (public baseDaos: AirtableBaseDao<any>[]) {}
+  constructor(public baseDaos: AirtableBaseDao<any>[]) {}
 
-  getDao<BASE = any> (baseName: string): AirtableBaseDao<BASE> {
+  getDao<BASE = any>(baseName: string): AirtableBaseDao<BASE> {
     const dao = this.baseDaos.find(dao => dao.cfg.baseName === baseName)
     if (!dao) throw new Error(`AirtableBaseDao not found for base: ${baseName}`)
     return dao
   }
 
-  getCacheMap (): BASE_MAP {
+  getCacheMap(): BASE_MAP {
     const cacheMap = {} as BASE_MAP
 
     this.baseDaos.forEach(baseDao => {
@@ -27,7 +27,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
   /**
    * @returns map from baseName to unix timestamp of last fetched (or undefined)
    */
-  getLastFetchedMap (connectorType: symbol): StringMap<number | undefined> {
+  getLastFetchedMap(connectorType: symbol): StringMap<number | undefined> {
     const map = {}
 
     this.baseDaos.forEach(baseDao => {
@@ -40,7 +40,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
   /**
    * @returns map from baseName to unix timestamp of when it's cache was last changed
    */
-  getLastChangedMap (): StringMap<number | undefined> {
+  getLastChangedMap(): StringMap<number | undefined> {
     const map = {}
 
     this.baseDaos.forEach(baseDao => {
@@ -51,7 +51,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
   }
 
   @logMethod({ logStart: true })
-  async fetchAll (
+  async fetchAll(
     connectorType: symbol,
     opts: AirtableDaoOptions = {},
     concurrency = 1,
@@ -70,7 +70,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
   }
 
   @logMethod({ logStart: true })
-  async uploadAll (
+  async uploadAll(
     connectorType: symbol,
     opts?: AirtableDaoOptions,
     concurrency = 1,

@@ -14,7 +14,7 @@ import {
 } from './airtable.model'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
-  constructor (
+  constructor(
     airtableApi: AirtableApi,
     baseId: string,
     private tableName: string,
@@ -32,7 +32,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Empty records are filtered out.
    */
   @logMethod()
-  async getRecords (
+  async getRecords(
     opts: AirtableDaoOptions = {},
     selectOpts: AirtableApiSelectOpts<T> = {},
   ): Promise<T[]> {
@@ -58,7 +58,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   }
 
   @logMethod()
-  async getRecord (airtableId: string, opts: AirtableDaoOptions = {}): Promise<T | undefined> {
+  async getRecord(airtableId: string, opts: AirtableDaoOptions = {}): Promise<T | undefined> {
     const record = await this.table
       .find(airtableId)
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
@@ -70,7 +70,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * @returns created record (with generated `airtableId`)
    */
   @logMethod()
-  async createRecord (record: Exclude<T, 'airtableId'>, opts: AirtableDaoOptions = {}): Promise<T> {
+  async createRecord(record: Exclude<T, 'airtableId'>, opts: AirtableDaoOptions = {}): Promise<T> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.table
       .create(record as Partial<T>)
@@ -85,7 +85,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Or if opts.skipPreservingOrder=true
    */
   @logMethod()
-  async createRecords (
+  async createRecords(
     records: Exclude<T, 'airtableId'>[],
     opts: AirtableDaoOptions = {},
   ): Promise<T[]> {
@@ -108,7 +108,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Partial update (patch) the record.
    */
   @logMethod()
-  async updateRecord (
+  async updateRecord(
     airtableId: string,
     patch: Partial<T>,
     opts: AirtableDaoOptions = {},
@@ -126,7 +126,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * > Any fields that are not included will be cleared.
    */
   @logMethod()
-  async replaceRecord (
+  async replaceRecord(
     airtableId: string,
     record: Exclude<T, 'airtableId'>,
     opts: AirtableDaoOptions = {},
@@ -139,7 +139,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   }
 
   @logMethod()
-  async replaceRecords (records: T[], opts: AirtableDaoOptions = {}): Promise<T[]> {
+  async replaceRecords(records: T[], opts: AirtableDaoOptions = {}): Promise<T[]> {
     const concurrency = opts.concurrency || 4
     return pMap(
       records,
@@ -158,7 +158,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * @returns true if record existed.
    */
   @logMethod()
-  async deleteRecord (airtableId: string): Promise<boolean> {
+  async deleteRecord(airtableId: string): Promise<boolean> {
     return this.table
       .destroy(airtableId)
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
@@ -171,7 +171,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * @returns array of airtableIds of deleted records
    */
   @logMethod()
-  async deleteAllRecords (concurrency = 4): Promise<string[]> {
+  async deleteAllRecords(concurrency = 4): Promise<string[]> {
     // Using low level commands to include empty records too
     const airtableIds = (await this.table
       .select({
@@ -193,7 +193,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     return airtableIds
   }
 
-  private validate<R> (record: R, opts: AirtableDaoOptions = {}): R {
+  private validate<R>(record: R, opts: AirtableDaoOptions = {}): R {
     const { validationSchema } = this.cfg
     const { skipValidation, onValidationError, throwOnValidationError } = opts
 
@@ -212,7 +212,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     return value
   }
 
-  private mapToAirtableRecord (r: AirtableApiRecord<T>, opts: AirtableDaoOptions = {}): T {
+  private mapToAirtableRecord(r: AirtableApiRecord<T>, opts: AirtableDaoOptions = {}): T {
     return this.validate(
       {
         airtableId: r.id,
@@ -222,7 +222,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     )
   }
 
-  onErrorOrUndefined (err: any, airtableInput?: any): undefined | never {
+  onErrorOrUndefined(err: any, airtableInput?: any): undefined | never {
     // Turn 404 error into `undefined`
     if (err && err.statusCode === 404) {
       return
@@ -231,7 +231,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     this.onError(err, airtableInput)
   }
 
-  private onError (err: any, airtableInput?: any): never {
+  private onError(err: any, airtableInput?: any): never {
     // Wrap as AppError with code
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)

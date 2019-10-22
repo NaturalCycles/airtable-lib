@@ -18,7 +18,7 @@ import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
  * Provides API to fetch or upload records via provided Connectors (e.g Json, Remote).
  */
 export class AirtableBaseDao<BASE = any> implements InstanceId {
-  constructor (public cfg: AirtableBaseDaoCfg<BASE>) {
+  constructor(public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastFetchedMap = new Map<symbol, number | undefined>()
 
@@ -66,7 +66,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   private _airtableIdIndex?: StringMap<AirtableRecord>
 
-  getCache (): BASE {
+  getCache(): BASE {
     if (!this._cache) {
       if (!this.cfg.lazyConnectorType) {
         throw new Error(`lazyConnectorType not defined for ${this.instanceId}`)
@@ -80,7 +80,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._cache!
   }
 
-  setCache (cache?: BASE, opts: AirtableDaoOptions = {}): void {
+  setCache(cache?: BASE, opts: AirtableDaoOptions = {}): void {
     if (!cache) {
       console.warn(`AirtableBaseDao.${this.instanceId} setCache to undefined`)
       this._cache = undefined
@@ -120,7 +120,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     this.cacheUpdated$.next(this._cache)
   }
 
-  private getAirtableIndex (): StringMap<AirtableRecord> {
+  private getAirtableIndex(): StringMap<AirtableRecord> {
     if (!this._airtableIdIndex) {
       this.getCache()
     }
@@ -128,7 +128,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._airtableIdIndex!
   }
 
-  getTableRecords<TABLE_NAME extends keyof BASE> (
+  getTableRecords<TABLE_NAME extends keyof BASE>(
     tableName: TABLE_NAME,
     noAirtableIds = false,
   ): BASE[TABLE_NAME] {
@@ -141,11 +141,11 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     }
   }
 
-  getById<T extends AirtableRecord> (airtableId?: string): T | undefined {
+  getById<T extends AirtableRecord>(airtableId?: string): T | undefined {
     return this.getAirtableIndex()[airtableId!] as T
   }
 
-  requireById<T extends AirtableRecord> (airtableId: string): T {
+  requireById<T extends AirtableRecord>(airtableId: string): T {
     const r = this.getAirtableIndex()[airtableId] as T
     if (!r) {
       throw new Error(`requireById ${this.cfg.baseName}.${airtableId} not found`)
@@ -153,11 +153,11 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return r
   }
 
-  getByIds<T extends AirtableRecord> (airtableIds: string[] = []): T[] {
+  getByIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
     return airtableIds.map(id => this.getAirtableIndex()[id]) as T[]
   }
 
-  requireByIds<T extends AirtableRecord> (airtableIds: string[] = []): T[] {
+  requireByIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
     return airtableIds.map(id => {
       const r = this.getAirtableIndex()[id]
       if (!r) {
@@ -167,7 +167,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     }) as T[]
   }
 
-  private getConnector (connectorType: symbol): AirtableConnector<BASE> {
+  private getConnector(connectorType: symbol): AirtableConnector<BASE> {
     const connector = this.connectorMap.get(connectorType)
     if (!connector) {
       throw new Error(`Connector not found by type: ${String(connectorType)}`)
@@ -181,7 +181,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    * If `opts.cache` is true - saves to cache.
    */
   @logMethod({ logStart: true })
-  async fetch (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
+  async fetch(connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
     const base = await this.getConnector(connectorType).fetch(this.cfg, opts)
 
     if (!base) {
@@ -202,7 +202,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   }
 
   @logMethod({ logStart: true })
-  async upload (connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
+  async upload(connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
     await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opts)
   }
 }

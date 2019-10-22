@@ -12,11 +12,11 @@ export interface AirtableJsonConnectorCfg {
 }
 
 export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE> {
-  constructor (private cfg: AirtableJsonConnectorCfg) {}
+  constructor(private cfg: AirtableJsonConnectorCfg) {}
 
   readonly TYPE = AIRTABLE_CONNECTOR_JSON
 
-  async fetch (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
+  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
     // require ensures the read operation is cached
     // return require(this.jsonPath)
     // NO: going in favor of async interface for all connectors
@@ -25,12 +25,12 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
     return fs.readJson(jsonPath)
   }
 
-  fetchSync (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): BASE {
+  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): BASE {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     return require(jsonPath)
   }
 
-  async upload (base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>): Promise<void> {
+  async upload(base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>): Promise<void> {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     await fs.ensureFile(jsonPath)
     await fs.writeJson(jsonPath, base, { spaces: 2 })
