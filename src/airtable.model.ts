@@ -8,7 +8,6 @@ import {
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
 import { AirtableApiSort } from './airtable.api'
-import { AirtableRecord, AirtableTableCfg } from './index'
 
 export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
