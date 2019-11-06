@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.2...v2.2.3) (2019-11-06)
+
+
+### Bug Fixes
+
+* ts3.7 caught error ([266fd3e](https://github.com/NaturalCycles/airtable-lib/commit/266fd3eadd9ca11b58588c4e88ccf6810d01df4e))
+
 ## [2.2.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.1...v2.2.2) (2019-11-02)
 
 
