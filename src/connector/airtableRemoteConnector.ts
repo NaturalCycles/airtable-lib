@@ -23,13 +23,10 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     const { tableCfgMap } = baseDaoCfg
 
     return pProps(
-      Object.keys(tableCfgMap).reduce(
-        (r, tableName) => {
-          r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opts)
-          return r
-        },
-        {} as BASE,
-      ),
+      Object.keys(tableCfgMap).reduce((r, tableName) => {
+        r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opts)
+        return r
+      }, {} as BASE),
       { concurrency: opts.concurrency || 4 },
     )
   }

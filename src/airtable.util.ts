@@ -16,11 +16,8 @@ export function sortAirtableBase<BASE>(base: BASE): BASE {
 function sortObjectKeys<T>(o: T): T {
   return Object.keys(o)
     .sort()
-    .reduce(
-      (r, k) => {
-        r[k] = o[k]
-        return r
-      },
-      {} as T,
-    )
+    .reduce((r, k) => {
+      r[k] = o[k]
+      return r
+    }, {} as T)
 }

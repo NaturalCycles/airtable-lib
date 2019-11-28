@@ -173,12 +173,14 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   @logMethod()
   async deleteAllRecords(concurrency = 4): Promise<string[]> {
     // Using low level commands to include empty records too
-    const airtableIds = (await this.table
-      .select({
-        pageSize: 100,
-      })
-      .all()
-      .catch(err => this.onError(err))).map(r => r.id)
+    const airtableIds = (
+      await this.table
+        .select({
+          pageSize: 100,
+        })
+        .all()
+        .catch(err => this.onError(err))
+    ).map(r => r.id)
 
     await pMap(
       airtableIds,
