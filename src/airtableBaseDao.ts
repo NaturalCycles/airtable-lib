@@ -1,4 +1,4 @@
-import { _omit, InstanceId, logMethod, StringMap } from '@naturalcycles/js-lib'
+import { InstanceId, logMethod, StringMap, _omit } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import { Subject } from 'rxjs'
 import {

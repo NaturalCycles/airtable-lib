@@ -7,10 +7,10 @@ import {
   AirtableApiTable,
 } from './airtable.api'
 import {
-  AIRTABLE_ERROR_CODE,
   AirtableDaoOptions,
   AirtableRecord,
   AirtableTableCfg,
+  AIRTABLE_ERROR_CODE,
 } from './airtable.model'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {

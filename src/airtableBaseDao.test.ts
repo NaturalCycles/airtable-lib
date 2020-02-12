@@ -1,4 +1,4 @@
-import { MOCK_TS_2018_06_21, mockTime } from '@naturalcycles/test-lib'
+import { mockTime, MOCK_TS_2018_06_21 } from '@naturalcycles/test-lib'
 import { AirtableLib } from './airtableLib'
 import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
 import { mockBaseDao } from './test/airtable.mock'

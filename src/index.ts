@@ -1,5 +1,4 @@
 import {
-  AIRTABLE_ERROR_CODE,
   AirtableAttachment,
   airtableAttachmentSchema,
   airtableAttachmentsSchema,
@@ -17,6 +16,7 @@ import {
   AirtableTableCfgMap,
   AirtableThumbnail,
   airtableThumbnailSchema,
+  AIRTABLE_ERROR_CODE,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
 import { AirtableBaseDao } from './airtableBaseDao'
@@ -24,13 +24,13 @@ import { AirtableBasesDao } from './airtableBasesDao'
 import { AirtableLib } from './airtableLib'
 import { AirtableTableDao } from './airtableTableDao'
 import {
-  AIRTABLE_CONNECTOR_JSON,
   AirtableJsonConnector,
   AirtableJsonConnectorCfg,
+  AIRTABLE_CONNECTOR_JSON,
 } from './connector/airtableJsonConnector'
 import {
-  AIRTABLE_CONNECTOR_REMOTE,
   AirtableRemoteConnector,
+  AIRTABLE_CONNECTOR_REMOTE,
 } from './connector/airtableRemoteConnector'
 
 export {
