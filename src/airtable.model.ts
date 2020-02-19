@@ -128,6 +128,8 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
 export interface AirtableDaoOptions {
   /**
    * Will still _transform_ the value.
+   *
+   * @default false
    */
   skipValidation?: boolean
 
@@ -142,6 +144,8 @@ export interface AirtableDaoOptions {
    * Applies only to "upload to remote Airtable" tasks.
    * `true` means it will upload rows concurrently and the order will NOT be preserved.
    * Otherwise order is preserved, but upload is sequential and slower.
+   *
+   * @default false
    */
   skipPreservingOrder?: boolean
 
@@ -154,16 +158,22 @@ export interface AirtableDaoOptions {
    * By default AirtableBaseDao caches everything that is fetched from Connector.
    * Settings this to `true` skips caching.
    * Applicable to AirtableBaseDao methods that fetch data, not applicable to AirtableTableDao methods.
+   *
+   * @default false
    */
   noCache?: boolean
 
   /**
    * If set to true - preserves `lastChanged` field.
+   *
+   * @default false
    */
   preserveLastChanged?: boolean
 
   /**
    * If set to true - preserves `lastFetched` field.
+   *
+   * @default false
    */
   preserveLastFetched?: boolean
 }
