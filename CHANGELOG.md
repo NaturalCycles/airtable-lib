@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.4...v2.3.0) (2020-02-20)
+
+
+### Features
+
+* AirtableDB first implementation ([35f9624](https://github.com/NaturalCycles/airtable-lib/commit/35f96243b76e11f7441028dcd259cb09d6789744))
+
 ## [2.2.4](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.3...v2.2.4) (2019-11-28)
 
 
