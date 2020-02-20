@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.3.0...v2.4.0) (2020-02-20)
+
+
+### Features
+
+* allow baseId as part of `table` ([4801437](https://github.com/NaturalCycles/airtable-lib/commit/4801437f9d182bdda470d3353a87e0e9df81200c))
+
 # [2.3.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.2.4...v2.3.0) (2020-02-20)
 
 
