@@ -21,6 +21,13 @@ import {
 import { sortAirtableBase } from './airtable.util'
 import { AirtableBaseDao } from './airtableBaseDao'
 import { AirtableBasesDao } from './airtableBasesDao'
+import {
+  AirtableDB,
+  AirtableDBCfg,
+  AirtableDBOptions,
+  AirtableDBSaveOptions,
+  AirtableDBStreamOptions,
+} from './airtableDB'
 import { AirtableLib } from './airtableLib'
 import { AirtableTableDao } from './airtableTableDao'
 import {
@@ -62,4 +69,9 @@ export {
   AirtableJsonConnectorCfg,
   AIRTABLE_CONNECTOR_REMOTE,
   AirtableRemoteConnector,
+  AirtableDBCfg,
+  AirtableDBOptions,
+  AirtableDBStreamOptions,
+  AirtableDBSaveOptions,
+  AirtableDB,
 }

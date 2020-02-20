@@ -16,7 +16,7 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
 
   readonly TYPE = AIRTABLE_CONNECTOR_JSON
 
-  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
+  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): Promise<BASE> {
     // require ensures the read operation is cached
     // return require(this.jsonPath)
     // NO: going in favor of async interface for all connectors
@@ -25,7 +25,7 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
     return fs.readJson(jsonPath)
   }
 
-  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): BASE {
+  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): BASE {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     return require(jsonPath)
   }

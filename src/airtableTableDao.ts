@@ -33,7 +33,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    */
   @logMethod()
   async getRecords(
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoOptions = {},
     selectOpts: AirtableApiSelectOpts<T> = {},
   ): Promise<T[]> {
     const { sort } = this.cfg
@@ -43,7 +43,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
         // defaults
         pageSize: 100,
         view: this.cfg.view || 'Grid view',
-        ...(sort && sort.length && { sort }),
+        ...(sort?.length && { sort }),
         ...selectOpts,
       })
       .all()
@@ -53,43 +53,61 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       records
         // Filter out empty records
         .filter(r => Object.keys(r.fields).length)
-        .map(r => this.mapToAirtableRecord(r, opts))
+        .map(r => this.mapToAirtableRecord(r, opt))
     )
   }
 
   @logMethod()
-  async getRecord(airtableId: string, opts: AirtableDaoOptions = {}): Promise<T | undefined> {
+  async getRecord(airtableId: string, opt: AirtableDaoOptions = {}): Promise<T | undefined> {
     const record = await this.table
       .find(airtableId)
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
 
-    return record && this.mapToAirtableRecord(record, opts)
+    return record && this.mapToAirtableRecord(record, opt)
+  }
+
+  async getByIds(
+    ids: string[],
+    opt: AirtableDaoOptions = {},
+    selectOpts: AirtableApiSelectOpts<T> = {},
+  ): Promise<T[]> {
+    if (!ids.length) return []
+
+    const { idField = 'id' } = opt
+
+    const pairs = ids.map(id => `{${idField}}="${id}"`)
+    const filterByFormula = `OR(${pairs.join(',')})`
+
+    return await this.getRecords(opt, {
+      filterByFormula,
+      ...selectOpts,
+    })
   }
 
   /**
    * @returns created record (with generated `airtableId`)
    */
   @logMethod()
-  async createRecord(record: Exclude<T, 'airtableId'>, opts: AirtableDaoOptions = {}): Promise<T> {
+  async createRecord(record: Exclude<T, 'airtableId'>, opt: AirtableDaoOptions = {}): Promise<T> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.table
       .create(record as Partial<T>)
       .catch(err => this.onError(err, { record }))
 
-    return this.mapToAirtableRecord(raw, opts)
+    return this.mapToAirtableRecord(raw, opt)
   }
 
   /**
    * Warning:
    * Order of records is not preserved if `concurrency` is set to higher than 1!
-   * Or if opts.skipPreservingOrder=true
+   * Or if opt.skipPreservingOrder=true
    */
   @logMethod()
   async createRecords(
     records: Exclude<T, 'airtableId'>[],
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoOptions = {},
   ): Promise<T[]> {
-    const concurrency = opts.concurrency || (opts.skipPreservingOrder ? 4 : 1)
+    const concurrency = opt.concurrency || (opt.skipPreservingOrder ? 4 : 1)
 
     return pMap(
       records,
@@ -98,7 +116,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
         const raw = await this.table
           .create(record as Partial<T>)
           .catch(err => this.onError(err, { record }))
-        return this.mapToAirtableRecord(raw, opts)
+        return this.mapToAirtableRecord(raw, opt)
       },
       { concurrency },
     )
@@ -111,14 +129,14 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   async updateRecord(
     airtableId: string,
     patch: Partial<T>,
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoOptions = {},
   ): Promise<T> {
     // console.log('updateRecord', {airtableId, patch})
     const raw = await this.table
       .update(airtableId, patch)
       .catch(err => this.onError(err, { airtableId, patch }))
 
-    return this.mapToAirtableRecord(raw, opts)
+    return this.mapToAirtableRecord(raw, opt)
   }
 
   /**
@@ -129,18 +147,18 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   async replaceRecord(
     airtableId: string,
     record: Exclude<T, 'airtableId'>,
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoOptions = {},
   ): Promise<T> {
     const raw = await this.table
       .replace(airtableId, record as Partial<T>)
       .catch(err => this.onError(err, { record }))
 
-    return this.mapToAirtableRecord(raw, opts)
+    return this.mapToAirtableRecord(raw, opt)
   }
 
   @logMethod()
-  async replaceRecords(records: T[], opts: AirtableDaoOptions = {}): Promise<T[]> {
-    const concurrency = opts.concurrency || 4
+  async replaceRecords(records: T[], opt: AirtableDaoOptions = {}): Promise<T[]> {
+    const concurrency = opt.concurrency || 4
     return pMap(
       records,
       async r => {
@@ -148,7 +166,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
         const raw = await this.table
           .replace(airtableId, record as T)
           .catch(err => this.onError(err, { record: r }))
-        return this.mapToAirtableRecord(raw, opts)
+        return this.mapToAirtableRecord(raw, opt)
       },
       { concurrency },
     )
@@ -164,6 +182,16 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
       .then(r => !!r)
   }
+
+  // @logMethod()
+  // async deleteByIds(ids: string[], opt: AirtableDaoOptions = {}): Promise<boolean> {
+  //   await this.getByIds()
+  //
+  //   return this.table
+  //     .destroy(airtableId)
+  //     .catch(err => this.onErrorOrUndefined(err, { airtableId }))
+  //     .then(r => !!r)
+  // }
 
   /**
    * Will first fetch all records to get their airtableIds.
@@ -195,9 +223,9 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     return airtableIds
   }
 
-  private validate<R>(record: R, opts: AirtableDaoOptions = {}): R {
+  private validate<R>(record: R, opt: AirtableDaoOptions = {}): R {
     const { validationSchema } = this.cfg
-    const { skipValidation, onValidationError, throwOnValidationError } = opts
+    const { skipValidation, onValidationError, throwOnValidationError } = opt
 
     const { value, error } = getValidationResult<R>(record, validationSchema, this.tableName)
 
@@ -226,7 +254,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
 
   onErrorOrUndefined(err: any, airtableInput?: any): undefined | never {
     // Turn 404 error into `undefined`
-    if (err && err.statusCode === 404) {
+    if (err?.statusCode === 404) {
       return
     }
 

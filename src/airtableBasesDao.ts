@@ -1,5 +1,5 @@
 import { logMethod, pMap, StringMap } from '@naturalcycles/js-lib'
-import { AirtableDaoOptions } from './airtable.model'
+import { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
 /**
@@ -53,7 +53,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
   @logMethod({ logStart: true })
   async fetchAll(
     connectorType: symbol,
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoOptions = {},
     concurrency = 1,
   ): Promise<BASE_MAP> {
     const bases = {} as BASE_MAP
@@ -61,7 +61,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
     await pMap(
       this.baseDaos,
       async baseDao => {
-        bases[baseDao.cfg.baseName] = await baseDao.fetch(connectorType, opts)
+        bases[baseDao.cfg.baseName] = await baseDao.fetch(connectorType, opt)
       },
       { concurrency },
     )
@@ -72,13 +72,13 @@ export class AirtableBasesDao<BASE_MAP = any> {
   @logMethod({ logStart: true })
   async uploadAll(
     connectorType: symbol,
-    opts?: AirtableDaoOptions,
+    opt?: AirtableDaoSaveOptions,
     concurrency = 1,
   ): Promise<void> {
     await pMap(
       this.baseDaos,
       async baseDao => {
-        await baseDao.upload(connectorType, opts)
+        await baseDao.upload(connectorType, opt)
       },
       { concurrency },
     )

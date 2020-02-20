@@ -2,6 +2,7 @@
   "name": "@naturalcycles/airtable-lib",
   "scripts": {},
   "dependencies": {
+    "@naturalcycles/db-lib": "^3.10.1",
     "@naturalcycles/js-lib": "^8.0.0",
     "@naturalcycles/nodejs-lib": "^7.1.1",
     "airtable": "^0.8.0",

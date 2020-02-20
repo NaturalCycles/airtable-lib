@@ -122,6 +122,24 @@ export const airtableRecordSchema = objectSchema<AirtableRecord>({
   // id: stringSchema,
 })
 
+export interface AirtableDaoSaveOptions extends AirtableDaoOptions {
+  /**
+   * @default true
+   *
+   * If true - will DELETE all items as a first step of Upload process.
+   * If false - will APPEND items, which may lead to duplicates (unless `upsert` is set to `true`).
+   */
+  deleteAllOnUpload?: boolean
+
+  /**
+   * @default false
+   *
+   * If true - will OVERWRITE records if they exist (by `id`).
+   * If false - will NOT check for id uniqueness. Duplicate ids can exist because of that.
+   */
+  upsert?: boolean
+}
+
 /**
  * All properties default to undefined (treated as false).
  */
@@ -176,6 +194,14 @@ export interface AirtableDaoOptions {
    * @default false
    */
   preserveLastFetched?: boolean
+
+  /**
+   * @default `id`
+   *
+   * Defines the primary key (leftmost column) of the Airtable sheet.
+   * Conventionally should be named `id` (to match the CommonDB specification).
+   */
+  idField?: string
 }
 
 export interface AirtableBaseDaoCfg<BASE = any> {
@@ -209,7 +235,11 @@ export type AirtableTableCfgMap<BASE = any> = {
 
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
-  fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<BASE>
-  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): BASE
-  upload(base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts?: AirtableDaoOptions): Promise<void>
+  fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions): Promise<BASE>
+  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions): BASE
+  upload(
+    base: BASE,
+    baseDaoCfg: AirtableBaseDaoCfg<BASE>,
+    opt?: AirtableDaoSaveOptions,
+  ): Promise<void>
 }

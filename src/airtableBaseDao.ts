@@ -5,6 +5,7 @@ import {
   AirtableBaseDaoCfg,
   AirtableConnector,
   AirtableDaoOptions,
+  AirtableDaoSaveOptions,
   AirtableRecord,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
@@ -80,7 +81,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._cache!
   }
 
-  setCache(cache?: BASE, opts: AirtableDaoOptions = {}): void {
+  setCache(cache?: BASE, opt: AirtableDaoOptions = {}): void {
     if (!cache) {
       console.warn(`AirtableBaseDao.${this.instanceId} setCache to undefined`)
       this._cache = undefined
@@ -114,7 +115,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     this._airtableIdIndex = airtableIndex
 
     // Update
-    if (!opts.preserveLastChanged && cacheWasDefined) {
+    if (!opt.preserveLastChanged && cacheWasDefined) {
       this.lastChanged = Math.floor(Date.now() / 1000)
     }
     this.cacheUpdated$.next(this._cache)
@@ -178,31 +179,31 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
   /**
    * Fetches from Connector.
    *
-   * If `opts.cache` is true - saves to cache.
+   * If `opt.cache` is true - saves to cache.
    */
   @logMethod({ logStart: true })
-  async fetch(connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<BASE> {
-    const base = await this.getConnector(connectorType).fetch(this.cfg, opts)
+  async fetch(connectorType: symbol, opt: AirtableDaoOptions = {}): Promise<BASE> {
+    const base = await this.getConnector(connectorType).fetch(this.cfg, opt)
 
     if (!base) {
       console.warn(`AirtableBaseDao.${this.instanceId}.fetch returned empty base`)
       return undefined as any
     }
 
-    if (opts.noCache) {
+    if (opt.noCache) {
       return sortAirtableBase(base)
     }
 
-    if (!opts.preserveLastFetched) {
+    if (!opt.preserveLastFetched) {
       this.lastFetchedMap.set(connectorType, Math.floor(Date.now() / 1000))
     }
 
-    this.setCache(base, opts)
+    this.setCache(base, opt)
     return this._cache!
   }
 
   @logMethod({ logStart: true })
-  async upload(connectorType: symbol, opts: AirtableDaoOptions = {}): Promise<void> {
-    await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opts)
+  async upload(connectorType: symbol, opt: AirtableDaoSaveOptions = {}): Promise<void> {
+    await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opt)
   }
 }

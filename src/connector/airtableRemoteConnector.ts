@@ -6,6 +6,7 @@ import {
   AirtableBaseDaoCfg,
   AirtableConnector,
   AirtableDaoOptions,
+  AirtableDaoSaveOptions,
   AirtableRecord,
 } from '../airtable.model'
 import { AirtableTableDao } from '../airtableTableDao'
@@ -19,15 +20,15 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
 
   readonly TYPE = AIRTABLE_CONNECTOR_REMOTE
 
-  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opts: AirtableDaoOptions = {}): Promise<BASE> {
+  async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): Promise<BASE> {
     const { tableCfgMap } = baseDaoCfg
 
     return pProps(
       Object.keys(tableCfgMap).reduce((r, tableName) => {
-        r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opts)
+        r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opt)
         return r
       }, {} as BASE),
-      { concurrency: opts.concurrency || 4 },
+      { concurrency: opt.concurrency || 4 },
     )
   }
 
@@ -41,9 +42,9 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   async upload(
     base: BASE,
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
-    opts: AirtableDaoOptions = {},
+    opt: AirtableDaoSaveOptions = {},
   ): Promise<void> {
-    const concurrency = opts.concurrency || 4
+    const { concurrency = 4, deleteAllOnUpload = true, upsert = false } = opt
     const { tableCfgMap } = baseDaoCfg
     // map from old airtableId to newly-created airtableId
     const idMap: StringMap = {}
@@ -54,7 +55,9 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
       tableNames,
       async tableName => {
         const dao = this.getTableDao(baseDaoCfg, tableName)
-        await dao.deleteAllRecords(concurrency)
+        if (deleteAllOnUpload) {
+          await dao.deleteAllRecords(concurrency)
+        }
 
         // One-by-one to preserve order
         await pMap(
@@ -70,10 +73,22 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             // Transform Attachments
             r = _mapValues(r, v => transformAttachments(v as any))
 
-            const newRecord = await dao.createRecord(r, opts)
-            idMap[oldId] = newRecord.airtableId
+            let existingRecord: AirtableRecord | undefined
+
+            if (upsert && (r as any).id) {
+              const rows = await dao.getByIds([(r as any).id], opt)
+              existingRecord = rows[0]
+            }
+
+            if (existingRecord) {
+              const newRecord = await dao.updateRecord(existingRecord.airtableId, r, opt)
+              idMap[oldId] = newRecord.airtableId
+            } else {
+              const newRecord = await dao.createRecord(r, opt)
+              idMap[oldId] = newRecord.airtableId
+            }
           },
-          { concurrency: opts.skipPreservingOrder ? concurrency : 1 },
+          { concurrency: opt.skipPreservingOrder ? concurrency : 1 },
         )
       },
       { concurrency },
@@ -101,7 +116,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             // use idMap
             patch = _mapValues(patch, v => ((v as any) as string[]).map(oldId => idMap[oldId]))
             // console.log({patch2: patch})
-            await dao.updateRecord(idMap[airtableId], patch, opts)
+            await dao.updateRecord(idMap[airtableId], patch, opt)
           },
           { concurrency },
         )
