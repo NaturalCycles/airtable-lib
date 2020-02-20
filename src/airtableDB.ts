@@ -23,7 +23,13 @@ import { dbQueryToAirtableSelectOptions } from './query.util'
 
 export interface AirtableDBCfg<BASE = any> {
   airtableApi: AirtableApi
-  baseId: string
+
+  /**
+   * If defined - it will be used for all tables.
+   *
+   * If not defined - you'll need to pass `baseId` as part of the `table`, e.g `${baseId}.${table}`
+   */
+  baseId?: string
 }
 
 export interface AirtableDBOptions extends CommonDBOptions {
@@ -197,7 +203,17 @@ export class AirtableDB implements CommonDB {
   }
 
   private tableApi<DBM extends SavedDBEntity>(table: string): AirtableApiTable<DBM> {
-    return this.cfg.airtableApi.base(this.cfg.baseId)<DBM>(table)
+    let { baseId } = this.cfg
+
+    if (!baseId) {
+      if (!table.includes('.')) {
+        throw new Error(`"table" should include baseId, e.g "BaseId1.TABLE1"`)
+      }
+
+      ;[baseId, table] = table.split('.', 2)
+    }
+
+    return this.cfg.airtableApi.base(baseId)<DBM>(table)
   }
 
   private async queryAirtableRecords<DBM extends SavedDBEntity>(
