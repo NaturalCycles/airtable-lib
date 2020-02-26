@@ -21,10 +21,6 @@ import { AirtableBasesDao } from '../airtableBasesDao'
 import { AirtableTableDao } from '../airtableTableDao'
 import { cacheDir } from '../paths.cnst'
 
-const _baseMap: Record<string, AirtableRecord[]> = {
-  Test: [],
-}
-
 export interface BaseMap {
   TestBase: TestBase
 }
@@ -137,12 +133,14 @@ export const categorySchema = objectSchema<Category>({
 
 export function mockTableDao1(api: AirtableApi, baseId: string): AirtableTableDao<Table1> {
   return new AirtableTableDao<Table1>(api, baseId, 'table1', {
+    idField: 'name',
     sort: [{ field: 'name' }],
   })
 }
 
 export function mockTableDao2(api: AirtableApi, baseId: string): AirtableTableDao<Table2> {
   return new AirtableTableDao<Table2>(api, baseId, 'table2', {
+    idField: 'name',
     sort: [{ field: 'name' }],
   })
 }
@@ -158,10 +156,10 @@ export function mockBaseDao(api: AirtableApi, baseId: string): AirtableBaseDao<T
       new AirtableRemoteConnector<TestBase>(api),
     ],
     tableCfgMap: {
-      users: { validationSchema: userSchema },
-      roles: { validationSchema: roleSchema },
-      permissions: { validationSchema: permissionSchema },
-      categories: { validationSchema: categorySchema },
+      users: { validationSchema: userSchema, idField: 'id' },
+      roles: { validationSchema: roleSchema, idField: 'id' },
+      permissions: { validationSchema: permissionSchema, idField: 'id' },
+      categories: { validationSchema: categorySchema, idField: 'id' },
     },
   })
 }

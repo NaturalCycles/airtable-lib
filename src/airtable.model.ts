@@ -218,6 +218,13 @@ export interface AirtableBaseDaoCfg<BASE = any> {
 }
 
 export interface AirtableTableCfg<T extends AirtableRecord = any> {
+  /**
+   * Required field!
+   *
+   * It will skip rows (without marking them invalid) if row[idField] is empty
+   */
+  idField: string
+
   validationSchema?: AnySchemaTyped<T>
   sort?: AirtableApiSort<T>[]
 

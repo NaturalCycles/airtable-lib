@@ -36,7 +36,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     opt: AirtableDaoOptions = {},
     selectOpts: AirtableApiSelectOpts<T> = {},
   ): Promise<T[]> {
-    const { sort } = this.cfg
+    const { sort, idField } = this.cfg
 
     const records = await this.table
       .select({
@@ -53,6 +53,8 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       records
         // Filter out empty records
         .filter(r => Object.keys(r.fields).length)
+        // Filter empty records by idField being empty
+        .filter(r => r[idField])
         .map(r => this.mapToAirtableRecord(r, opt))
     )
   }
