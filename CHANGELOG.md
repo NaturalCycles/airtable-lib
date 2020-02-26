@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.5.0...v2.5.1) (2020-02-26)
+
+
+### Bug Fixes
+
+* idField filtering ([8c44ef3](https://github.com/NaturalCycles/airtable-lib/commit/8c44ef322d445be83d5bd97df5b3268e9cc692a0))
+
 # [2.5.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.4.0...v2.5.0) (2020-02-26)
 
 
