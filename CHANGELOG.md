@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.4.0...v2.5.0) (2020-02-26)
+
+
+### Features
+
+* AirtableTableCfg.idField (required field!) ([16fcaa5](https://github.com/NaturalCycles/airtable-lib/commit/16fcaa5b2fc6800fbb66e1fb077063ce0b3c9898))
+
 # [2.4.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.3.0...v2.4.0) (2020-02-20)
 
 
