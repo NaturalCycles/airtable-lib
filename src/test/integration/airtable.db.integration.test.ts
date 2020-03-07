@@ -1,7 +1,6 @@
 import { CommonDBTestOptions, runCommonDaoTest, runCommonDBTest } from '@naturalcycles/db-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
 import { AirtableDB } from '../../airtableDB'
-import { AirtableLib } from '../../airtableLib'
 
 jest.setTimeout(60000)
 
@@ -12,12 +11,8 @@ const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID } = requireEnvKeys(
   'AIRTABLE_BASE_ID',
 )
 
-const airtableLib = new AirtableLib({
-  apiKey: AIRTABLE_API_KEY,
-})
-
 const db = new AirtableDB({
-  airtableApi: airtableLib.api(),
+  apiKey: AIRTABLE_API_KEY,
   baseId: AIRTABLE_BASE_ID,
 })
 

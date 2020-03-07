@@ -22,7 +22,10 @@ import { AirtableRecord, AIRTABLE_ERROR_CODE } from './airtable.model'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 
 export interface AirtableDBCfg<BASE = any> {
-  airtableApi: AirtableApi
+  /**
+   * Airtable apiKey
+   */
+  apiKey: string
 
   /**
    * If defined - it will be used for all tables.
@@ -47,7 +50,20 @@ export interface AirtableDBSaveOptions extends CommonDBSaveOptions {}
  *
  */
 export class AirtableDB implements CommonDB {
-  constructor(public cfg: AirtableDBCfg) {}
+  constructor(public cfg: AirtableDBCfg) {
+    // lazy-loading the library
+    const airtableApi = require('airtable') as AirtableApi
+
+    airtableApi.configure({
+      endpointURL: 'https://api.airtable.com',
+      apiKey: cfg.apiKey,
+      // requestTimeout: 300000,
+    })
+
+    this.api = airtableApi
+  }
+
+  api: AirtableApi
 
   async getByIds<DBM extends SavedDBEntity>(
     table: string,
@@ -213,7 +229,7 @@ export class AirtableDB implements CommonDB {
       ;[baseId, table] = table.split('.', 2)
     }
 
-    return this.cfg.airtableApi.base(baseId)<DBM>(table)
+    return this.api.base(baseId)<DBM>(table)
   }
 
   private async queryAirtableRecords<DBM extends SavedDBEntity>(

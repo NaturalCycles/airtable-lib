@@ -27,7 +27,7 @@ const airtableLib = new AirtableLib({
 
 test('getByIds', async () => {
   const db = new AirtableDB({
-    airtableApi: airtableLib.api(),
+    apiKey: AIRTABLE_API_KEY,
     baseId: AIRTABLE_BASE_ID,
     // tableCfgMap: {},
   })
