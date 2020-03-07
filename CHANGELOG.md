@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.6.0...v2.7.0) (2020-03-07)
+
+
+### Features
+
+* AirtableDBCfg simplification ([0f71e67](https://github.com/NaturalCycles/airtable-lib/commit/0f71e6791ad3bf1c47f54a3fece58ca707529e8f))
+
 # [2.6.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.5.1...v2.6.0) (2020-03-01)
 
 
