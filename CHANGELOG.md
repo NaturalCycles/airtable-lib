@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.7.0...v2.8.0) (2020-03-08)
+
+
+### Features
+
+* baseDao.getById, getByAirtableId ([b73111b](https://github.com/NaturalCycles/airtable-lib/commit/b73111b2d0f01646b6bc3eb3d5b6f33b7a5320fa))
+
 # [2.7.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.6.0...v2.7.0) (2020-03-07)
 
 
