@@ -7,6 +7,7 @@ import {
   AirtableDaoOptions,
   AirtableDaoSaveOptions,
   AirtableRecord,
+  AirtableTableCfg,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
 import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
@@ -67,6 +68,12 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   private _airtableIdIndex?: StringMap<AirtableRecord>
 
+  /**
+   * _tableIdIndex[tableName][id]
+   * where id is defined by idField property
+   */
+  private _tableIdIndex?: StringMap<StringMap<AirtableRecord>>
+
   getCache(): BASE {
     if (!this._cache) {
       if (!this.cfg.lazyConnectorType) {
@@ -114,6 +121,18 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
 
     this._airtableIdIndex = airtableIndex
 
+    // TableIdIndex
+    const tableIdIndex: StringMap<StringMap<AirtableRecord>> = {}
+    Object.entries(this.cfg.tableCfgMap).forEach(([tableName, cfg]) => {
+      const { idField } = cfg as AirtableTableCfg
+      tableIdIndex[tableName] = {}
+      ;(this._cache![tableName] || []).forEach(
+        (r: AirtableRecord) => (tableIdIndex[tableName][r[idField]] = r),
+      )
+    })
+
+    this._tableIdIndex = tableIdIndex
+
     // Update
     if (!opt.preserveLastChanged && cacheWasDefined) {
       this.lastChanged = Math.floor(Date.now() / 1000)
@@ -129,6 +148,14 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._airtableIdIndex!
   }
 
+  private getTableIdIndex(): StringMap<StringMap<AirtableRecord>> {
+    if (!this._tableIdIndex) {
+      this.getCache()
+    }
+
+    return this._tableIdIndex!
+  }
+
   getTableRecords<TABLE_NAME extends keyof BASE>(
     tableName: TABLE_NAME,
     noAirtableIds = false,
@@ -142,27 +169,53 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     }
   }
 
-  getById<T extends AirtableRecord>(airtableId?: string): T | undefined {
-    return this.getAirtableIndex()[airtableId!] as T
+  getById<T extends AirtableRecord>(table: string, id?: string): T | undefined {
+    return this.getTableIdIndex()[table]?.[id!] as T
   }
 
-  requireById<T extends AirtableRecord>(airtableId: string): T {
-    const r = this.getAirtableIndex()[airtableId] as T
+  getByIds<T extends AirtableRecord>(table: string, ids: string[]): T[] {
+    return ids.map(id => this.getTableIdIndex()[table]?.[id]) as T[]
+  }
+
+  requireById<T extends AirtableRecord>(table: string, id: string): T | undefined {
+    const r = this.getTableIdIndex()[table]?.[id] as T
     if (!r) {
-      throw new Error(`requireById ${this.cfg.baseName}.${airtableId} not found`)
+      throw new Error(`requireById ${this.cfg.baseName}.${table}.${id} not found`)
     }
     return r
   }
 
-  getByIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
+  requireByIds<T extends AirtableRecord>(table: string, ids: string[]): T[] {
+    return ids.map(id => {
+      const r = this.getTableIdIndex()[table]?.[id] as T
+      if (!r) {
+        throw new Error(`requireByIds ${this.cfg.baseName}.${table}.${id} not found`)
+      }
+      return r
+    })
+  }
+
+  getByAirtableId<T extends AirtableRecord>(airtableId?: string): T | undefined {
+    return this.getAirtableIndex()[airtableId!] as T
+  }
+
+  requireByAirtableId<T extends AirtableRecord>(airtableId: string): T {
+    const r = this.getAirtableIndex()[airtableId] as T
+    if (!r) {
+      throw new Error(`requireByAirtableId ${this.cfg.baseName}.${airtableId} not found`)
+    }
+    return r
+  }
+
+  getByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
     return airtableIds.map(id => this.getAirtableIndex()[id]) as T[]
   }
 
-  requireByIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
+  requireByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
     return airtableIds.map(id => {
       const r = this.getAirtableIndex()[id]
       if (!r) {
-        throw new Error(`requireByIds ${this.cfg.baseName}.${id} not found`)
+        throw new Error(`requireByAirtableIds ${this.cfg.baseName}.${id} not found`)
       }
       return r
     }) as T[]

@@ -120,6 +120,10 @@ test('getAirtableCacheFromJson', async () => {
 
   // console.log(cache.getBase())
   console.log(baseDao.getTableRecords('categories'))
-  console.log(baseDao.getById('recKD4dQ5UVWxBFhT'))
-  console.log(baseDao.getByIds(['recKD4dQ5UVWxBFhT', 'recL8ZPFiCjTivovL']))
+  console.log(baseDao.getByAirtableId('recKD4dQ5UVWxBFhT'))
+  console.log(baseDao.getByAirtableIds(['recKD4dQ5UVWxBFhT', 'recL8ZPFiCjTivovL']))
+
+  expect(baseDao.getById('categories', 'category1')).toMatchObject({
+    id: 'category1',
+  })
 })
