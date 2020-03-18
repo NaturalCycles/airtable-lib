@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.8.1...v2.8.2) (2020-03-18)
+
+
+### Bug Fixes
+
+* saveBatch when updating records was broken ([aa23002](https://github.com/NaturalCycles/airtable-lib/commit/aa2300234b82c871a1347244343da4c770d26709))
+
 ## [2.8.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.8.0...v2.8.1) (2020-03-16)
 
 
