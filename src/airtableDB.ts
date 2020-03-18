@@ -125,18 +125,16 @@ export class AirtableDB implements CommonDB {
       opt,
     )
     const existingRecordById = by(existingRecords, r => r.id)
+    // console.log({existingRecordById})
 
     await pMap(
       dbms,
       async dbm => {
         if (existingRecordById[dbm.id]) {
-          await this.updateRecord(
-            table,
-            existingRecordById[dbm.id].airtableId,
-            _omit(existingRecordById[dbm.id], ['airtableId']),
-          )
+          // console.log(`will update ${dbm.id} to ${existingRecordById[dbm.id].airtableId}`)
+          await this.updateRecord(table, existingRecordById[dbm.id].airtableId, dbm)
         } else {
-          await this.createRecord(table, _omit(dbm, ['airtableId' as keyof DBM]))
+          await this.createRecord(table, dbm)
         }
       },
       { concurrency: 4 },
@@ -264,7 +262,7 @@ export class AirtableDB implements CommonDB {
   async createRecord<DBM extends SavedDBEntity>(table: string, record: Partial<DBM>): Promise<DBM> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.tableApi<DBM>(table)
-      .create(record)
+      .create(_omit(record, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { record }))
 
     return this.mapToAirtableRecord(raw)
@@ -276,7 +274,7 @@ export class AirtableDB implements CommonDB {
     patch: Partial<DBM>,
   ): Promise<DBM> {
     const raw = await this.tableApi<DBM>(table)
-      .update(airtableId, patch)
+      .update(airtableId, _omit(patch, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { airtableId, patch }))
 
     return this.mapToAirtableRecord(raw)

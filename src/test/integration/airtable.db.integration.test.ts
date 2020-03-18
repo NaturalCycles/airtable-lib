@@ -27,3 +27,14 @@ const opt: CommonDBTestOptions = {
 describe('runCommonDBTest', () => runCommonDBTest(db, opt))
 
 describe('runCommonDaoTest', () => runCommonDaoTest(db, opt))
+
+test('manual1', async () => {
+  delete db.cfg.baseId
+
+  await db.saveBatch<any>(`appT51quIWm4RiMpc.Translations`, [
+    {
+      id: 'push-startTesting-title2',
+      'en-US': 'sdf3',
+    },
+  ])
+})
