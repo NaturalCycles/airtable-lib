@@ -18,9 +18,7 @@ export type AirtableId<T = any> = string
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
 export const airtableMultipleLinkSchema = <T>() =>
-  arraySchema<AirtableId<T>>(airtableIdSchema)
-    .optional()
-    .default([])
+  arraySchema<AirtableId<T>>(airtableIdSchema).optional().default([])
 
 export const airtableSingleLinkSchema = <T>() => airtableMultipleLinkSchema<T>().max(1)
 

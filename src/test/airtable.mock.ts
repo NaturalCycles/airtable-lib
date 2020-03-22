@@ -83,9 +83,7 @@ export const userSchema = objectSchema<User>({
   email: emailSchema,
   roles: airtableMultipleLinkSchema<Role>(),
   category: airtableSingleLinkSchema<Category>(),
-  tags: arraySchema(stringSchema)
-    .optional()
-    .default([]),
+  tags: arraySchema(stringSchema).optional().default([]),
   images: airtableAttachmentsSchema,
 }).concat(airtableRecordSchema)
 
