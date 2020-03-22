@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.8.2...v2.9.0) (2020-03-22)
+
+
+### Features
+
+* bump nodejs-lib (joi 17), prettier 2.x ([16464d5](https://github.com/NaturalCycles/airtable-lib/commit/16464d543b8fcb803119874d1bae3cba76c5e5b3))
+
 ## [2.8.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.8.1...v2.8.2) (2020-03-18)
 
 
