@@ -4,14 +4,13 @@
   "dependencies": {
     "@naturalcycles/db-lib": "^3.10.1",
     "@naturalcycles/js-lib": "^10.0.0",
-    "@naturalcycles/nodejs-lib": "^8.0.0",
+    "@naturalcycles/nodejs-lib": "^9.1.1",
     "airtable": "^0.8.0",
     "fs-extra": "^9.0.0",
     "rxjs": "^6.5.2"
   },
   "devDependencies": {
     "@naturalcycles/dev-lib": "^10.0.0",
-    "@naturalcycles/test-lib": "^1.0.3",
     "@types/node": "^13.7.1",
     "dotenv": "^8.0.0",
     "jest": "^25.1.0"
