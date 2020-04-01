@@ -6,6 +6,7 @@ import {
   CommonDBStreamOptions,
   CommonSchema,
   DBQuery,
+  queryInMemory,
   RunQueryResult,
   SavedDBEntity,
 } from '@naturalcycles/db-lib'
@@ -65,6 +66,10 @@ export class AirtableDB implements CommonDB {
 
   api: AirtableApi
 
+  async ping(): Promise<void> {
+    // impossible to implement without having a baseId and a known Table name there
+  }
+
   async getByIds<DBM extends SavedDBEntity>(
     table: string,
     ids: string[],
@@ -76,9 +81,11 @@ export class AirtableDB implements CommonDB {
     const pairs = ids.map(id => `{${idField}}="${id}"`)
     const filterByFormula = `OR(${pairs.join(',')})`
 
-    return await this.queryAirtableRecords<DBM>(table, {
-      filterByFormula,
-    })
+    return (
+      await this.queryAirtableRecords<DBM>(table, {
+        filterByFormula,
+      })
+    ).sort((a, b) => (a[idField] > b[idField] ? 1 : -1))
   }
 
   async deleteByIds(table: string, ids: string[], opt: AirtableDBOptions = {}): Promise<number> {
@@ -148,8 +155,15 @@ export class AirtableDB implements CommonDB {
     const selectOpts = dbQueryToAirtableSelectOptions<DBM>(q)
     // console.log({selectOpts})
 
+    let records = await this.queryAirtableRecords<any>(q.table, selectOpts)
+
+    // Cause Airtable doesn't sort it for you
+    if (q._orders.length) {
+      records = queryInMemory(q, records)
+    }
+
     return {
-      records: await this.queryAirtableRecords<any>(q.table, selectOpts),
+      records,
     }
   }
 

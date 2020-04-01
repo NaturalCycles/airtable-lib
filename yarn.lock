@@ -576,10 +576,10 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
-"@naturalcycles/db-lib@^3.10.1":
-  version "3.18.3"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-3.18.3.tgz#8490d6f335172f65cdcb4482b4fda4a02f4ba130"
-  integrity sha512-Xm9Pd+0gFzOgKt2AyckDhDZNhcH0+dIMXZwrRnGD7RexuPi+28k/jE9j7brDS8Bvral4ymHuIL9Yx8r/r50loA==
+"@naturalcycles/db-lib@^4.4.0":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-4.4.2.tgz#e1942b407d07ae9cf561468258d52ff9f7c4bb11"
+  integrity sha512-aoZJi+Kh6jDr+F8O9PhQACuouI7f5QtEo4giKLqm+mXOr0TMWoaNRTR09UOvWpNbShsw1nOygpzryrRHMazkkw==
   dependencies:
     "@naturalcycles/js-lib" "^10.0.0"
     "@naturalcycles/nodejs-lib" "^9.1.1"
@@ -635,14 +635,14 @@
     yargs "^15.1.0"
 
 "@naturalcycles/js-lib@^10.0.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-10.1.0.tgz#4a35d3db6b4e7da4f6d37a8e5b00a0521bd38457"
-  integrity sha512-66uYnYCF4BIRAvgCqEv7XTX6mFgsgHtgqddBPkJkqKo6D7DAqPGbdaZq8duvhkddtmHHCeXJhbWPsrqSgQj6IQ==
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-10.2.0.tgz#01d208bd4be8177b98f6211a5db1d0e4c20e96dc"
+  integrity sha512-213yzsfrGVJNoDHZz1pgkLEvtmJDdOjewDIAOFtiVwwkbT4RY315dpW5T3efof7emg7hrevjHKtrAliTO6lEtw==
 
 "@naturalcycles/nodejs-lib@^9.0.0", "@naturalcycles/nodejs-lib@^9.1.1":
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-9.1.1.tgz#7a42bb9690a5e93c66b0c30df3ab9f99ad2c4abd"
-  integrity sha512-yxoLdSDn8o0COh3UPDnmHRYlY++BFCqv5Ruz6KQu7iqZxevOfjbvECabmeKwtYmx++j3oAAPHi8Nns9rn74MfA==
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-9.1.2.tgz#ec6491648c71886273d1c4e10b15ee308e5825e8"
+  integrity sha512-h+qWi7LdLGxbNrXuCbJ2Dg5S3qLfdQSe0iBRu7QZ1kv8g1nZceaVN3A26DsFxT3g6rP2ZIo5ig4DD6d0TBUiQg==
   dependencies:
     "@hapi/joi" "^17.1.1"
     "@naturalcycles/js-lib" "^10.0.0"
@@ -719,9 +719,9 @@
     defer-to-connect "^2.0.0"
 
 "@types/babel__core@^7.1.0":
-  version "7.1.6"
-  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.6.tgz#16ff42a5ae203c9af1c6e190ed1f30f83207b610"
-  integrity sha512-tTnhWszAqvXnhW7m5jQU9PomXSiKXk2sFxpahXvI20SZKu9ylPi8WtIxueZ6ehDWikPT0jeFujMj3X4ZHuf3Tg==
+  version "7.1.7"
+  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.7.tgz#1dacad8840364a57c98d0dd4855c6dd3752c6b89"
+  integrity sha512-RL62NqSFPCDK2FM1pSDH0scHpJvsXtZNiYlMB73DgPBaG1E38ZYVL+ei5EkWRbr+KC4YNiAUNBnRj+bgwpgjMw==
   dependencies:
     "@babel/parser" "^7.1.0"
     "@babel/types" "^7.0.0"

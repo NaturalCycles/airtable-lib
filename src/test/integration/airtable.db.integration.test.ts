@@ -1,4 +1,9 @@
-import { CommonDBTestOptions, runCommonDaoTest, runCommonDBTest } from '@naturalcycles/db-lib'
+import {
+  CommonDBImplementationFeatures,
+  CommonDBImplementationQuirks,
+  runCommonDaoTest,
+  runCommonDBTest,
+} from '@naturalcycles/db-lib/dist/testing'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
 import { AirtableDB } from '../../airtableDB'
 
@@ -16,19 +21,18 @@ const db = new AirtableDB({
   baseId: AIRTABLE_BASE_ID,
 })
 
-const opt: CommonDBTestOptions = {
-  allowGetByIdsUnsorted: true,
-  allowQueryUnsorted: true,
-  allowStreamQueryToBeUnsorted: true,
+const features: CommonDBImplementationFeatures = {}
+
+const quirks: CommonDBImplementationQuirks = {
   allowExtraPropertiesInResponse: true,
   allowBooleansAsUndefined: true,
 }
 
-describe('runCommonDBTest', () => runCommonDBTest(db, opt))
+describe('runCommonDBTest', () => runCommonDBTest(db, features, quirks))
 
-describe('runCommonDaoTest', () => runCommonDaoTest(db, opt))
+describe('runCommonDaoTest', () => runCommonDaoTest(db, features, quirks))
 
-test('manual1', async () => {
+test.skip('manual1', async () => {
   delete db.cfg.baseId
 
   await db.saveBatch<any>(`appT51quIWm4RiMpc.Translations`, [
