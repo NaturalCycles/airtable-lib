@@ -1,3 +1,10 @@
+## [2.9.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.1...v2.9.2) (2020-04-01)
+
+
+### Bug Fixes
+
+* update to latest db-lib ([446360d](https://github.com/NaturalCycles/airtable-lib/commit/446360d4bc1b243035d9f8c67edc18b168b95ccf))
+
 ## [2.9.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.0...v2.9.1) (2020-03-31)
 
 
