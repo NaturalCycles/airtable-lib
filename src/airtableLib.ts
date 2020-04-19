@@ -1,11 +1,11 @@
-import { memo } from '@naturalcycles/js-lib'
+import { _Memo } from '@naturalcycles/js-lib'
 import { AirtableApi } from './airtable.api'
 import { AirtableLibCfg } from './airtable.model'
 
 export class AirtableLib {
   constructor(public airtableServiceCfg: AirtableLibCfg) {}
 
-  @memo()
+  @_Memo()
   api(): AirtableApi {
     // lazy-loading the library
     const airtableApi = require('airtable') as AirtableApi

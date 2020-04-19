@@ -1,4 +1,4 @@
-import { anyToErrorMessage, AppError, InstanceId, logMethod, pMap } from '@naturalcycles/js-lib'
+import { AppError, InstanceId, pMap, _anyToErrorMessage, _LogMethod } from '@naturalcycles/js-lib'
 import { getValidationResult } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
@@ -31,7 +31,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   /**
    * Empty records are filtered out.
    */
-  @logMethod()
+  @_LogMethod()
   async getRecords(
     opt: AirtableDaoOptions = {},
     selectOpts: AirtableApiSelectOpts<T> = {},
@@ -59,7 +59,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     )
   }
 
-  @logMethod()
+  @_LogMethod()
   async getRecord(airtableId: string, opt: AirtableDaoOptions = {}): Promise<T | undefined> {
     const record = await this.table
       .find(airtableId)
@@ -89,7 +89,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   /**
    * @returns created record (with generated `airtableId`)
    */
-  @logMethod()
+  @_LogMethod()
   async createRecord(record: Exclude<T, 'airtableId'>, opt: AirtableDaoOptions = {}): Promise<T> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.table
@@ -104,7 +104,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Order of records is not preserved if `concurrency` is set to higher than 1!
    * Or if opt.skipPreservingOrder=true
    */
-  @logMethod()
+  @_LogMethod()
   async createRecords(
     records: Exclude<T, 'airtableId'>[],
     opt: AirtableDaoOptions = {},
@@ -127,7 +127,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   /**
    * Partial update (patch) the record.
    */
-  @logMethod()
+  @_LogMethod()
   async updateRecord(
     airtableId: string,
     patch: Partial<T>,
@@ -145,7 +145,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Replace the record.
    * > Any fields that are not included will be cleared.
    */
-  @logMethod()
+  @_LogMethod()
   async replaceRecord(
     airtableId: string,
     record: Exclude<T, 'airtableId'>,
@@ -158,7 +158,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     return this.mapToAirtableRecord(raw, opt)
   }
 
-  @logMethod()
+  @_LogMethod()
   async replaceRecords(records: T[], opt: AirtableDaoOptions = {}): Promise<T[]> {
     const concurrency = opt.concurrency || 4
     return pMap(
@@ -177,7 +177,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   /**
    * @returns true if record existed.
    */
-  @logMethod()
+  @_LogMethod()
   async deleteRecord(airtableId: string): Promise<boolean> {
     return this.table
       .destroy(airtableId)
@@ -185,7 +185,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       .then(r => !!r)
   }
 
-  // @logMethod()
+  // @_LogMethod()
   // async deleteByIds(ids: string[], opt: AirtableDaoOptions = {}): Promise<boolean> {
   //   await this.getByIds()
   //
@@ -200,7 +200,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    * Then will call `deleteRecord` on each of them.
    * @returns array of airtableIds of deleted records
    */
-  @logMethod()
+  @_LogMethod()
   async deleteAllRecords(concurrency = 4): Promise<string[]> {
     // Using low level commands to include empty records too
     const airtableIds = (
@@ -268,7 +268,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
     const { tableName } = this
-    const msg = `${tableName}: ${anyToErrorMessage(err)}`
+    const msg = `${tableName}: ${_anyToErrorMessage(err)}`
     throw new AppError(msg, {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
       airtableTableName: tableName,

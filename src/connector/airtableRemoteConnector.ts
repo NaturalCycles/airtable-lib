@@ -1,4 +1,4 @@
-import { filterObject, pMap, pProps, StringMap, _mapValues } from '@naturalcycles/js-lib'
+import { pMap, pProps, StringMap, _filterObject, _mapValues } from '@naturalcycles/js-lib'
 import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
@@ -111,7 +111,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
           async r => {
             const { airtableId } = r
             // only array values
-            let patch = filterObject(r, (_k, v) => isArrayOfLinks(v))
+            let patch = _filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
             patch = _mapValues(patch, v => ((v as any) as string[]).map(oldId => idMap[oldId]))

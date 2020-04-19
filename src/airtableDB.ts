@@ -10,7 +10,7 @@ import {
   RunQueryResult,
   SavedDBEntity,
 } from '@naturalcycles/db-lib'
-import { anyToErrorMessage, AppError, by, pMap, _omit } from '@naturalcycles/js-lib'
+import { AppError, pMap, _anyToErrorMessage, _by, _omit } from '@naturalcycles/js-lib'
 import { ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { Readable } from 'stream'
 import {
@@ -131,7 +131,7 @@ export class AirtableDB implements CommonDB {
       dbms.map(r => r.id),
       opt,
     )
-    const existingRecordById = by(existingRecords, r => r.id)
+    const existingRecordById = _by(existingRecords, r => r.id)
     // console.log({existingRecordById})
 
     await pMap(
@@ -305,7 +305,7 @@ export class AirtableDB implements CommonDB {
     // Wrap as AppError with code
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
-    const msg = `${table}: ${anyToErrorMessage(err)}`
+    const msg = `${table}: ${_anyToErrorMessage(err)}`
     throw new AppError(msg, {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
       airtableTableName: table,

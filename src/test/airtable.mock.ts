@@ -1,4 +1,4 @@
-import { filterFalsyValues, _range } from '@naturalcycles/js-lib'
+import { _filterFalsyValues, _range } from '@naturalcycles/js-lib'
 import {
   arraySchema,
   booleanSchema,
@@ -61,7 +61,7 @@ export function mockTable1(): Table1[] {
 
 export function mockTable2(): Table2[] {
   return _range(1, 10).map(num =>
-    filterFalsyValues({
+    _filterFalsyValues({
       name: `name2_${num}`,
       field3: `val3 ${num}`,
       boolField: num % 2 === 0,

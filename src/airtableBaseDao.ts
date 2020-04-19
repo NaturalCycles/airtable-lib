@@ -1,4 +1,4 @@
-import { InstanceId, logMethod, StringMap, _omit } from '@naturalcycles/js-lib'
+import { InstanceId, StringMap, _LogMethod, _omit } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import { Subject } from 'rxjs'
 import {
@@ -234,7 +234,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    *
    * If `opt.cache` is true - saves to cache.
    */
-  @logMethod({ logStart: true })
+  @_LogMethod({ logStart: true })
   async fetch(connectorType: symbol, opt: AirtableDaoOptions = {}): Promise<BASE> {
     const base = await this.getConnector(connectorType).fetch(this.cfg, opt)
 
@@ -255,7 +255,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     return this._cache!
   }
 
-  @logMethod({ logStart: true })
+  @_LogMethod({ logStart: true })
   async upload(connectorType: symbol, opt: AirtableDaoSaveOptions = {}): Promise<void> {
     await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opt)
   }

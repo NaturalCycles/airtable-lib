@@ -1,4 +1,4 @@
-import { logMethod, pMap, StringMap } from '@naturalcycles/js-lib'
+import { pMap, StringMap, _LogMethod } from '@naturalcycles/js-lib'
 import { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
@@ -50,7 +50,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
     return map
   }
 
-  @logMethod({ logStart: true })
+  @_LogMethod({ logStart: true })
   async fetchAll(
     connectorType: symbol,
     opt: AirtableDaoOptions = {},
@@ -69,7 +69,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
     return bases
   }
 
-  @logMethod({ logStart: true })
+  @_LogMethod({ logStart: true })
   async uploadAll(
     connectorType: symbol,
     opt?: AirtableDaoSaveOptions,
