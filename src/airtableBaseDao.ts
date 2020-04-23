@@ -127,7 +127,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
       const { idField } = cfg as AirtableTableCfg
       tableIdIndex[tableName] = {}
       ;(this._cache![tableName] || []).forEach(
-        (r: AirtableRecord) => (tableIdIndex[tableName][r[idField]] = r),
+        (r: AirtableRecord) => (tableIdIndex[tableName]![r[idField]] = r),
       )
     })
 

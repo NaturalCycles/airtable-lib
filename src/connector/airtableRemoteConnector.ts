@@ -116,7 +116,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             // use idMap
             patch = _mapValues(patch, v => ((v as any) as string[]).map(oldId => idMap[oldId]))
             // console.log({patch2: patch})
-            await dao.updateRecord(idMap[airtableId], patch, opt)
+            await dao.updateRecord(idMap[airtableId]!, patch, opt)
           },
           { concurrency },
         )
