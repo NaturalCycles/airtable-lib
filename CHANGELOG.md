@@ -1,3 +1,10 @@
+## [2.9.6](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.5...v2.9.6) (2020-04-25)
+
+
+### Bug Fixes
+
+* deps ([b751096](https://github.com/NaturalCycles/airtable-lib/commit/b7510968d0c0d33437fd200f9f09a60be5d53af6))
+
 ## [2.9.5](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.4...v2.9.5) (2020-04-23)
 
 
