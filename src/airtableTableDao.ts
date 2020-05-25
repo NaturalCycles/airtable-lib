@@ -247,6 +247,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   private mapToAirtableRecord(r: AirtableApiRecord<T>, opts: AirtableDaoOptions = {}): T {
     return this.validate(
       {
+        // @ts-ignore
         airtableId: r.id,
         ...r.fields,
       },

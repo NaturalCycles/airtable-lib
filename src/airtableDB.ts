@@ -6,9 +6,10 @@ import {
   CommonDBStreamOptions,
   CommonSchema,
   DBQuery,
+  DBTransaction,
+  ObjectWithId,
   queryInMemory,
   RunQueryResult,
-  SavedDBEntity,
 } from '@naturalcycles/db-lib'
 import { AppError, pMap, _anyToErrorMessage, _by, _omit } from '@naturalcycles/js-lib'
 import { ReadableTyped } from '@naturalcycles/nodejs-lib'
@@ -70,7 +71,7 @@ export class AirtableDB implements CommonDB {
     // impossible to implement without having a baseId and a known Table name there
   }
 
-  async getByIds<DBM extends SavedDBEntity>(
+  async getByIds<DBM extends ObjectWithId>(
     table: string,
     ids: string[],
     opt: AirtableDBOptions = {},
@@ -96,14 +97,14 @@ export class AirtableDB implements CommonDB {
     const pairs = ids.map(id => `{${idField}}="${id}"`)
     const filterByFormula = `OR(${pairs.join(',')})`
     const airtableIds = (
-      await this.queryAirtableRecords<AirtableRecord & SavedDBEntity>(table, {
+      await this.queryAirtableRecords<AirtableRecord & ObjectWithId>(table, {
         fields: [], // no fields, just airtableIds
         filterByFormula,
       })
     ).map(r => r.airtableId)
 
     // step 2: delete by airtableIds
-    const tableApi = this.tableApi<SavedDBEntity>(table)
+    const tableApi = this.tableApi<ObjectWithId>(table)
 
     await pMap(
       airtableIds,
@@ -121,7 +122,7 @@ export class AirtableDB implements CommonDB {
   /**
    * Does "upsert" always
    */
-  async saveBatch<DBM extends SavedDBEntity>(
+  async saveBatch<DBM extends ObjectWithId>(
     table: string,
     dbms: DBM[],
     opt?: AirtableDBSaveOptions,
@@ -148,8 +149,8 @@ export class AirtableDB implements CommonDB {
     )
   }
 
-  async runQuery<DBM extends SavedDBEntity, OUT = DBM>(
-    q: DBQuery<any, DBM>,
+  async runQuery<DBM extends ObjectWithId, OUT = DBM>(
+    q: DBQuery<DBM>,
     opt?: AirtableDBOptions,
   ): Promise<RunQueryResult<OUT>> {
     const selectOpts = dbQueryToAirtableSelectOptions<DBM>(q)
@@ -172,9 +173,9 @@ export class AirtableDB implements CommonDB {
   }
 
   async deleteByQuery(q: DBQuery, opt?: AirtableDBOptions): Promise<number> {
-    const { records } = await this.runQuery<AirtableRecord & SavedDBEntity>(q.select([]), opt)
+    const { records } = await this.runQuery<AirtableRecord & ObjectWithId>(q.select([]), opt)
 
-    const tableApi = this.tableApi<SavedDBEntity>(q.table)
+    const tableApi = this.tableApi<ObjectWithId>(q.table)
 
     await pMap(
       records.map(r => r.airtableId),
@@ -192,8 +193,8 @@ export class AirtableDB implements CommonDB {
   /**
    * Streaming is emulated by just returning the results of the query as a stream.
    */
-  streamQuery<DBM extends SavedDBEntity, OUT = DBM>(
-    q: DBQuery<any, DBM>,
+  streamQuery<DBM extends ObjectWithId, OUT = DBM>(
+    q: DBQuery<DBM>,
     opt?: AirtableDBStreamOptions,
   ): ReadableTyped<OUT> {
     const readable = new Readable({
@@ -213,7 +214,7 @@ export class AirtableDB implements CommonDB {
     // no-op
   }
 
-  async getTableSchema<DBM extends SavedDBEntity>(table: string): Promise<CommonSchema<DBM>> {
+  async getTableSchema<DBM extends ObjectWithId>(table: string): Promise<CommonSchema<DBM>> {
     // throw new Error('not implemented')
     return {
       table,
@@ -230,7 +231,7 @@ export class AirtableDB implements CommonDB {
     // throw new Error('not implemented')
   }
 
-  private tableApi<DBM extends SavedDBEntity>(table: string): AirtableApiTable<DBM> {
+  private tableApi<DBM extends ObjectWithId>(table: string): AirtableApiTable<DBM> {
     let { baseId } = this.cfg
 
     if (!baseId) {
@@ -244,7 +245,7 @@ export class AirtableDB implements CommonDB {
     return this.api.base(baseId)<DBM>(table)
   }
 
-  private async queryAirtableRecords<DBM extends SavedDBEntity>(
+  private async queryAirtableRecords<DBM extends ObjectWithId>(
     table: string,
     selectOpts: AirtableApiSelectOpts<DBM> = {},
   ): Promise<DBM[]> {
@@ -273,7 +274,7 @@ export class AirtableDB implements CommonDB {
     )
   }
 
-  async createRecord<DBM extends SavedDBEntity>(table: string, record: Partial<DBM>): Promise<DBM> {
+  async createRecord<DBM extends ObjectWithId>(table: string, record: Partial<DBM>): Promise<DBM> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.tableApi<DBM>(table)
       .create(_omit(record, ['airtableId'] as any))
@@ -282,7 +283,7 @@ export class AirtableDB implements CommonDB {
     return this.mapToAirtableRecord(raw)
   }
 
-  private async updateRecord<DBM extends SavedDBEntity>(
+  private async updateRecord<DBM extends ObjectWithId>(
     table: string,
     airtableId: string,
     patch: Partial<DBM>,
@@ -327,5 +328,9 @@ export class AirtableDB implements CommonDB {
       airtableId: r.id,
       ...r.fields,
     }
+  }
+
+  transaction(): DBTransaction {
+    return new DBTransaction(this)
   }
 }

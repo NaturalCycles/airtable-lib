@@ -1,8 +1,8 @@
 import { _omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
-import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../..'
-import { AirtableDB } from '../../airtableDB'
-import { AirtableLib } from '../../airtableLib'
+import { AirtableDB } from '../airtableDB'
+import { AirtableLib } from '../airtableLib'
+import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../index'
 import {
   mockBaseDao,
   mockBasesDao,
@@ -10,7 +10,7 @@ import {
   mockTable2,
   mockTableDao1,
   mockTableDao2,
-} from '../airtable.mock'
+} from './airtable.mock'
 
 jest.setTimeout(60000)
 

@@ -5,7 +5,7 @@ import {
   runCommonDBTest,
 } from '@naturalcycles/db-lib/dist/testing'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
-import { AirtableDB } from '../../airtableDB'
+import { AirtableDB } from '../airtableDB'
 
 jest.setTimeout(60000)
 

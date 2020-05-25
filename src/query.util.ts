@@ -1,10 +1,12 @@
-import { DBQuery } from '@naturalcycles/db-lib'
+import { DBQuery, ObjectWithId } from '@naturalcycles/db-lib'
 import { AirtableApiSelectOpts } from './airtable.api'
 
 /**
  * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
  */
-export function dbQueryToAirtableSelectOptions<DBM>(q: DBQuery<DBM>): AirtableApiSelectOpts<DBM> {
+export function dbQueryToAirtableSelectOptions<DBM extends ObjectWithId>(
+  q: DBQuery<DBM>,
+): AirtableApiSelectOpts<DBM> {
   const o: AirtableApiSelectOpts<DBM> = {}
 
   // filter
@@ -47,7 +49,7 @@ export function dbQueryToAirtableSelectOptions<DBM>(q: DBQuery<DBM>): AirtableAp
     o.fields = q._selectedFieldNames as (keyof DBM)[]
 
     if (!o.fields.length) {
-      o.fields.push('id' as keyof DBM)
+      o.fields.push('id')
     }
   }
 

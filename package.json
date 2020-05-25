@@ -2,7 +2,7 @@
   "name": "@naturalcycles/airtable-lib",
   "scripts": {},
   "dependencies": {
-    "@naturalcycles/db-lib": "^5.0.0",
+    "@naturalcycles/db-lib": "^6.2.1",
     "@naturalcycles/js-lib": "^13.0.0",
     "@naturalcycles/nodejs-lib": "^10.0.0",
     "airtable": "^0.8.0",
@@ -11,9 +11,9 @@
   },
   "devDependencies": {
     "@naturalcycles/dev-lib": "^10.0.0",
-    "@types/node": "^13.7.1",
+    "@types/node": "^14.0.5",
     "dotenv": "^8.0.0",
-    "jest": "^25.1.0"
+    "jest": "^26.0.1"
   },
   "files": [
     "dist",
