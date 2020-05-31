@@ -4,10 +4,10 @@ import { AirtableApiSelectOpts } from './airtable.api'
 /**
  * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
  */
-export function dbQueryToAirtableSelectOptions<DBM extends ObjectWithId>(
-  q: DBQuery<DBM>,
-): AirtableApiSelectOpts<DBM> {
-  const o: AirtableApiSelectOpts<DBM> = {}
+export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
+  q: DBQuery<ROW>,
+): AirtableApiSelectOpts<ROW> {
+  const o: AirtableApiSelectOpts<ROW> = {}
 
   // filter
   if (q._filters.length) {
@@ -39,14 +39,14 @@ export function dbQueryToAirtableSelectOptions<DBM extends ObjectWithId>(
   // order
   if (q._orders.length) {
     o.sort = q._orders.map(o => ({
-      field: o.name as keyof DBM,
+      field: o.name as keyof ROW,
       direction: o.descending ? 'desc' : 'asc',
     }))
   }
 
   // select
   if (q._selectedFieldNames) {
-    o.fields = q._selectedFieldNames as (keyof DBM)[]
+    o.fields = q._selectedFieldNames as (keyof ROW)[]
 
     if (!o.fields.length) {
       o.fields.push('id')

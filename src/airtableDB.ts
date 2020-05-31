@@ -1,12 +1,10 @@
 import {
+  BaseCommonDB,
   CommonDB,
-  CommonDBCreateOptions,
   CommonDBOptions,
   CommonDBSaveOptions,
   CommonDBStreamOptions,
-  CommonSchema,
   DBQuery,
-  DBTransaction,
   ObjectWithId,
   queryInMemory,
   RunQueryResult,
@@ -44,15 +42,14 @@ export interface AirtableDBOptions extends CommonDBOptions {
   idField?: string
 }
 export interface AirtableDBStreamOptions extends CommonDBStreamOptions {}
-export interface AirtableDBSaveOptions extends CommonDBSaveOptions {}
+export interface AirtableDBSaveOptions extends AirtableDBOptions, CommonDBSaveOptions {}
 
 /**
  * CommonDB implementation based on Airtable sheets.
- *
- *
  */
-export class AirtableDB implements CommonDB {
+export class AirtableDB extends BaseCommonDB implements CommonDB {
   constructor(public cfg: AirtableDBCfg) {
+    super()
     // lazy-loading the library
     const airtableApi = require('airtable') as AirtableApi
 
@@ -71,11 +68,11 @@ export class AirtableDB implements CommonDB {
     // impossible to implement without having a baseId and a known Table name there
   }
 
-  async getByIds<DBM extends ObjectWithId>(
+  async getByIds<ROW extends ObjectWithId>(
     table: string,
     ids: string[],
     opt: AirtableDBOptions = {},
-  ): Promise<DBM[]> {
+  ): Promise<ROW[]> {
     if (!ids.length) return []
 
     const { idField = 'id' } = opt
@@ -83,7 +80,7 @@ export class AirtableDB implements CommonDB {
     const filterByFormula = `OR(${pairs.join(',')})`
 
     return (
-      await this.queryAirtableRecords<DBM>(table, {
+      await this.queryAirtableRecords<ROW>(table, {
         filterByFormula,
       })
     ).sort((a, b) => (a[idField] > b[idField] ? 1 : -1))
@@ -122,63 +119,63 @@ export class AirtableDB implements CommonDB {
   /**
    * Does "upsert" always
    */
-  async saveBatch<DBM extends ObjectWithId>(
+  async saveBatch<ROW extends ObjectWithId>(
     table: string,
-    dbms: DBM[],
+    rows: ROW[],
     opt?: AirtableDBSaveOptions,
   ): Promise<void> {
-    const existingRecords = await this.getByIds<DBM & AirtableRecord>(
+    const existingRows = await this.getByIds<ROW & AirtableRecord>(
       table,
-      dbms.map(r => r.id),
+      rows.map(r => r.id),
       opt,
     )
-    const existingRecordById = _by(existingRecords, r => r.id)
+    const existingRowById = _by(existingRows, r => r.id)
     // console.log({existingRecordById})
 
     await pMap(
-      dbms,
-      async dbm => {
-        if (existingRecordById[dbm.id]) {
+      rows,
+      async r => {
+        if (existingRowById[r.id]) {
           // console.log(`will update ${dbm.id} to ${existingRecordById[dbm.id].airtableId}`)
-          await this.updateRecord(table, existingRecordById[dbm.id].airtableId, dbm)
+          await this.updateRecord(table, existingRowById[r.id].airtableId, r)
         } else {
-          await this.createRecord(table, dbm)
+          await this.createRecord(table, r)
         }
       },
       { concurrency: 4 },
     )
   }
 
-  async runQuery<DBM extends ObjectWithId, OUT = DBM>(
-    q: DBQuery<DBM>,
+  async runQuery<ROW extends ObjectWithId, OUT = ROW>(
+    q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<RunQueryResult<OUT>> {
-    const selectOpts = dbQueryToAirtableSelectOptions<DBM>(q)
+    const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q)
     // console.log({selectOpts})
 
-    let records = await this.queryAirtableRecords<any>(q.table, selectOpts)
+    let rows = await this.queryAirtableRecords<any>(q.table, selectOpts)
 
     // Cause Airtable doesn't sort it for you
     if (q._orders.length) {
-      records = queryInMemory(q, records)
+      rows = queryInMemory(q, rows)
     }
 
     return {
-      records,
+      rows,
     }
   }
 
   async runQueryCount(q: DBQuery, opt?: AirtableDBOptions): Promise<number> {
-    return (await this.runQuery(q.select([]), opt)).records.length
+    return (await this.runQuery(q.select([]), opt)).rows.length
   }
 
   async deleteByQuery(q: DBQuery, opt?: AirtableDBOptions): Promise<number> {
-    const { records } = await this.runQuery<AirtableRecord & ObjectWithId>(q.select([]), opt)
+    const { rows } = await this.runQuery<AirtableRecord & ObjectWithId>(q.select([]), opt)
 
     const tableApi = this.tableApi<ObjectWithId>(q.table)
 
     await pMap(
-      records.map(r => r.airtableId),
+      rows.map(r => r.airtableId),
       async airtableId => {
         await tableApi
           .destroy(airtableId)
@@ -187,14 +184,14 @@ export class AirtableDB implements CommonDB {
       { concurrency: 4 },
     )
 
-    return records.length
+    return rows.length
   }
 
   /**
    * Streaming is emulated by just returning the results of the query as a stream.
    */
-  streamQuery<DBM extends ObjectWithId, OUT = DBM>(
-    q: DBQuery<DBM>,
+  streamQuery<ROW extends ObjectWithId, OUT = ROW>(
+    q: DBQuery<ROW>,
     opt?: AirtableDBStreamOptions,
   ): ReadableTyped<OUT> {
     const readable = new Readable({
@@ -202,36 +199,15 @@ export class AirtableDB implements CommonDB {
       read() {},
     })
 
-    void this.runQuery<DBM, OUT>(q, opt).then(({ records }) => {
-      records.forEach(r => readable.push(r))
+    void this.runQuery<ROW, OUT>(q, opt).then(({ rows }) => {
+      rows.forEach(r => readable.push(r))
       readable.push(null) // "complete" the stream
     })
 
     return readable
   }
 
-  async resetCache(table?: string): Promise<void> {
-    // no-op
-  }
-
-  async getTableSchema<DBM extends ObjectWithId>(table: string): Promise<CommonSchema<DBM>> {
-    // throw new Error('not implemented')
-    return {
-      table,
-      fields: [],
-    }
-  }
-
-  async getTables(): Promise<string[]> {
-    // throw new Error('not implemented')
-    return []
-  }
-
-  async createTable(schema: CommonSchema, opt?: CommonDBCreateOptions): Promise<void> {
-    // throw new Error('not implemented')
-  }
-
-  private tableApi<DBM extends ObjectWithId>(table: string): AirtableApiTable<DBM> {
+  private tableApi<ROW extends ObjectWithId>(table: string): AirtableApiTable<ROW> {
     let { baseId } = this.cfg
 
     if (!baseId) {
@@ -242,14 +218,14 @@ export class AirtableDB implements CommonDB {
       ;[baseId, table] = table.split('.', 2)
     }
 
-    return this.api.base(baseId)<DBM>(table)
+    return this.api.base(baseId)<ROW>(table)
   }
 
-  private async queryAirtableRecords<DBM extends ObjectWithId>(
+  private async queryAirtableRecords<ROW extends ObjectWithId>(
     table: string,
-    selectOpts: AirtableApiSelectOpts<DBM> = {},
-  ): Promise<DBM[]> {
-    const records = await this.tableApi<DBM>(table)
+    selectOpts: AirtableApiSelectOpts<ROW> = {},
+  ): Promise<ROW[]> {
+    const records = await this.tableApi<ROW>(table)
       .select({
         // defaults
         pageSize: 100,
@@ -274,21 +250,21 @@ export class AirtableDB implements CommonDB {
     )
   }
 
-  async createRecord<DBM extends ObjectWithId>(table: string, record: Partial<DBM>): Promise<DBM> {
+  async createRecord<ROW extends ObjectWithId>(table: string, record: Partial<ROW>): Promise<ROW> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
-    const raw = await this.tableApi<DBM>(table)
+    const raw = await this.tableApi<ROW>(table)
       .create(_omit(record, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { record }))
 
     return this.mapToAirtableRecord(raw)
   }
 
-  private async updateRecord<DBM extends ObjectWithId>(
+  private async updateRecord<ROW extends ObjectWithId>(
     table: string,
     airtableId: string,
-    patch: Partial<DBM>,
-  ): Promise<DBM> {
-    const raw = await this.tableApi<DBM>(table)
+    patch: Partial<ROW>,
+  ): Promise<ROW> {
+    const raw = await this.tableApi<ROW>(table)
       .update(airtableId, _omit(patch, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { airtableId, patch }))
 
@@ -311,6 +287,7 @@ export class AirtableDB implements CommonDB {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
       airtableTableName: table,
       airtableInput,
+      // todo: extend the stack of original error
     })
   }
 
@@ -328,9 +305,5 @@ export class AirtableDB implements CommonDB {
       airtableId: r.id,
       ...r.fields,
     }
-  }
-
-  transaction(): DBTransaction {
-    return new DBTransaction(this)
   }
 }
