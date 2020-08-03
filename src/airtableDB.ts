@@ -137,7 +137,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       async r => {
         if (existingRowById[r.id]) {
           // console.log(`will update ${dbm.id} to ${existingRecordById[dbm.id].airtableId}`)
-          await this.updateRecord(table, existingRowById[r.id].airtableId, r)
+          await this.updateRecord(table, existingRowById[r.id]!.airtableId, r)
         } else {
           await this.createRecord(table, r)
         }
