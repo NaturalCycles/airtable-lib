@@ -35,7 +35,7 @@
   "engines": {
     "node": ">=12.13.1"
   },
-  "version": "2.9.10",
+  "version": "2.9.11",
   "description": "High-level API and CLI for Airtable",
   "keywords": [
     "airtable",
