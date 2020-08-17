@@ -68,10 +68,10 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             let r = { ..._r }
             delete r.airtableId
             // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
-            r = _mapValues(r, v => (isArrayOfLinks(v) ? [] : v))
+            r = _mapValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
 
             // Transform Attachments
-            r = _mapValues(r, v => transformAttachments(v as any))
+            r = _mapValues(r, (_k, v) => transformAttachments(v as any))
 
             let existingRecord: AirtableRecord | undefined
 
@@ -114,7 +114,9 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             let patch = _filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
-            patch = _mapValues(patch, v => ((v as any) as string[]).map(oldId => idMap[oldId]))
+            patch = _mapValues(patch, (_k, v) =>
+              ((v as any) as string[]).map(oldId => idMap[oldId]),
+            )
             // console.log({patch2: patch})
             await dao.updateRecord(idMap[airtableId]!, patch, opt)
           },
