@@ -1,3 +1,10 @@
+## [2.9.13](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.12...v2.9.13) (2020-08-18)
+
+
+### Bug Fixes
+
+* AirtableDB to filter out empty rows (rows without idField) ([da517fa](https://github.com/NaturalCycles/airtable-lib/commit/da517fa51a260e39d2b492251cea713769bcf460))
+
 ## [2.9.12](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.11...v2.9.12) (2020-08-17)
 
 
