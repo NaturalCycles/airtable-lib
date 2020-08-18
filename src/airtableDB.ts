@@ -80,9 +80,13 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     const filterByFormula = `OR(${pairs.join(',')})`
 
     return (
-      await this.queryAirtableRecords<ROW>(table, {
-        filterByFormula,
-      })
+      await this.queryAirtableRecords<ROW>(
+        table,
+        {
+          filterByFormula,
+        },
+        opt,
+      )
     ).sort((a, b) => (a[idField] > b[idField] ? 1 : -1))
   }
 
@@ -94,10 +98,14 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     const pairs = ids.map(id => `{${idField}}="${id}"`)
     const filterByFormula = `OR(${pairs.join(',')})`
     const airtableIds = (
-      await this.queryAirtableRecords<AirtableRecord & ObjectWithId>(table, {
-        fields: [], // no fields, just airtableIds
-        filterByFormula,
-      })
+      await this.queryAirtableRecords<AirtableRecord & ObjectWithId>(
+        table,
+        {
+          fields: [], // no fields, just airtableIds
+          filterByFormula,
+        },
+        opt,
+      )
     ).map(r => r.airtableId)
 
     // step 2: delete by airtableIds
@@ -148,12 +156,12 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   async runQuery<ROW extends ObjectWithId, OUT = ROW>(
     q: DBQuery<ROW>,
-    opt?: AirtableDBOptions,
+    opt: AirtableDBOptions = {},
   ): Promise<RunQueryResult<OUT>> {
-    const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q)
+    const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q, opt)
     // console.log({selectOpts})
 
-    let rows = await this.queryAirtableRecords<any>(q.table, selectOpts)
+    let rows = await this.queryAirtableRecords<any>(q.table, selectOpts, opt, q)
 
     // Cause Airtable doesn't sort it for you
     if (q._orders.length) {
@@ -223,7 +231,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   private async queryAirtableRecords<ROW extends ObjectWithId>(
     table: string,
-    selectOpts: AirtableApiSelectOpts<ROW> = {},
+    selectOpts: AirtableApiSelectOpts<ROW>,
+    opt: AirtableDBOptions,
+    q?: DBQuery<ROW>,
   ): Promise<ROW[]> {
     const records = await this.tableApi<ROW>(table)
       .select({
@@ -242,12 +252,24 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // })
     // console.log({records: records.map(r => [r.fields, (r as any)._rawJson])})
 
-    return (
-      records
-        // Filter out empty records
-        .filter(r => Object.keys(r.fields).length)
-        .map(r => this.mapToAirtableRecord(r))
-    )
+    const { idField = 'id' } = opt
+
+    const rows = records
+      // Filter out empty records
+      // .filter(r => Object.keys(r.fields).length)
+      .map(r => this.mapToAirtableRecord(r))
+      // Filter out rows without an id (silently, without throwing an error)
+      .filter(r => r[idField])
+
+    if (q?._selectedFieldNames && !q._selectedFieldNames.includes(idField)) {
+      // Special case
+      // It's a projection query without an idField included
+      // idField is always queried to be able to "filter empty rows"
+      // So, now we have to remove idField from rows
+      rows.forEach(r => delete r[idField])
+    }
+
+    return rows
   }
 
   async createRecord<ROW extends ObjectWithId>(table: string, record: Partial<ROW>): Promise<ROW> {

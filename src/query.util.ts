@@ -1,11 +1,14 @@
 import { DBQuery, ObjectWithId } from '@naturalcycles/db-lib'
+import { _uniq } from '@naturalcycles/js-lib'
 import { AirtableApiSelectOpts } from './airtable.api'
+import { AirtableDBOptions } from './airtableDB'
 
 /**
  * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
  */
 export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
   q: DBQuery<ROW>,
+  opt: AirtableDBOptions,
 ): AirtableApiSelectOpts<ROW> {
   const o: AirtableApiSelectOpts<ROW> = {}
 
@@ -46,11 +49,10 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
 
   // select
   if (q._selectedFieldNames) {
-    o.fields = q._selectedFieldNames as (keyof ROW)[]
+    const { idField = 'id' } = opt
 
-    if (!o.fields.length) {
-      o.fields.push('id')
-    }
+    // idField must be always included, to be able to "filter empty rows" (by checking if id is empty or not)
+    o.fields = _uniq([idField, ...q._selectedFieldNames]) as (keyof ROW)[]
   }
 
   return o
