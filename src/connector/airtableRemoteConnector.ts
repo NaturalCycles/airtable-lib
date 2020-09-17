@@ -66,7 +66,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             const oldId = _r.airtableId
 
             let r = { ..._r }
-            delete r.airtableId
+            delete (r as any).airtableId
             // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
             r = _mapValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
 
