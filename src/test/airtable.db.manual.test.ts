@@ -21,7 +21,9 @@ const db = new AirtableDB({
   baseId: AIRTABLE_BASE_ID,
 })
 
-const features: CommonDBImplementationFeatures = {}
+const features: CommonDBImplementationFeatures = {
+  bufferSupport: false,
+}
 
 const quirks: CommonDBImplementationQuirks = {
   allowExtraPropertiesInResponse: true,
