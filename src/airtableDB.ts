@@ -161,6 +161,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q, opt)
     // console.log({selectOpts})
 
+    // todo: opt.table
     let rows = await this.queryAirtableRecords<any>(q.table, selectOpts, opt, q)
 
     // Cause Airtable doesn't sort it for you

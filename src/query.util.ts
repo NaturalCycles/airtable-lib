@@ -1,7 +1,11 @@
-import { DBQuery, ObjectWithId } from '@naturalcycles/db-lib'
+import { DBQuery, DBQueryFilterOperator, ObjectWithId } from '@naturalcycles/db-lib'
 import { _uniq } from '@naturalcycles/js-lib'
 import { AirtableApiSelectOpts } from './airtable.api'
 import { AirtableDBOptions } from './airtableDB'
+
+const OP_MAP: Partial<Record<DBQueryFilterOperator, string>> = {
+  '==': '=',
+}
 
 /**
  * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
@@ -28,7 +32,9 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
         v = `"${f.val}"`
       }
 
-      return `{${f.name}}${f.op}${v}`
+      const op = OP_MAP[f.op] || f.op
+
+      return `{${f.name}}${op}${v}`
     })
 
     o.filterByFormula = `AND(${tokens.join(',')})`
