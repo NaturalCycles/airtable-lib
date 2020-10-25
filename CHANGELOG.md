@@ -1,3 +1,10 @@
+## [2.9.17](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.16...v2.9.17) (2020-10-25)
+
+
+### Bug Fixes
+
+* adapt to recent db-lib with '==' to '=' op mapping ([8daf518](https://github.com/NaturalCycles/airtable-lib/commit/8daf5185d28bc8ff56ca7cd68c1dd1b809500060))
+
 ## [2.9.16](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.15...v2.9.16) (2020-10-12)
 
 
