@@ -154,10 +154,10 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     )
   }
 
-  async runQuery<ROW extends ObjectWithId, OUT = ROW>(
+  async runQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt: AirtableDBOptions = {},
-  ): Promise<RunQueryResult<OUT>> {
+  ): Promise<RunQueryResult<ROW>> {
     const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q, opt)
     // console.log({selectOpts})
 
@@ -174,11 +174,17 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     }
   }
 
-  async runQueryCount(q: DBQuery, opt?: AirtableDBOptions): Promise<number> {
+  async runQueryCount<ROW extends ObjectWithId>(
+    q: DBQuery<ROW>,
+    opt?: AirtableDBOptions,
+  ): Promise<number> {
     return (await this.runQuery(q.select([]), opt)).rows.length
   }
 
-  async deleteByQuery(q: DBQuery, opt?: AirtableDBOptions): Promise<number> {
+  async deleteByQuery<ROW extends ObjectWithId>(
+    q: DBQuery<ROW>,
+    opt?: AirtableDBOptions,
+  ): Promise<number> {
     const { rows } = await this.runQuery<AirtableRecord & ObjectWithId>(q.select([]), opt)
 
     const tableApi = this.tableApi<ObjectWithId>(q.table)
@@ -199,16 +205,16 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Streaming is emulated by just returning the results of the query as a stream.
    */
-  streamQuery<ROW extends ObjectWithId, OUT = ROW>(
+  streamQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBStreamOptions,
-  ): ReadableTyped<OUT> {
+  ): ReadableTyped<ROW> {
     const readable = new Readable({
       objectMode: true,
       read() {},
     })
 
-    void this.runQuery<ROW, OUT>(q, opt).then(({ rows }) => {
+    void this.runQuery(q, opt).then(({ rows }) => {
       rows.forEach(r => readable.push(r))
       readable.push(null) // "complete" the stream
     })
