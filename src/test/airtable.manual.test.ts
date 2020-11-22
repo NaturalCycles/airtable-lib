@@ -38,7 +38,7 @@ test('getByIds', async () => {
 
 test('delete, create, update, get', async () => {
   const records = mockTable1()
-  const [rec1] = records
+  const rec1 = records[0]!
 
   const tableDao = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
 

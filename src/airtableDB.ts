@@ -230,7 +230,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
         throw new Error(`"table" should include baseId, e.g "BaseId1.TABLE1"`)
       }
 
-      ;[baseId, table] = table.split('.', 2)
+      const a = table.split('.', 2)
+      baseId = a[0]!
+      table = a[1]!
     }
 
     return this.api.base(baseId)<ROW>(table)
