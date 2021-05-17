@@ -61,7 +61,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
 
         // One-by-one to preserve order
         await pMap(
-          (base[tableName] as any) as AirtableRecord[],
+          base[tableName] as any as AirtableRecord[],
           async _r => {
             const oldId = _r.airtableId
 
@@ -102,7 +102,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
       async tableName => {
         const dao = this.getTableDao(baseDaoCfg, tableName)
 
-        const records = ((base[tableName] as any) as AirtableRecord[])
+        const records = (base[tableName] as any as AirtableRecord[])
           // Only records with non-empty array values
           .filter(r => Object.values(r).some(isArrayOfLinks))
 
@@ -114,9 +114,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
             let patch = _filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
-            patch = _mapValues(patch, (_k, v) =>
-              ((v as any) as string[]).map(oldId => idMap[oldId]),
-            )
+            patch = _mapValues(patch, (_k, v) => (v as any as string[]).map(oldId => idMap[oldId]))
             // console.log({patch2: patch})
             await dao.updateRecord(idMap[airtableId]!, patch, opt)
           },
