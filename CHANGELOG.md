@@ -1,3 +1,15 @@
+# [2.10.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.21...v2.10.0) (2021-05-17)
+
+
+### Bug Fixes
+
+* eslint errors ([55f945f](https://github.com/NaturalCycles/airtable-lib/commit/55f945fec30f5579407c68d910451f54260f315c))
+
+
+### Features
+
+* drop rxjs, replace cacheUpdated$ with onCacheUpdated hook ([b9fc13b](https://github.com/NaturalCycles/airtable-lib/commit/b9fc13b275ffb15fdb87610eda26f90d34346fba))
+
 ## [2.9.21](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.20...v2.9.21) (2021-05-01)
 
 
