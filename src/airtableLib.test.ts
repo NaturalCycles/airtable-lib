@@ -10,7 +10,7 @@ test('wrong apiKey should throw', async () => {
   const tableDao = mockTableDao1(airtableLib.api(), 'someBaseId')
 
   // await expect(airtableService.getRecords('someBaseId.someTable')).rejects.toThrow(AppError)
-  const err = await tableDao.getRecords().catch(e => e)
+  const err = await tableDao.getRecords().catch(err2 => err2)
   expect(err).toBeInstanceOf(AppError)
   expect(err).toMatchObject({
     message: expect.any(String),

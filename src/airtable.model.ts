@@ -13,13 +13,16 @@ export enum AIRTABLE_ERROR_CODE {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
 }
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export type AirtableId<T = any> = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const airtableMultipleLinkSchema = <T>() =>
   arraySchema<AirtableId<T>>(airtableIdSchema).optional().default([])
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const airtableSingleLinkSchema = <T>() => airtableMultipleLinkSchema<T>().max(1)
 
 /* Example:

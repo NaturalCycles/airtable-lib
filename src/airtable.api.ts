@@ -4,7 +4,9 @@ export interface AirtableApi {
   configure(param: { endpointURL: string; apiKey: string; requestTimeout?: number }): void
 }
 
-export type AirtableApiBase = <T extends object>(tableName: string) => AirtableApiTable<T>
+export type AirtableApiBase = <T extends Record<string, any>>(
+  tableName: string,
+) => AirtableApiTable<T>
 
 export interface AirtableApiTable<T> {
   select(selectOpts?: AirtableApiSelectOpts<T>): AirtableApiQuery<T>

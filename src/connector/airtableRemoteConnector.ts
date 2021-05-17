@@ -23,7 +23,8 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): Promise<BASE> {
     const { tableCfgMap } = baseDaoCfg
 
-    return pProps(
+    return await pProps(
+      // eslint-disable-next-line unicorn/no-array-reduce
       Object.keys(tableCfgMap).reduce((r, tableName) => {
         r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opt)
         return r
@@ -104,7 +105,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
 
         const records = (base[tableName] as any as AirtableRecord[])
           // Only records with non-empty array values
-          .filter(r => Object.values(r).some(isArrayOfLinks))
+          .filter(r => Object.values(r).some(v => isArrayOfLinks(v)))
 
         await pMap(
           records,

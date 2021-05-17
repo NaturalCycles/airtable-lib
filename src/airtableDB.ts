@@ -21,6 +21,7 @@ import {
 import { AirtableRecord, AIRTABLE_ERROR_CODE } from './airtable.model'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export interface AirtableDBCfg<BASE = any> {
   /**
    * Airtable apiKey
@@ -41,7 +42,7 @@ export interface AirtableDBOptions extends CommonDBOptions {
    */
   idField?: string
 }
-export interface AirtableDBStreamOptions extends CommonDBStreamOptions {}
+export type AirtableDBStreamOptions = CommonDBStreamOptions
 export interface AirtableDBSaveOptions extends AirtableDBOptions, CommonDBSaveOptions {}
 
 /**

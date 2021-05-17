@@ -62,7 +62,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   @_LogMethod()
   async getRecord(airtableId: string, opt: AirtableDaoOptions = {}): Promise<T | undefined> {
     const record = await this.table
-      .find(airtableId)
+      .find(airtableId) // eslint-disable-line unicorn/no-array-callback-reference
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
 
     return record && this.mapToAirtableRecord(record, opt)
@@ -111,7 +111,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   ): Promise<T[]> {
     const concurrency = opt.concurrency || (opt.skipPreservingOrder ? 4 : 1)
 
-    return pMap(
+    return await pMap(
       records,
       async record => {
         // pre-save validation is skipped
@@ -161,7 +161,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   @_LogMethod()
   async replaceRecords(records: T[], opt: AirtableDaoOptions = {}): Promise<T[]> {
     const concurrency = opt.concurrency || 4
-    return pMap(
+    return await pMap(
       records,
       async r => {
         const { airtableId, ...record } = r
@@ -179,7 +179,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
    */
   @_LogMethod()
   async deleteRecord(airtableId: string): Promise<boolean> {
-    return this.table
+    return await this.table
       .destroy(airtableId)
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
       .then(r => !!r)
@@ -198,6 +198,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   /**
    * Will first fetch all records to get their airtableIds.
    * Then will call `deleteRecord` on each of them.
+   *
    * @returns array of airtableIds of deleted records
    */
   @_LogMethod()
