@@ -1,6 +1,5 @@
 import { InstanceId, StringMap, _LogMethod, _omit } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
-import { Subject } from 'rxjs'
 import {
   AirtableBaseDaoCfg,
   AirtableConnector,
@@ -49,11 +48,6 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
    */
   lastChanged?: number
 
-  /**
-   * Fires every time when Cache is changed (including when it's set to `undefined`, including the very first fetch).
-   */
-  cacheUpdated$ = new Subject<BASE>()
-
   private _cache?: BASE
 
   /**
@@ -94,7 +88,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
       this._cache = undefined
       this._airtableIdIndex = undefined
       this.contentHash = undefined
-      this.cacheUpdated$.next(undefined)
+      this.cfg.onCacheUpdated?.(undefined)
       return
     }
 
@@ -137,7 +131,7 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     if (!opt.preserveLastChanged && cacheWasDefined) {
       this.lastChanged = Math.floor(Date.now() / 1000)
     }
-    this.cacheUpdated$.next(this._cache)
+    this.cfg.onCacheUpdated?.(this._cache)
   }
 
   private getAirtableIndex(): StringMap<AirtableRecord> {

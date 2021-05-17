@@ -213,6 +213,11 @@ export interface AirtableBaseDaoCfg<BASE = any> {
   lazyConnectorType?: symbol
 
   tableCfgMap: AirtableTableCfgMap<BASE>
+
+  /**
+   * Hook. Allows to subscribe to "cacheUpdated" event.
+   */
+  onCacheUpdated?: (cache: BASE | undefined) => void
 }
 
 export interface AirtableTableCfg<T extends AirtableRecord = any> {
