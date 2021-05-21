@@ -1,3 +1,10 @@
+## [2.10.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.0...v2.10.1) (2021-05-21)
+
+
+### Bug Fixes
+
+* revert to cacheUpdated$ rxjs Subject ([2bcb661](https://github.com/NaturalCycles/airtable-lib/commit/2bcb661878698d6b26dd224e18e27f45cc029175))
+
 # [2.10.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.9.21...v2.10.0) (2021-05-17)
 
 
