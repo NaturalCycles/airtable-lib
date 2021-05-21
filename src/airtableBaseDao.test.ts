@@ -25,11 +25,11 @@ test('getCache', async () => {
   expect(baseDao.lastChanged).toBeUndefined() // accessing the cache and lazy-loading it is not considered as "changed"
 })
 
-test('onCacheUpdated', async () => {
+test('cacheUpdated$', async () => {
   const baseDao = mockBaseDao(airtableLib.api(), 'baseId')
 
   let updatedTimes = 0
-  baseDao.cfg.onCacheUpdated = () => updatedTimes++
+  baseDao.cacheUpdated$.subscribe(() => updatedTimes++)
 
   expect(updatedTimes).toBe(0)
 
