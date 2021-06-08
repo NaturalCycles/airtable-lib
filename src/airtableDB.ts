@@ -65,11 +65,11 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   api: AirtableApi
 
-  async ping(): Promise<void> {
+  override async ping(): Promise<void> {
     // impossible to implement without having a baseId and a known Table name there
   }
 
-  async getByIds<ROW extends ObjectWithId>(
+  override async getByIds<ROW extends ObjectWithId>(
     table: string,
     ids: string[],
     opt: AirtableDBOptions = {},
@@ -91,7 +91,11 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     ).sort((a, b) => (a[idField] > b[idField] ? 1 : -1))
   }
 
-  async deleteByIds(table: string, ids: string[], opt: AirtableDBOptions = {}): Promise<number> {
+  override async deleteByIds(
+    table: string,
+    ids: string[],
+    opt: AirtableDBOptions = {},
+  ): Promise<number> {
     if (!ids.length) return 0
 
     // step 1: get airtableIds of the records
@@ -128,7 +132,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Does "upsert" always
    */
-  async saveBatch<ROW extends ObjectWithId>(
+  override async saveBatch<ROW extends ObjectWithId>(
     table: string,
     rows: ROW[],
     opt?: AirtableDBSaveOptions,
@@ -155,7 +159,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     )
   }
 
-  async runQuery<ROW extends ObjectWithId>(
+  override async runQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt: AirtableDBOptions = {},
   ): Promise<RunQueryResult<ROW>> {
@@ -175,14 +179,14 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     }
   }
 
-  async runQueryCount<ROW extends ObjectWithId>(
+  override async runQueryCount<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<number> {
     return (await this.runQuery(q.select([]), opt)).rows.length
   }
 
-  async deleteByQuery<ROW extends ObjectWithId>(
+  override async deleteByQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<number> {
@@ -206,7 +210,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Streaming is emulated by just returning the results of the query as a stream.
    */
-  streamQuery<ROW extends ObjectWithId>(
+  override streamQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBStreamOptions,
   ): ReadableTyped<ROW> {

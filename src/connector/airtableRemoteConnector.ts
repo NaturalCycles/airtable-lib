@@ -23,14 +23,14 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): Promise<BASE> {
     const { tableCfgMap } = baseDaoCfg
 
-    return (await pProps(
+    return await pProps(
       // eslint-disable-next-line unicorn/no-array-reduce
       Object.keys(tableCfgMap).reduce((r, tableName) => {
         r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opt)
         return r
       }, {} as BASE),
       { concurrency: opt.concurrency || 4 },
-    )) as BASE
+    )
   }
 
   /**

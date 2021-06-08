@@ -1,7 +1,6 @@
 {
   "extends": "@naturalcycles/dev-lib/cfg/tsconfig.json",
   "compilerOptions": {
-    "noImplicitOverride": false, // todo
     "outDir": "dist"
   },
   "include": ["src"],
