@@ -1,6 +1,8 @@
 {
   "name": "@naturalcycles/airtable-lib",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky install"
+  },
   "dependencies": {
     "@naturalcycles/db-lib": "^8.0.0",
     "@naturalcycles/js-lib": "^14.0.0",
@@ -10,8 +12,8 @@
     "rxjs": "^7.1.0"
   },
   "devDependencies": {
-    "@naturalcycles/dev-lib": "^11.0.1",
-    "@types/node": "^15.0.1",
+    "@naturalcycles/dev-lib": "^12.1.1",
+    "@types/node": "^16.4.13",
     "dotenv": "^10.0.0",
     "jest": "^27.0.3"
   },
