@@ -1,5 +1,5 @@
-import { AppError, InstanceId, pMap, _anyToErrorMessage, _LogMethod } from '@naturalcycles/js-lib'
-import { getValidationResult } from '@naturalcycles/nodejs-lib'
+import { AppError, InstanceId, pMap, _LogMethod } from '@naturalcycles/js-lib'
+import { getValidationResult, inspectAny } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
   AirtableApiRecord,
@@ -270,7 +270,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
     const { tableName } = this
-    const msg = `${tableName}: ${_anyToErrorMessage(err)}`
+    const msg = `${tableName}: ${inspectAny(err)}`
     throw new AppError(msg, {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
       airtableTableName: tableName,

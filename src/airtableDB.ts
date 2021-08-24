@@ -9,8 +9,8 @@ import {
   queryInMemory,
   RunQueryResult,
 } from '@naturalcycles/db-lib'
-import { AppError, pMap, _anyToErrorMessage, _by, _omit } from '@naturalcycles/js-lib'
-import { ReadableTyped } from '@naturalcycles/nodejs-lib'
+import { AppError, pMap, _by, _omit } from '@naturalcycles/js-lib'
+import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import { Readable } from 'stream'
 import {
   AirtableApi,
@@ -318,7 +318,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // Wrap as AppError with code
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
-    const msg = `${table}: ${_anyToErrorMessage(err)}`
+    const msg = `${table}: ${inspectAny(err)}`
     throw new AppError(msg, {
       code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
       airtableTableName: table,
