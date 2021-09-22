@@ -1,3 +1,10 @@
+# [2.11.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.4...v2.11.0) (2021-09-22)
+
+
+### Features
+
+* make `requestTimeout` configurable ([2b968e5](https://github.com/NaturalCycles/airtable-lib/commit/2b968e561292ac04b9845703da7c8e43bcea71bc))
+
 ## [2.10.4](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.3...v2.10.4) (2021-09-22)
 
 
