@@ -29,6 +29,11 @@ export interface AirtableDBCfg<BASE = any> {
   apiKey: string
 
   /**
+   * Defaults to 40 seconds.
+   */
+  requestTimeout?: number
+
+  /**
    * If defined - it will be used for all tables.
    *
    * If not defined - you'll need to pass `baseId` as part of the `table`, e.g `${baseId}.${table}`
@@ -58,7 +63,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       // endpointURL: 'https://api.airtable.com',
       apiKey: cfg.apiKey,
       // Default is 5 minutes, we override the default to 40 seconds
-      requestTimeout: 40_000,
+      requestTimeout: cfg.requestTimeout || 40_000,
     })
 
     this.api = airtableApi
