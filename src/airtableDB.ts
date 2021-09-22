@@ -55,9 +55,10 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     const airtableApi = require('airtable') as AirtableApi
 
     airtableApi.configure({
-      endpointURL: 'https://api.airtable.com',
+      // endpointURL: 'https://api.airtable.com',
       apiKey: cfg.apiKey,
-      // requestTimeout: 300000,
+      // Default is 5 minutes, we override the default to 40 seconds
+      requestTimeout: 40_000,
     })
 
     this.api = airtableApi

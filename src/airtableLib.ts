@@ -13,9 +13,10 @@ export class AirtableLib {
     const { apiKey } = this.airtableServiceCfg
 
     airtableApi.configure({
-      endpointURL: 'https://api.airtable.com',
+      // endpointURL: 'https://api.airtable.com',
       apiKey,
-      // requestTimeout: 300000,
+      // Default is 5 minutes, we override the default to 40 seconds
+      requestTimeout: 40_000,
     })
     return airtableApi
   }

@@ -1,7 +1,14 @@
 export interface AirtableApi {
   base(baseId: string): AirtableApiBase
 
-  configure(param: { endpointURL: string; apiKey: string; requestTimeout?: number }): void
+  configure(param: {
+    endpointURL?: string
+    apiKey: string
+    /**
+     * Default is 5 minutes.
+     */
+    requestTimeout?: number
+  }): void
 }
 
 export type AirtableApiBase = <T extends Record<string, any>>(
