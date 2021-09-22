@@ -1,3 +1,10 @@
+## [2.10.4](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.3...v2.10.4) (2021-09-22)
+
+
+### Bug Fixes
+
+* default timeout to 40 seconds ([3f5dc84](https://github.com/NaturalCycles/airtable-lib/commit/3f5dc848f6bb9edd882ab9dab97f8617d26306e7))
+
 ## [2.10.3](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.2...v2.10.3) (2021-08-24)
 
 
