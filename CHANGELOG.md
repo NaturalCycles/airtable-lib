@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/NaturalCycles/airtable-lib/compare/v2.11.0...v2.11.1) (2021-10-02)
+
+
+### Bug Fixes
+
+* deps, remove tslint ([dbd1e5c](https://github.com/NaturalCycles/airtable-lib/commit/dbd1e5cbad0a334a0242295a03dc04a8c7b50264))
+
 # [2.11.0](https://github.com/NaturalCycles/airtable-lib/compare/v2.10.4...v2.11.0) (2021-09-22)
 
 
