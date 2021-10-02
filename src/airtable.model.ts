@@ -9,7 +9,7 @@ import {
 } from '@naturalcycles/nodejs-lib'
 import { AirtableApiSort } from './airtable.api'
 
-export enum AIRTABLE_ERROR_CODE {
+export enum AirtableErrorCode {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
 }
 

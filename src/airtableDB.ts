@@ -1,3 +1,4 @@
+import { Readable } from 'stream'
 import {
   BaseCommonDB,
   CommonDB,
@@ -11,14 +12,13 @@ import {
 } from '@naturalcycles/db-lib'
 import { AppError, pMap, _by, _omit } from '@naturalcycles/js-lib'
 import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
-import { Readable } from 'stream'
 import {
   AirtableApi,
   AirtableApiRecord,
   AirtableApiSelectOpts,
   AirtableApiTable,
 } from './airtable.api'
-import { AirtableRecord, AIRTABLE_ERROR_CODE } from './airtable.model'
+import { AirtableRecord, AirtableErrorCode } from './airtable.model'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 
 // eslint-disable-next-line unused-imports/no-unused-vars
@@ -326,7 +326,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // console.error('onError', err)
     const msg = `${table}: ${inspectAny(err)}`
     throw new AppError(msg, {
-      code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
+      code: AirtableErrorCode.AIRTABLE_ERROR,
       airtableTableName: table,
       airtableInput,
       // todo: extend the stack of original error

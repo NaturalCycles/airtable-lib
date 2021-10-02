@@ -16,7 +16,7 @@ import {
   AirtableTableCfgMap,
   AirtableThumbnail,
   airtableThumbnailSchema,
-  AIRTABLE_ERROR_CODE,
+  AirtableErrorCode,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
 import { AirtableBaseDao } from './airtableBaseDao'
@@ -63,7 +63,7 @@ export {
   AirtableTableDao,
   AirtableBaseDao,
   AirtableBasesDao,
-  AIRTABLE_ERROR_CODE,
+  AirtableErrorCode,
   airtableIdSchema,
   airtableMultipleLinkSchema,
   airtableSingleLinkSchema,

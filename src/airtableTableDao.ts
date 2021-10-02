@@ -10,7 +10,7 @@ import {
   AirtableDaoOptions,
   AirtableRecord,
   AirtableTableCfg,
-  AIRTABLE_ERROR_CODE,
+  AirtableErrorCode,
 } from './airtable.model'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
@@ -272,7 +272,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     const { tableName } = this
     const msg = `${tableName}: ${inspectAny(err)}`
     throw new AppError(msg, {
-      code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
+      code: AirtableErrorCode.AIRTABLE_ERROR,
       airtableTableName: tableName,
       airtableInput,
     })

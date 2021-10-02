@@ -1,5 +1,5 @@
 import { AppError } from '@naturalcycles/js-lib'
-import { AIRTABLE_ERROR_CODE } from './airtable.model'
+import { AirtableErrorCode } from './airtable.model'
 import { AirtableLib } from './airtableLib'
 import { mockTableDao1 } from './test/airtable.mock'
 
@@ -16,7 +16,7 @@ test('wrong apiKey should throw', async () => {
     message: expect.any(String),
     stack: expect.any(String),
     data: {
-      code: AIRTABLE_ERROR_CODE.AIRTABLE_ERROR,
+      code: AirtableErrorCode.AIRTABLE_ERROR,
     },
   })
 })
