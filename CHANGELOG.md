@@ -1,3 +1,10 @@
+## [2.11.3](https://github.com/NaturalCycles/airtable-lib/compare/v2.11.2...v2.11.3) (2021-10-17)
+
+
+### Bug Fixes
+
+* types ([aaef30c](https://github.com/NaturalCycles/airtable-lib/commit/aaef30c5e33582a915da85ef892c9a6580f80778))
+
 ## [2.11.2](https://github.com/NaturalCycles/airtable-lib/compare/v2.11.1...v2.11.2) (2021-10-17)
 
 
