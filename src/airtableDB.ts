@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
-import { AnyObjectWithId } from '@naturalcycles/db-lib/src/db.model'
 import {
+  AnyObjectWithId,
   BaseCommonDB,
   CommonDB,
   CommonDBOptions,
