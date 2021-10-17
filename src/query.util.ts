@@ -48,7 +48,7 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
   // order
   if (q._orders.length) {
     o.sort = q._orders.map(o => ({
-      field: o.name as keyof ROW,
+      field: o.name,
       direction: o.descending ? 'desc' : 'asc',
     }))
   }

@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import { AnyObjectWithId } from '@naturalcycles/db-lib/src/db.model'
 import {
   BaseCommonDB,
   CommonDB,
@@ -48,7 +49,9 @@ export interface AirtableDBOptions extends CommonDBOptions {
   idField?: string
 }
 export type AirtableDBStreamOptions = CommonDBStreamOptions
-export interface AirtableDBSaveOptions extends AirtableDBOptions, CommonDBSaveOptions {}
+export interface AirtableDBSaveOptions<ROW extends ObjectWithId = AnyObjectWithId>
+  extends AirtableDBOptions,
+    CommonDBSaveOptions<ROW> {}
 
 /**
  * CommonDB implementation based on Airtable sheets.
@@ -141,7 +144,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   override async saveBatch<ROW extends ObjectWithId>(
     table: string,
     rows: ROW[],
-    opt?: AirtableDBSaveOptions,
+    opt?: AirtableDBSaveOptions<ROW>,
   ): Promise<void> {
     const existingRows = await this.getByIds<ROW & AirtableRecord>(
       table,
@@ -196,7 +199,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<number> {
-    const { rows } = await this.runQuery<AirtableRecord & ObjectWithId>(q.select([]), opt)
+    const { rows } = await this.runQuery<ROW & AirtableRecord>(q.select([]), opt)
 
     const tableApi = this.tableApi<ObjectWithId>(q.table)
 
@@ -281,7 +284,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       // Filter out rows without an id (silently, without throwing an error)
       .filter(r => r[idField])
 
-    if (q?._selectedFieldNames && !q._selectedFieldNames.includes(idField)) {
+    if (q?._selectedFieldNames && !q._selectedFieldNames.includes(idField as keyof ROW)) {
       // Special case
       // It's a projection query without an idField included
       // idField is always queried to be able to "filter empty rows"
