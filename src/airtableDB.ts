@@ -146,6 +146,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     rows: ROW[],
     opt?: AirtableDBSaveOptions<ROW>,
   ): Promise<void> {
+    // db-lib requires `undefined` values to not be saved/loaded
+    // rows = rows.map(r => _filterUndefinedValues(r))
+
     const existingRows = await this.getByIds<ROW & AirtableRecord>(
       table,
       rows.map(r => r.id),
@@ -158,7 +161,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       rows,
       async r => {
         if (existingRowById[r.id]) {
-          // console.log(`will update ${dbm.id} to ${existingRecordById[dbm.id].airtableId}`)
+          // console.log(`will update ${r.id} to ${existingRowById[r.id]!.airtableId}`)
           await this.updateRecord(table, existingRowById[r.id]!.airtableId, r)
         } else {
           await this.createRecord(table, r)
