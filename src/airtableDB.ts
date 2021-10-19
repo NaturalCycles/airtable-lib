@@ -1,17 +1,15 @@
 import { Readable } from 'stream'
 import {
-  AnyObjectWithId,
   BaseCommonDB,
   CommonDB,
   CommonDBOptions,
   CommonDBSaveOptions,
   CommonDBStreamOptions,
   DBQuery,
-  ObjectWithId,
   queryInMemory,
   RunQueryResult,
 } from '@naturalcycles/db-lib'
-import { AppError, pMap, _by, _omit } from '@naturalcycles/js-lib'
+import { AppError, pMap, _by, _omit, AnyObjectWithId, ObjectWithId } from '@naturalcycles/js-lib'
 import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
