@@ -1,4 +1,4 @@
-import { pMap, pProps, StringMap, _filterObject, _mapValues } from '@naturalcycles/js-lib'
+import { pMap, StringMap, _filterObject, _mapValues } from '@naturalcycles/js-lib'
 import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
@@ -13,8 +13,6 @@ import { AirtableTableDao } from '../airtableTableDao'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 
-// export interface AirtableRemoteConnectorCfg<BASE> {}
-
 export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BASE> {
   constructor(private airtableApi: AirtableApi) {}
 
@@ -23,14 +21,21 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
   async fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt: AirtableDaoOptions = {}): Promise<BASE> {
     const { tableCfgMap } = baseDaoCfg
 
-    return await pProps(
-      // eslint-disable-next-line unicorn/no-array-reduce
-      Object.keys(tableCfgMap).reduce((r, tableName) => {
-        r[tableName] = this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(opt)
-        return r
-      }, {} as BASE),
-      { concurrency: opt.concurrency || 4 },
+    const base = {} as BASE
+
+    await pMap(
+      Object.keys(tableCfgMap),
+      async tableName => {
+        base[tableName] = await this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(
+          opt,
+        )
+      },
+      {
+        concurrency: opt.concurrency || 4,
+      },
     )
+
+    return base
   }
 
   /**
