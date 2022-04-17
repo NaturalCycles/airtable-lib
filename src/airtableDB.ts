@@ -47,7 +47,7 @@ export interface AirtableDBOptions extends CommonDBOptions {
   idField?: string
 }
 export type AirtableDBStreamOptions = CommonDBStreamOptions
-export interface AirtableDBSaveOptions<ROW extends ObjectWithId = AnyObjectWithId>
+export interface AirtableDBSaveOptions<ROW extends Partial<ObjectWithId> = AnyObjectWithId>
   extends AirtableDBOptions,
     CommonDBSaveOptions<ROW> {}
 
@@ -139,7 +139,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Does "upsert" always
    */
-  override async saveBatch<ROW extends ObjectWithId>(
+  override async saveBatch<ROW extends Partial<ObjectWithId>>(
     table: string,
     rows: ROW[],
     opt?: AirtableDBSaveOptions<ROW>,
@@ -147,9 +147,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // db-lib requires `undefined` values to not be saved/loaded
     // rows = rows.map(r => _filterUndefinedValues(r))
 
-    const existingRows = await this.getByIds<ROW & AirtableRecord>(
+    const existingRows = await this.getByIds<ROW & ObjectWithId & AirtableRecord>(
       table,
-      rows.map(r => r.id),
+      rows.map(r => r.id!),
       opt,
     )
     const existingRowById = _by(existingRows, r => r.id)
@@ -158,9 +158,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     await pMap(
       rows,
       async r => {
-        if (existingRowById[r.id]) {
+        if (existingRowById[r.id!]) {
           // console.log(`will update ${r.id} to ${existingRowById[r.id]!.airtableId}`)
-          await this.updateRecord(table, existingRowById[r.id]!.airtableId, r)
+          await this.updateRecord(table, existingRowById[r.id!]!.airtableId, r)
         } else {
           await this.createRecord(table, r)
         }
