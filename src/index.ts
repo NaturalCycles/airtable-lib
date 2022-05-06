@@ -17,6 +17,7 @@ import {
   AirtableThumbnail,
   airtableThumbnailSchema,
   AirtableErrorCode,
+  AirtableThumbnails,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
 import { AirtableBaseDao } from './airtableBaseDao'
@@ -44,6 +45,7 @@ export type {
   AirtableLibCfg,
   AirtableRecord,
   AirtableId,
+  AirtableThumbnails,
   AirtableThumbnail,
   AirtableAttachment,
   AirtableDaoOptions,

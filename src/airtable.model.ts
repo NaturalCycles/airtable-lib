@@ -51,6 +51,12 @@ export const airtableSingleLinkSchema = <T>() => airtableMultipleLinkSchema<T>()
   "url": "https://dl.airtable.com/RZECUa9NS2q3bTR8B0Hg_nc_product_landscape_4_1200_6243.jpg"
  */
 
+export interface AirtableThumbnails {
+  full: AirtableThumbnail
+  large: AirtableThumbnail
+  small: AirtableThumbnail
+}
+
 export interface AirtableThumbnail {
   width: number
   height: number
@@ -69,11 +75,7 @@ export interface AirtableAttachment {
   filename: string
   size?: number
   type?: string
-  thumbnails?: {
-    full: AirtableThumbnail
-    large: AirtableThumbnail
-    small: AirtableThumbnail
-  }
+  thumbnails?: AirtableThumbnails
 }
 
 export interface AirtableAttachmentUpload {
@@ -216,6 +218,8 @@ export interface AirtableBaseDaoCfg<BASE = any> {
   lazyConnectorType?: symbol
 
   tableCfgMap: AirtableTableCfgMap<BASE>
+
+  noAttachmentQueryString?: boolean
 }
 
 export interface AirtableTableCfg<T extends AirtableRecord = any> {
@@ -234,6 +238,17 @@ export interface AirtableTableCfg<T extends AirtableRecord = any> {
    * Without view - airtable api returns records in wrongly sorted order (sorted by airtableId), not in the view order.
    */
   view?: string
+
+  /**
+   * Set to true to strip away query string from attachment urls.
+   * E.g
+   * TAYGREWE3.JPG?ts=1651857038&userId=usrgPxsBnMxTz7qD2&cs=3ff02a34e23ce4df
+   * will become:
+   * TAYGREWE3.JPG
+   *
+   * Defaults to false.
+   */
+  noAttachmentQueryString?: boolean
 }
 
 export type AirtableTableCfgMap<BASE = any> = {

@@ -1,194 +1,194 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getCache 1`] = `
-Object {
-  "categories": Array [
-    Object {
+{
+  "categories": [
+    {
       "airtableId": "reczAHtt0JZ4Uq97s",
       "id": "category1",
-      "users": Array [
+      "users": [
         "recKeeT3hUQXfly9T",
       ],
     },
-    Object {
+    {
       "airtableId": "recGBC7azpVH4Xhfu",
       "id": "category2",
-      "users": Array [
+      "users": [
         "recCOtGXUSWzZEbzf",
       ],
     },
-    Object {
+    {
       "airtableId": "recy3fSNv0w3yoSBh",
       "id": "category3",
-      "users": Array [
+      "users": [
         "recPJPfpwUOpxhd1s",
       ],
     },
   ],
-  "permissions": Array [
-    Object {
+  "permissions": [
+    {
       "airtableId": "recKIx5gXMF6sFz9X",
       "descr": "description 1
 long text",
       "id": "permission1",
-      "parent": Array [],
+      "parent": [],
       "pub": true,
-      "roles": Array [
+      "roles": [
         "recFt2k0XC9Lh4MXv",
         "recZuSfp2VFUwzlkZ",
       ],
     },
-    Object {
+    {
       "airtableId": "recfA6bfrDSLoLMOR",
       "descr": "description 2
 long text",
       "id": "permission2",
-      "parent": Array [
+      "parent": [
         "recKIx5gXMF6sFz9X",
       ],
       "pub": true,
-      "roles": Array [
+      "roles": [
         "recXRZ20Y9RRXK1nf",
         "recZuSfp2VFUwzlkZ",
       ],
     },
-    Object {
+    {
       "airtableId": "recTXd1ZiyRV6MkCd",
       "descr": "description 3
 long text",
       "id": "permission3",
-      "parent": Array [
+      "parent": [
         "recfA6bfrDSLoLMOR",
       ],
       "pub": true,
-      "roles": Array [
+      "roles": [
         "recZuSfp2VFUwzlkZ",
       ],
     },
-    Object {
+    {
       "airtableId": "recqXONSau2ByYuAP",
       "descr": "description 4
 long text",
       "id": "permission4",
-      "parent": Array [],
+      "parent": [],
       "pub": true,
-      "roles": Array [
+      "roles": [
         "recMtSLHe2fnVOZoF",
       ],
     },
-    Object {
+    {
       "airtableId": "recOcMXcycSymXEGn",
       "descr": "description 5
 long text",
       "id": "permission5",
-      "parent": Array [
+      "parent": [
         "recTXd1ZiyRV6MkCd",
       ],
       "pub": true,
-      "roles": Array [
+      "roles": [
         "recqHMTb4mCFLKumG",
       ],
     },
-    Object {
+    {
       "airtableId": "rech4OufSiuAOrc6Q",
       "descr": "description 6
 long text",
       "id": "permission6",
-      "parent": Array [],
-      "roles": Array [
+      "parent": [],
+      "roles": [
         "recqHMTb4mCFLKumG",
       ],
     },
   ],
-  "roles": Array [
-    Object {
+  "roles": [
+    {
       "airtableId": "recZuSfp2VFUwzlkZ",
       "id": "role1",
-      "permissions": Array [
+      "permissions": [
         "recKIx5gXMF6sFz9X",
         "recTXd1ZiyRV6MkCd",
         "recfA6bfrDSLoLMOR",
       ],
       "pub": true,
-      "users": Array [
+      "users": [
         "recKeeT3hUQXfly9T",
       ],
     },
-    Object {
+    {
       "airtableId": "recMtSLHe2fnVOZoF",
       "id": "role2",
-      "permissions": Array [
+      "permissions": [
         "recqXONSau2ByYuAP",
       ],
-      "users": Array [
+      "users": [
         "recCOtGXUSWzZEbzf",
       ],
     },
-    Object {
+    {
       "airtableId": "recFt2k0XC9Lh4MXv",
       "id": "role3",
-      "permissions": Array [
+      "permissions": [
         "recKIx5gXMF6sFz9X",
       ],
       "pub": true,
-      "users": Array [
+      "users": [
         "recCOtGXUSWzZEbzf",
       ],
     },
-    Object {
+    {
       "airtableId": "recqHMTb4mCFLKumG",
       "id": "role4",
-      "permissions": Array [
+      "permissions": [
         "rech4OufSiuAOrc6Q",
         "recOcMXcycSymXEGn",
       ],
       "pub": true,
-      "users": Array [],
+      "users": [],
     },
-    Object {
+    {
       "airtableId": "rec6tdVmScqKRXDkC",
       "id": "role5",
-      "permissions": Array [],
-      "users": Array [
+      "permissions": [],
+      "users": [
         "rectsieTOdyjEBKGK",
       ],
     },
-    Object {
+    {
       "airtableId": "recXRZ20Y9RRXK1nf",
       "id": "role6",
-      "permissions": Array [
+      "permissions": [
         "recfA6bfrDSLoLMOR",
       ],
-      "users": Array [
+      "users": [
         "recBwvy2cmRfKXd3G",
       ],
     },
   ],
-  "users": Array [
-    Object {
+  "users": [
+    {
       "airtableId": "recKeeT3hUQXfly9T",
-      "category": Array [
+      "category": [
         "reczAHtt0JZ4Uq97s",
       ],
       "email": "user1@email.com",
       "id": "user1",
-      "images": Array [
-        Object {
+      "images": [
+        {
           "filename": "oculus_go_product_and_box.jpg",
           "id": "att8BiHM9PcJ1MkSM",
           "size": 18497,
-          "thumbnails": Object {
-            "full": Object {
+          "thumbnails": {
+            "full": {
               "height": 3000,
               "url": "https://dl.airtable.com/.attachmentThumbnails/d3a1ba7b453ae1625185acedf0c092d5/a597d908",
               "width": 3000,
             },
-            "large": Object {
+            "large": {
               "height": 360,
               "url": "https://dl.airtable.com/.attachmentThumbnails/5c3bd24479c1ed3c0f317ae4fe4f7a3d/ac170d70",
               "width": 640,
             },
-            "small": Object {
+            "small": {
               "height": 36,
               "url": "https://dl.airtable.com/.attachmentThumbnails/cacbc23ff8d66b261a9f572a98a4de78/abf6388d",
               "width": 64,
@@ -198,73 +198,73 @@ long text",
           "url": "https://dl.airtable.com/.attachments/822818b7f9dfce155a2decad0183e635/168ac624/oculus_go_product_and_box.jpg",
         },
       ],
-      "roles": Array [
+      "roles": [
         "recZuSfp2VFUwzlkZ",
       ],
-      "tags": Array [
+      "tags": [
         "tag1",
       ],
     },
-    Object {
+    {
       "airtableId": "recCOtGXUSWzZEbzf",
-      "category": Array [
+      "category": [
         "recGBC7azpVH4Xhfu",
       ],
       "email": "user2@email.com",
       "id": "user2",
-      "images": Array [],
-      "roles": Array [
+      "images": [],
+      "roles": [
         "recMtSLHe2fnVOZoF",
         "recFt2k0XC9Lh4MXv",
       ],
-      "tags": Array [
+      "tags": [
         "tag1",
         "tag2",
       ],
     },
-    Object {
+    {
       "airtableId": "recPJPfpwUOpxhd1s",
-      "category": Array [
+      "category": [
         "recy3fSNv0w3yoSBh",
       ],
       "email": "user3@email.com",
       "id": "user3",
-      "images": Array [],
-      "roles": Array [],
-      "tags": Array [],
+      "images": [],
+      "roles": [],
+      "tags": [],
     },
-    Object {
+    {
       "airtableId": "recBwvy2cmRfKXd3G",
-      "category": Array [],
+      "category": [],
       "email": "user4@email.com",
       "id": "user4",
-      "images": Array [],
-      "roles": Array [
+      "images": [],
+      "roles": [
         "recXRZ20Y9RRXK1nf",
       ],
-      "tags": Array [
+      "tags": [
         "tag2",
       ],
     },
-    Object {
+    {
       "airtableId": "rectsieTOdyjEBKGK",
-      "category": Array [],
+      "category": [],
       "email": "user5@email.com",
       "id": "user5",
-      "images": Array [],
-      "roles": Array [
+      "images": [],
+      "roles": [
         "rec6tdVmScqKRXDkC",
       ],
-      "tags": Array [],
+      "tags": [],
     },
-    Object {
+    {
       "airtableId": "recf5MjaK3eslxNy0",
-      "category": Array [],
+      "category": [],
       "email": "user6@email.com",
       "id": "user6",
-      "images": Array [],
-      "roles": Array [],
-      "tags": Array [],
+      "images": [],
+      "roles": [],
+      "tags": [],
     },
   ],
 }

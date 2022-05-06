@@ -159,6 +159,7 @@ export function mockBaseDao(api: AirtableApi, baseId: string): AirtableBaseDao<T
       permissions: { validationSchema: permissionSchema, idField: 'id' },
       categories: { validationSchema: categorySchema, idField: 'id' },
     },
+    noAttachmentQueryString: true,
   })
 }
 

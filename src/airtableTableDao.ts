@@ -1,4 +1,4 @@
-import { AppError, InstanceId, pMap, _LogMethod } from '@naturalcycles/js-lib'
+import { AppError, InstanceId, pMap, _LogMethod, _mapValues } from '@naturalcycles/js-lib'
 import { getValidationResult, inspectAny } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
@@ -12,6 +12,7 @@ import {
   AirtableTableCfg,
   AirtableErrorCode,
 } from './airtable.model'
+import { stripQueryStringFromAttachments } from './airtable.util'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
   constructor(
@@ -246,7 +247,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   }
 
   private mapToAirtableRecord(r: AirtableApiRecord<T>, opts: AirtableDaoOptions = {}): T {
-    return this.validate(
+    const o = this.validate(
       {
         // @ts-ignore
         airtableId: r.id,
@@ -254,6 +255,12 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       },
       opts,
     )
+
+    if (this.cfg.noAttachmentQueryString) {
+      _mapValues(o, (_, v) => stripQueryStringFromAttachments(v), true)
+    }
+
+    return o
   }
 
   onErrorOrUndefined(err: any, airtableInput?: any): undefined | never {

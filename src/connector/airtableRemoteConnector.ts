@@ -9,6 +9,7 @@ import {
   AirtableDaoSaveOptions,
   AirtableRecord,
 } from '../airtable.model'
+import { isArrayOfAttachments } from '../airtable.util'
 import { AirtableTableDao } from '../airtableTableDao'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
@@ -139,11 +140,14 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     tableName: keyof BASE,
   ): AirtableTableDao<T> {
+    const tableCfg = baseDaoCfg.tableCfgMap[tableName]
+    tableCfg.noAttachmentQueryString ??= baseDaoCfg.noAttachmentQueryString
+
     return new AirtableTableDao<T>(
       this.airtableApi,
       baseDaoCfg.baseId,
       tableName as string,
-      baseDaoCfg.tableCfgMap[tableName],
+      tableCfg,
     )
   }
 }
@@ -153,14 +157,6 @@ function isArrayOfLinks(v: any): boolean {
     Array.isArray(v) &&
     !!v.length &&
     v.some(item => typeof item === 'string' && item.startsWith('rec'))
-  )
-}
-
-function isArrayOfAttachments(v: any): boolean {
-  return (
-    Array.isArray(v) &&
-    !!v.length &&
-    v.some(item => !!item && typeof item === 'object' && !!item.url)
   )
 }
 

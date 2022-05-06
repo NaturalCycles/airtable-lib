@@ -30,6 +30,7 @@ test('getByIds', async () => {
     apiKey: AIRTABLE_API_KEY,
     baseId: AIRTABLE_BASE_ID,
     // tableCfgMap: {},
+    noAttachmentQueryString: true,
   })
 
   const r = await db.getByIds('users', ['user1', 'user4'])

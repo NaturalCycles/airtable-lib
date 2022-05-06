@@ -9,7 +9,15 @@ import {
   queryInMemory,
   RunQueryResult,
 } from '@naturalcycles/db-lib'
-import { AppError, pMap, _by, _omit, AnyObjectWithId, ObjectWithId } from '@naturalcycles/js-lib'
+import {
+  AppError,
+  pMap,
+  _by,
+  _omit,
+  AnyObjectWithId,
+  ObjectWithId,
+  _mapValues,
+} from '@naturalcycles/js-lib'
 import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
@@ -18,6 +26,7 @@ import {
   AirtableApiTable,
 } from './airtable.api'
 import { AirtableRecord, AirtableErrorCode } from './airtable.model'
+import { stripQueryStringFromAttachments } from './airtable.util'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 
 // eslint-disable-next-line unused-imports/no-unused-vars
@@ -38,6 +47,17 @@ export interface AirtableDBCfg<BASE = any> {
    * If not defined - you'll need to pass `baseId` as part of the `table`, e.g `${baseId}.${table}`
    */
   baseId?: string
+
+  /**
+   * Set to true to strip away query string from attachment urls.
+   * E.g
+   * TAYGREWE3.JPG?ts=1651857038&userId=usrgPxsBnMxTz7qD2&cs=3ff02a34e23ce4df
+   * will become:
+   * TAYGREWE3.JPG
+   *
+   * Defaults to false.
+   */
+  noAttachmentQueryString?: boolean
 }
 
 export interface AirtableDBOptions extends CommonDBOptions {
@@ -347,9 +367,15 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   }
 
   private mapToAirtableRecord<T>(r: AirtableApiRecord<T>): T {
-    return {
+    const o = {
       airtableId: r.id,
       ...r.fields,
     }
+
+    if (this.cfg.noAttachmentQueryString) {
+      _mapValues(o, (_, v) => stripQueryStringFromAttachments(v), true)
+    }
+
+    return o
   }
 }
