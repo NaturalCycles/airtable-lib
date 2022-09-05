@@ -1,3 +1,5 @@
+import { AnyObject } from '@naturalcycles/js-lib'
+
 export interface AirtableApi {
   base(baseId: string): AirtableApiBase
 
@@ -11,11 +13,9 @@ export interface AirtableApi {
   }): void
 }
 
-export type AirtableApiBase = <T extends Record<string, any>>(
-  tableName: string,
-) => AirtableApiTable<T>
+export type AirtableApiBase = <T extends AnyObject>(tableName: string) => AirtableApiTable<T>
 
-export interface AirtableApiTable<T> {
+export interface AirtableApiTable<T extends AnyObject> {
   select(selectOpts?: AirtableApiSelectOpts<T>): AirtableApiQuery<T>
 
   find(airtableId: string): Promise<AirtableApiRecord<T> | undefined>
@@ -32,7 +32,7 @@ export interface AirtableApiTable<T> {
   destroy(airtableId: string): Promise<T>
 }
 
-export interface AirtableApiSelectOpts<T> {
+export interface AirtableApiSelectOpts<T extends AnyObject> {
   pageSize?: number
   fields?: (keyof T)[]
   maxRecords?: number
@@ -45,7 +45,7 @@ export interface AirtableApiSelectOpts<T> {
   filterByFormula?: string
 }
 
-export interface AirtableApiSort<T = any> {
+export interface AirtableApiSort<T extends AnyObject = any> {
   field: keyof T
 
   /**
@@ -54,11 +54,11 @@ export interface AirtableApiSort<T = any> {
   direction?: 'asc' | 'desc'
 }
 
-export interface AirtableApiQuery<T> {
+export interface AirtableApiQuery<T extends AnyObject> {
   all(): Promise<AirtableApiRecord<T>[]>
 }
 
-export interface AirtableApiRecord<T> {
+export interface AirtableApiRecord<T extends AnyObject> {
   id: string
   fields: T
   save(): any

@@ -26,7 +26,7 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
         if (f.val) {
           v = 'TRUE()'
         } else {
-          return `OR({${f.name}}=FALSE(),{${f.name}}=BLANK())`
+          return `OR({${String(f.name)}}=FALSE(),{${String(f.name)}}=BLANK())`
         }
       } else {
         v = `"${f.val}"`
@@ -34,7 +34,7 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
 
       const op = OP_MAP[f.op] || f.op
 
-      return `{${f.name}}${op}${v}`
+      return `{${String(f.name)}}${op}${v}`
     })
 
     o.filterByFormula = `AND(${tokens.join(',')})`

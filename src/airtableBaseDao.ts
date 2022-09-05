@@ -1,4 +1,4 @@
-import { InstanceId, StringMap, _LogMethod, _omit } from '@naturalcycles/js-lib'
+import { InstanceId, StringMap, _LogMethod, _omit, AnyObject } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import { Subject } from 'rxjs'
 import {
@@ -7,7 +7,6 @@ import {
   AirtableDaoOptions,
   AirtableDaoSaveOptions,
   AirtableRecord,
-  AirtableTableCfg,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
 import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
@@ -19,7 +18,7 @@ import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
  * Provides API to access records.
  * Provides API to fetch or upload records via provided Connectors (e.g Json, Remote).
  */
-export class AirtableBaseDao<BASE = any> implements InstanceId {
+export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId {
   constructor(public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastFetchedMap = new Map<symbol, number | undefined>()
@@ -124,10 +123,10 @@ export class AirtableBaseDao<BASE = any> implements InstanceId {
     // TableIdIndex
     const tableIdIndex: StringMap<StringMap<AirtableRecord>> = {}
     Object.entries(this.cfg.tableCfgMap).forEach(([tableName, cfg]) => {
-      const { idField } = cfg as AirtableTableCfg
+      const { idField } = cfg
       tableIdIndex[tableName] = {}
       ;(this._cache![tableName] || []).forEach(
-        (r: AirtableRecord) => (tableIdIndex[tableName]![r[idField]] = r),
+        (r: AirtableRecord) => (tableIdIndex[tableName]![r[idField as keyof AirtableRecord]] = r),
       )
     })
 

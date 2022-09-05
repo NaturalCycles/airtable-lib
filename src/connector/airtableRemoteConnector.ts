@@ -27,9 +27,10 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     await pMap(
       Object.keys(tableCfgMap),
       async tableName => {
-        base[tableName] = await this.getTableDao(baseDaoCfg, tableName as keyof BASE).getRecords(
-          opt,
-        )
+        ;(base as any)[tableName] = await this.getTableDao(
+          baseDaoCfg,
+          tableName as keyof BASE,
+        ).getRecords(opt)
       },
       {
         concurrency: opt.concurrency || 4,

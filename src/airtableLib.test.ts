@@ -28,5 +28,5 @@ test('api', async () => {
 
   const api = airtableLib.api()
   // console.log(api)
-  expect(api).not.toBeUndefined()
+  expect(api).toBeDefined()
 })

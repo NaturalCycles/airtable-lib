@@ -17,6 +17,7 @@ import {
   AnyObjectWithId,
   ObjectWithId,
   _mapValues,
+  AnyObject,
 } from '@naturalcycles/js-lib'
 import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import {
@@ -115,7 +116,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
         },
         opt,
       )
-    ).sort((a, b) => (a[idField] > b[idField] ? 1 : -1))
+    ).sort((a, b) => (a[idField as keyof ROW] > b[idField as keyof ROW] ? 1 : -1))
   }
 
   override async deleteByIds<ROW extends ObjectWithId>(
@@ -303,14 +304,14 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       // .filter(r => Object.keys(r.fields).length)
       .map(r => this.mapToAirtableRecord(r))
       // Filter out rows without an id (silently, without throwing an error)
-      .filter(r => r[idField])
+      .filter(r => r[idField as keyof ROW])
 
     if (q?._selectedFieldNames && !q._selectedFieldNames.includes(idField as keyof ROW)) {
       // Special case
       // It's a projection query without an idField included
       // idField is always queried to be able to "filter empty rows"
       // So, now we have to remove idField from rows
-      rows.forEach(r => delete r[idField])
+      rows.forEach(r => delete r[idField as keyof ROW])
     }
 
     return rows
@@ -366,7 +367,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     this.onError(err, table, airtableInput)
   }
 
-  private mapToAirtableRecord<T>(r: AirtableApiRecord<T>): T {
+  private mapToAirtableRecord<T extends AnyObject>(r: AirtableApiRecord<T>): T {
     const o = {
       airtableId: r.id,
       ...r.fields,

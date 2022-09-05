@@ -55,7 +55,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
         // Filter out empty records
         .filter(r => Object.keys(r.fields).length)
         // Filter empty records by idField being empty
-        .filter(r => r.fields[idField])
+        .filter(r => r.fields[idField as keyof T])
         .map(r => this.mapToAirtableRecord(r, opt))
     )
   }

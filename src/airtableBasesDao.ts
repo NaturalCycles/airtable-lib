@@ -1,14 +1,14 @@
-import { pMap, StringMap, _LogMethod } from '@naturalcycles/js-lib'
+import { pMap, StringMap, _LogMethod, AnyObject } from '@naturalcycles/js-lib'
 import { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
 /**
  * Allows to perform operations with MANY bases at once, e.g fetch from all bases, upload all bases, etc.
  */
-export class AirtableBasesDao<BASE_MAP = any> {
+export class AirtableBasesDao<BASE_MAP extends AnyObject = any> {
   constructor(public baseDaos: AirtableBaseDao<any>[]) {}
 
-  getDao<BASE = any>(baseName: string): AirtableBaseDao<BASE> {
+  getDao<BASE extends AnyObject = any>(baseName: string): AirtableBaseDao<BASE> {
     const dao = this.baseDaos.find(dao => dao.cfg.baseName === baseName)
     if (!dao) throw new Error(`AirtableBaseDao not found for base: ${baseName}`)
     return dao
@@ -18,7 +18,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
     const cacheMap = {} as BASE_MAP
 
     this.baseDaos.forEach(baseDao => {
-      cacheMap[baseDao.cfg.baseName] = baseDao.getCache()
+      cacheMap[baseDao.cfg.baseName as keyof BASE_MAP] = baseDao.getCache()
     })
 
     return cacheMap
@@ -28,7 +28,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
    * @returns map from baseName to unix timestamp of last fetched (or undefined)
    */
   getLastFetchedMap(connectorType: symbol): StringMap<number | undefined> {
-    const map = {}
+    const map: StringMap<number | undefined> = {}
 
     this.baseDaos.forEach(baseDao => {
       map[baseDao.cfg.baseName] = baseDao.lastFetchedMap.get(connectorType)
@@ -41,7 +41,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
    * @returns map from baseName to unix timestamp of when it's cache was last changed
    */
   getLastChangedMap(): StringMap<number | undefined> {
-    const map = {}
+    const map: StringMap<number | undefined> = {}
 
     this.baseDaos.forEach(baseDao => {
       map[baseDao.cfg.baseName] = baseDao.lastChanged
@@ -61,7 +61,7 @@ export class AirtableBasesDao<BASE_MAP = any> {
     await pMap(
       this.baseDaos,
       async baseDao => {
-        bases[baseDao.cfg.baseName] = await baseDao.fetch(connectorType, opt)
+        bases[baseDao.cfg.baseName as keyof BASE_MAP] = await baseDao.fetch(connectorType, opt)
       },
       { concurrency },
     )
