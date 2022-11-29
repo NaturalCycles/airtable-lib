@@ -8,7 +8,7 @@
     "@naturalcycles/js-lib": "^14.0.0",
     "@naturalcycles/nodejs-lib": "^12.0.0",
     "airtable": "^0.11.0",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^11.0.0",
     "rxjs": "^7.1.0"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "url": "https://github.com/NaturalCycles/airtable-lib"
   },
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=16.10.0"
   },
   "version": "2.11.5",
   "description": "High-level API and CLI for Airtable",
