@@ -24,6 +24,10 @@ const db = new AirtableDB({
 const features: CommonDBImplementationFeatures = {
   bufferSupport: false,
   nullValues: false,
+  updateByQuery: false,
+  transactions: false,
+  insert: false,
+  update: false,
 }
 
 const quirks: CommonDBImplementationQuirks = {

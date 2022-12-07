@@ -19,7 +19,10 @@ export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
   // filter
   if (q._filters.length) {
     const tokens = q._filters.map(f => {
-      if (f.op === 'in') throw new Error('filter by "in" is not supported!')
+      if (f.op === 'in') {
+        const pairs = (f.val as any[]).map(v => `{${f.name as string}}="${v}"`)
+        return `OR(${pairs.join(',')})`
+      }
 
       let v: any
       if (typeof f.val === 'boolean') {

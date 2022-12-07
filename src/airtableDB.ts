@@ -119,7 +119,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     ).sort((a, b) => (a[idField as keyof ROW] > b[idField as keyof ROW] ? 1 : -1))
   }
 
-  override async deleteByIds<ROW extends ObjectWithId>(
+  async deleteByIds<ROW extends ObjectWithId>(
     table: string,
     ids: ROW['id'][],
     opt: AirtableDBOptions = {},
@@ -378,5 +378,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     }
 
     return o
+  }
+
+  override async getTables(): Promise<string[]> {
+    return []
   }
 }
