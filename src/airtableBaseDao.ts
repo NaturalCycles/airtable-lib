@@ -24,7 +24,7 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
     this.lastFetchedMap = new Map<symbol, number | undefined>()
 
     // Default to JSON
-    this.cfg.lazyConnectorType = this.cfg.lazyConnectorType || AIRTABLE_CONNECTOR_JSON
+    this.cfg.lazyConnectorType ||= AIRTABLE_CONNECTOR_JSON
 
     cfg.connectors.forEach(c => {
       this.connectorMap.set(c.TYPE, c)
@@ -163,9 +163,8 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
       return ((this.getCache()[tableName] as any) || []).map((r: AirtableRecord) =>
         _omit(r, ['airtableId']),
       )
-    } else {
-      return (this.getCache()[tableName] as any) || []
     }
+    return (this.getCache()[tableName] as any) || []
   }
 
   getById<T extends AirtableRecord>(table: string, id?: string): T | undefined {

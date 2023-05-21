@@ -63,7 +63,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   @_LogMethod()
   async getRecord(airtableId: string, opt: AirtableDaoOptions = {}): Promise<T | undefined> {
     const record = await this.table
-      .find(airtableId) // eslint-disable-line unicorn/no-array-callback-reference
+      .find(airtableId)
       .catch(err => this.onErrorOrUndefined(err, { airtableId }))
 
     return record && this.mapToAirtableRecord(record, opt)
@@ -249,7 +249,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
   private mapToAirtableRecord(r: AirtableApiRecord<T>, opts: AirtableDaoOptions = {}): T {
     const o = this.validate(
       {
-        // @ts-ignore
+        // @ts-expect-error
         airtableId: r.id,
         ...r.fields,
       },

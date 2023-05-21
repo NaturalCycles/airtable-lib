@@ -258,11 +258,11 @@ export type AirtableTableCfgMap<BASE = any> = {
 
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
-  fetch(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions): Promise<BASE>
-  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions): BASE
-  upload(
+  fetch: (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions) => Promise<BASE>
+  fetchSync: (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions) => BASE
+  upload: (
     base: BASE,
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     opt?: AirtableDaoSaveOptions,
-  ): Promise<void>
+  ) => Promise<void>
 }
