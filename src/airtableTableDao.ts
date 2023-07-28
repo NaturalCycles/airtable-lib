@@ -231,7 +231,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
     const { validationSchema } = this.cfg
     const { skipValidation, onValidationError, throwOnValidationError } = opt
 
-    const { value, error } = getValidationResult<R>(record, validationSchema, this.tableName)
+    const { value, error } = getValidationResult<R>(record, validationSchema as any, this.tableName)
 
     if (error && !skipValidation) {
       if (onValidationError) onValidationError(error)

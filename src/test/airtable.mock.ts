@@ -55,7 +55,7 @@ export function mockTable1(): Table1[] {
         name: `name_${num}`,
         field1: `val ${num}`,
         ...(num % 2 === 0 && { numField: num }),
-      } as Table1),
+      }) as Table1,
   )
 }
 
@@ -81,11 +81,11 @@ export interface User extends AirtableRecord {
 export const userSchema = objectSchema<User>({
   id: stringSchema,
   email: emailSchema,
-  roles: airtableMultipleLinkSchema<Role>(),
-  category: airtableSingleLinkSchema<Category>(),
+  roles: airtableMultipleLinkSchema<Role>() as any,
+  category: airtableSingleLinkSchema<Category>() as any,
   tags: arraySchema(stringSchema).optional().default([]),
   images: airtableAttachmentsSchema,
-}).concat(airtableRecordSchema)
+}).concat(airtableRecordSchema as any)
 
 export interface Permission extends AirtableRecord {
   id: string
@@ -99,9 +99,9 @@ export const permissionSchema = objectSchema<Permission>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
-  parent: airtableSingleLinkSchema<Permission>(),
-  roles: airtableMultipleLinkSchema<Role>(),
-}).concat(airtableRecordSchema)
+  parent: airtableSingleLinkSchema<Permission>() as any,
+  roles: airtableMultipleLinkSchema<Role>() as any,
+}).concat(airtableRecordSchema as any)
 
 export interface Role extends AirtableRecord {
   id: string
@@ -115,9 +115,9 @@ export const roleSchema = objectSchema<Role>({
   id: stringSchema,
   pub: booleanSchema.optional(),
   descr: stringSchema.optional(),
-  permissions: airtableMultipleLinkSchema<Permission>(),
-  users: airtableMultipleLinkSchema<User>(),
-}).concat(airtableRecordSchema)
+  permissions: airtableMultipleLinkSchema<Permission>() as any,
+  users: airtableMultipleLinkSchema<User>() as any,
+}).concat(airtableRecordSchema as any)
 
 export interface Category extends AirtableRecord {
   id: string
@@ -126,8 +126,8 @@ export interface Category extends AirtableRecord {
 
 export const categorySchema = objectSchema<Category>({
   id: stringSchema,
-  users: airtableMultipleLinkSchema<User>(),
-}).concat(airtableRecordSchema)
+  users: airtableMultipleLinkSchema<User>() as any,
+}).concat(airtableRecordSchema as any)
 
 export function mockTableDao1(api: AirtableApi, baseId: string): AirtableTableDao<Table1> {
   return new AirtableTableDao<Table1>(api, baseId, 'table1', {

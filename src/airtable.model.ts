@@ -1,5 +1,6 @@
 import {
-  AnySchemaTyped,
+  AnySchema,
+  ArraySchema,
   arraySchema,
   integerSchema,
   JoiValidationError,
@@ -18,12 +19,11 @@ export type AirtableId<T = any> = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const airtableMultipleLinkSchema = <T>() =>
+export const airtableMultipleLinkSchema = <T>(): ArraySchema<AirtableId<T>[]> =>
   arraySchema<AirtableId<T>>(airtableIdSchema).optional().default([])
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const airtableSingleLinkSchema = <T>() => airtableMultipleLinkSchema<T>().max(1)
+export const airtableSingleLinkSchema = <T>(): ArraySchema<AirtableId<T>[]> =>
+  airtableMultipleLinkSchema<T>().max(1)
 
 /* Example:
 
@@ -230,7 +230,7 @@ export interface AirtableTableCfg<T extends AirtableRecord = any> {
    */
   idField: string
 
-  validationSchema?: AnySchemaTyped<T>
+  validationSchema?: AnySchema<T>
   sort?: AirtableApiSort<T>[]
 
   /**

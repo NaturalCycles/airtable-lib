@@ -73,7 +73,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
           async _r => {
             const oldId = _r.airtableId
 
-            let r = { ..._r }
+            let r: AirtableRecord = { ..._r }
             delete (r as any).airtableId
             // Set all array values that are Links as empty array (to avoid `Record ID xxx does not exist` error)
             r = _mapValues(r, (_k, v) => (isArrayOfLinks(v) ? [] : v))
@@ -119,7 +119,7 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
           async r => {
             const { airtableId } = r
             // only array values
-            let patch = _filterObject(r, (_k, v) => isArrayOfLinks(v))
+            let patch: AirtableRecord = _filterObject(r, (_k, v) => isArrayOfLinks(v))
             // console.log({patch1: patch})
             // use idMap
             patch = _mapValues(patch, (_k, v) => (v as any as string[]).map(oldId => idMap[oldId]))

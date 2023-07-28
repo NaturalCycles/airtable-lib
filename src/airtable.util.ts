@@ -39,14 +39,17 @@ export function isArrayOfAttachments(v: any): v is AirtableAttachment[] {
 export function stripQueryStringFromAttachments(v: any): AirtableAttachment[] {
   if (!isArrayOfAttachments(v)) return v
 
-  return v.map(a => ({
-    ...a,
-    url: stripQueryString(a.url),
-    thumbnails: _mapValues(a.thumbnails || ({} as AirtableThumbnails), (_, v) => ({
-      ...v,
-      url: stripQueryString(v.url),
-    })),
-  }))
+  return v.map(
+    a =>
+      ({
+        ...a,
+        url: stripQueryString(a.url),
+        thumbnails: _mapValues(a.thumbnails || ({} as AirtableThumbnails), (_, v) => ({
+          ...v,
+          url: stripQueryString(v.url),
+        })),
+      }) satisfies AirtableAttachment,
+  )
 }
 
 function stripQueryString(url: string): string {
