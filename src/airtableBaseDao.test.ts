@@ -29,7 +29,7 @@ test('cacheUpdated$', async () => {
   const baseDao = mockBaseDao(airtableLib.api(), 'baseId')
 
   let updatedTimes = 0
-  baseDao.cacheUpdated$.subscribe(() => updatedTimes++)
+  baseDao.cacheUpdatedListeners.push(() => updatedTimes++)
 
   expect(updatedTimes).toBe(0)
 
