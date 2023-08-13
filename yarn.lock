@@ -791,9 +791,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@naturalcycles/cli@^1.0.0":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/cli/-/cli-1.4.2.tgz#0f344f3597545741f2525aeef90650cf283e7677"
-  integrity sha512-YrZnO7Fv9eQRokvhMGY1dd5HjRG0F5PEB1VFRekcKLfxyZjHt6GV+DE5Q2SnB0ZabOzEUA586/MN8vo2vSVnBA==
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/cli/-/cli-1.4.3.tgz#39fa55b358a2cc67964f4eb2af83c67541adf3ea"
+  integrity sha512-8NdBIUXCGnrOeTtqozhUTO/dGUA5r8Bfmst96DETOWYEzGGvUQ2kbkwTzQ0tGoZduBOnpCNTsSleXmX43ZCLjQ==
   dependencies:
     "@naturalcycles/nodejs-lib" "^12.8.0"
     chalk "^4.0.0"
@@ -802,17 +802,17 @@
     typescript "^5.0.2"
 
 "@naturalcycles/db-lib@^8.0.0":
-  version "8.54.4"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-8.54.4.tgz#4969bc5a485888ff7fda63db18982bb2d19c6ed8"
-  integrity sha512-XBoCufvj+GG2K4A6hId399UcjbziZgOQgzOubNLNbkT+JwgE0DfJ9gWegPG66DQAikrwymopjPHxRRT5Mh1bIw==
+  version "8.54.5"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-8.54.5.tgz#55897902b3a7b894102f52849ebf864d11d5d776"
+  integrity sha512-3uUILo8YY0MTXdOJ1JbVY83t9hc1gydW+gP0vIsC90QBS6cYYxNsHgVV1669Sg1eT8wFx7i9z4fZ4BwqtGHMuw==
   dependencies:
     "@naturalcycles/js-lib" "^14.116.0"
     "@naturalcycles/nodejs-lib" "^12.0.0"
 
 "@naturalcycles/dev-lib@^13.4.1":
-  version "13.39.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-13.39.0.tgz#cd8113106ed470f52c097c6396b18ab42f3f3369"
-  integrity sha512-YmfKtB9c025xTHAHr77BbLBTXem8pQqKPOIVPJXJfpfX5181EP+J0XCmG70XL76uoAsaOqlN6LVgrdkvsg22SA==
+  version "13.39.2"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/dev-lib/-/dev-lib-13.39.2.tgz#e0ea2f03a130139a5c14dbcec37f381b2cb0ab88"
+  integrity sha512-ntLXwdA56MPMAd4+MwDfk63Xjg1rEjfmxH5oD69J1Mi3R9qHV5GQRBgOzdAhWgXv+SjxzDBgT3IzfZGgCGC7Iw==
   dependencies:
     "@commitlint/cli" "^17.0.0"
     "@commitlint/config-conventional" "^17.0.0"
@@ -852,9 +852,9 @@
     zod "^3.20.2"
 
 "@naturalcycles/nodejs-lib@^12.0.0", "@naturalcycles/nodejs-lib@^12.8.0":
-  version "12.103.2"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-12.103.2.tgz#a2d50f388073389023e0c19d6fd278cebca61ca7"
-  integrity sha512-gCrQ37lmjgFniNTXviypMmbAzSFwJs3p2JUc91Mwafvu/g4vBIwfg9S3soi6616VOta42fD7eWSonQHcsVFc+A==
+  version "12.104.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-12.104.0.tgz#17f2ee9a4213a8d5b9147d478c757c062f689ffd"
+  integrity sha512-ujUkjNyMFeUyoUXAtxXcGWycz8H0Z2OkgNWU5r9ohHS/cwuIZMDUX3Dxtf/hY/r1vChP0VzrdssnGSAaZYssaA==
   dependencies:
     "@naturalcycles/js-lib" "^14.0.0"
     "@types/jsonwebtoken" "^9.0.0"
@@ -1077,9 +1077,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*", "@types/node@^20.1.0", "@types/node@^20.2.2":
-  version "20.4.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.10.tgz#73c9480791e3ddeb4887a660fc93a7f59353ad45"
-  integrity sha512-vwzFiiy8Rn6E0MtA13/Cxxgpan/N6UeNYR9oUu6kuJWxu6zCk98trcDp8CBhbtaeuq9SykCmXkFr2lWLoPcvLg==
+  version "20.5.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.5.0.tgz#7fc8636d5f1aaa3b21e6245e97d56b7f56702313"
+  integrity sha512-Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==
 
 "@types/node@20.4.7":
   version "20.4.7"

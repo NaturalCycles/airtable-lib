@@ -1,4 +1,4 @@
-import { _ensureFile, _readJsonFile, _writeJsonFile } from '@naturalcycles/nodejs-lib'
+import { _ensureFile, _readJson, _writeJson } from '@naturalcycles/nodejs-lib'
 import { AirtableBaseDaoCfg, AirtableConnector, AirtableDaoOptions } from '../airtable.model'
 
 export const AIRTABLE_CONNECTOR_JSON = Symbol('AIRTABLE_CONNECTOR_JSON')
@@ -21,7 +21,7 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
     // return require(this.jsonPath)
     // NO: going in favor of async interface for all connectors
 
-    return await _readJsonFile(`${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`)
+    return await _readJson(`${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`)
   }
 
   fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, _opt: AirtableDaoOptions = {}): BASE {
@@ -32,6 +32,6 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
   async upload(base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>): Promise<void> {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     await _ensureFile(jsonPath)
-    await _writeJsonFile(jsonPath, base, { spaces: 2 })
+    await _writeJson(jsonPath, base, { spaces: 2 })
   }
 }
