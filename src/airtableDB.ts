@@ -2,9 +2,12 @@ import { Readable } from 'node:stream'
 import {
   BaseCommonDB,
   CommonDB,
+  commonDBFullSupport,
   CommonDBOptions,
   CommonDBSaveOptions,
   CommonDBStreamOptions,
+  CommonDBSupport,
+  CommonDBType,
   DBQuery,
   queryInMemory,
   RunQueryResult,
@@ -19,7 +22,7 @@ import {
   _mapValues,
   AnyObject,
 } from '@naturalcycles/js-lib'
-import { inspectAny, ReadableTyped } from '@naturalcycles/nodejs-lib'
+import { _inspect, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
   AirtableApiRecord,
@@ -76,6 +79,18 @@ export interface AirtableDBSaveOptions<ROW extends Partial<ObjectWithId> = AnyOb
  * CommonDB implementation based on Airtable sheets.
  */
 export class AirtableDB extends BaseCommonDB implements CommonDB {
+  override dbType = CommonDBType.relational
+
+  override support: CommonDBSupport = {
+    ...commonDBFullSupport,
+    bufferValues: false,
+    nullValues: false,
+    updateByQuery: false,
+    transactions: false,
+    insertSaveMethod: false,
+    updateSaveMethod: false,
+  }
+
   constructor(public cfg: AirtableDBCfg) {
     super()
     // lazy-loading the library
@@ -99,7 +114,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   override async getByIds<ROW extends ObjectWithId>(
     table: string,
-    ids: ROW['id'][],
+    ids: string[],
     opt: AirtableDBOptions = {},
   ): Promise<ROW[]> {
     if (!ids.length) return []
@@ -119,9 +134,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     ).sort((a, b) => (a[idField as keyof ROW] > b[idField as keyof ROW] ? 1 : -1))
   }
 
-  async deleteByIds<ROW extends ObjectWithId>(
+  override async deleteByIds(
     table: string,
-    ids: ROW['id'][],
+    ids: string[],
     opt: AirtableDBOptions = {},
   ): Promise<number> {
     if (!ids.length) return 0
@@ -349,7 +364,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // Wrap as AppError with code
     // Don't keep stack, cause `err` from Airtable is not instance of Error (hence no native stack)
     // console.error('onError', err)
-    const msg = `${table}: ${inspectAny(err)}`
+    const msg = `${table}: ${_inspect(err)}`
     throw new AppError(msg, {
       code: AirtableErrorCode.AIRTABLE_ERROR,
       airtableTableName: table,

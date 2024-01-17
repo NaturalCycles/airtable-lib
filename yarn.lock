@@ -798,10 +798,10 @@
     tslib "^2.6.2"
     typescript "^5.0.2"
 
-"@naturalcycles/db-lib@^8.0.0":
-  version "8.60.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-8.60.0.tgz#320af2c5fb0a65f7b545cd949b6e24e42eb51d9e"
-  integrity sha512-57zb4y9nC8itKp5VkcCHxESTU6Oil3vQJ6rqmlfdSEL4UXrN6Nu/+wt7NuP4ZDQq57OmFpXbA1vnG6scCCwdoA==
+"@naturalcycles/db-lib@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-9.1.0.tgz#4c2d206301caeb67381713566d1945df91435a1f"
+  integrity sha512-qAJai7bRWY37+Wo/p8KyxaJ+d1UE2XIgIZoc8dcdYtB3XyEUjz3ZNNA4GeurgtxOBqeD5U0UxcOHbijJaHyzCg==
   dependencies:
     "@naturalcycles/js-lib" "^14.116.0"
     "@naturalcycles/nodejs-lib" "^13.1.1"
@@ -850,9 +850,9 @@
     zod "^3.20.2"
 
 "@naturalcycles/nodejs-lib@^13.0.1", "@naturalcycles/nodejs-lib@^13.1.0", "@naturalcycles/nodejs-lib@^13.1.1":
-  version "13.6.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-13.6.0.tgz#33acd08d9104499ad37ffdafbac208f774ee4493"
-  integrity sha512-9Ol32xy24dmP38qhWCfZM8QkgLCsRRki+GFZjJeJQh0q42WhACahAwac9TF8XWCAEXQkOm1ft8zw/PQknEVNfw==
+  version "13.7.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/nodejs-lib/-/nodejs-lib-13.7.0.tgz#8d49d85d9c3165f20a9bbc08024bc213f5318cae"
+  integrity sha512-mPGMLS5pBP8U9ToVwM91+7ydir+fCUqYE3NVDotvfQW6jYf+LExKqnyMDGCEnwkGZhkafvGHbHBh5eqluyXsWA==
   dependencies:
     "@naturalcycles/js-lib" "^14.0.0"
     "@types/js-yaml" "^4.0.9"
@@ -1046,9 +1046,9 @@
   integrity sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==
 
 "@types/node@*", "@types/node@^20.1.0", "@types/node@^20.2.2":
-  version "20.11.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.4.tgz#c724a5d6723182af758b91b994209336f4439cb7"
-  integrity sha512-6I0fMH8Aoy2lOejL3s4LhyIYX34DPwY8bl5xlNjBvUEk8OHrcuzsFt+Ied4LvJihbtXPM+8zUqdydfIti86v9g==
+  version "20.11.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.5.tgz#be10c622ca7fcaa3cf226cf80166abc31389d86e"
+  integrity sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==
   dependencies:
     undici-types "~5.26.4"
 
@@ -1658,9 +1658,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001565:
-  version "1.0.30001577"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001577.tgz#a24991eb4ad67324ba8b96716340d53151f2f6f8"
-  integrity sha512-rs2ZygrG1PNXMfmncM0B5H1hndY5ZCC9b5TkFaVNfZ+AUlyqcMyVIQtc3fsezi0NUCk5XZfDf9WS6WxMxnfdrg==
+  version "1.0.30001578"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001578.tgz#11741580434ce60aae4b4a9abee9f9f8d7bf5be5"
+  integrity sha512-J/jkFgsQ3NEl4w2lCoM9ZPxrD+FoBNJ7uJUpGVjIg/j0OwJosWM36EPDv+Yyi0V4twBk9pPmlFS+PLykgEvUmg==
 
 chalk@5.3.0:
   version "5.3.0"
@@ -2008,9 +2008,9 @@ ecdsa-sig-formatter@1.0.11:
     safe-buffer "^5.0.1"
 
 electron-to-chromium@^1.4.601:
-  version "1.4.632"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.632.tgz#df6253483b802eb83eee2fdc0e5067bd46f36f11"
-  integrity sha512-JGmudTwg7yxMYvR/gWbalqqQiyu7WTFv2Xu3vw4cJHXPFxNgAk0oy8UHaer8nLF4lZJa+rNoj6GsrKIVJTV6Tw==
+  version "1.4.636"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.636.tgz#302cf4c3016d9d714ba246243a7c97b528e22fe7"
+  integrity sha512-NLE0GIy1OL9wRiKL20h9TkctBEYZuc99tquSS9MVdTahnuHputoETHeqDzgqGqyOY9NUH0g9wjfEuw5OD+wRcQ==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -4168,9 +4168,9 @@ prelude-ls@^1.2.1:
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
 prettier@^3.0.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.2.tgz#96e580f7ca9c96090ad054616c0c4597e2844b65"
-  integrity sha512-HTByuKZzw7utPiDO523Tt2pLtEyK7OibUD9suEJQrPUCYQqrHr74GGX6VidMrovbf/I50mPqr8j/II6oBAuc5A==
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.4.tgz#4723cadeac2ce7c9227de758e5ff9b14e075f283"
+  integrity sha512-FWu1oLHKCrtpO1ypU6J0SbK2d9Ckwysq6bHj/uaCP26DxrPpppCLQRGVuqAxSTvhF00AcvDRyYrLNW7ocBhFFQ==
 
 pretty-format@^29.0.0, pretty-format@^29.7.0:
   version "29.7.0"

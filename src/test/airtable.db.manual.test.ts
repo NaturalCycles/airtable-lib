@@ -1,5 +1,4 @@
 import {
-  CommonDBImplementationFeatures,
   CommonDBImplementationQuirks,
   runCommonDaoTest,
   runCommonDBTest,
@@ -21,23 +20,14 @@ const db = new AirtableDB({
   baseId: AIRTABLE_BASE_ID,
 })
 
-const features: CommonDBImplementationFeatures = {
-  bufferSupport: false,
-  nullValues: false,
-  updateByQuery: false,
-  transactions: false,
-  insert: false,
-  update: false,
-}
-
 const quirks: CommonDBImplementationQuirks = {
   allowExtraPropertiesInResponse: true,
   allowBooleansAsUndefined: true,
 }
 
-describe('runCommonDBTest', () => runCommonDBTest(db, features, quirks))
+describe('runCommonDBTest', () => runCommonDBTest(db, quirks))
 
-describe('runCommonDaoTest', () => runCommonDaoTest(db, features, quirks))
+describe('runCommonDaoTest', () => runCommonDaoTest(db, quirks))
 
 test.skip('manual1', async () => {
   delete db.cfg.baseId
