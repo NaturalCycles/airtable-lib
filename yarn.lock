@@ -799,9 +799,9 @@
     typescript "^5.0.2"
 
 "@naturalcycles/db-lib@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-9.1.0.tgz#4c2d206301caeb67381713566d1945df91435a1f"
-  integrity sha512-qAJai7bRWY37+Wo/p8KyxaJ+d1UE2XIgIZoc8dcdYtB3XyEUjz3ZNNA4GeurgtxOBqeD5U0UxcOHbijJaHyzCg==
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/db-lib/-/db-lib-9.3.0.tgz#d6727ff62b4150f26e83e3b68e5ca975229f154d"
+  integrity sha512-wcPFWmQ+jXtdXrSqPuXHnkzw4UjwvJUhtIIWFxLdsaoEFnA8peSsdpH+E5QIU7EDjXfQmYQ6nhcacmWQ6NvM+Q==
   dependencies:
     "@naturalcycles/js-lib" "^14.116.0"
     "@naturalcycles/nodejs-lib" "^13.1.1"
@@ -842,9 +842,9 @@
     yargs "^17.0.0"
 
 "@naturalcycles/js-lib@^14.0.0", "@naturalcycles/js-lib@^14.116.0":
-  version "14.201.1"
-  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-14.201.1.tgz#67d7b74be557385736b489c4ab6f318cf8d093cf"
-  integrity sha512-NAxPDWxNiFs8Eidj4vt0jcRyvLJ2MuHmPuryIETvKRLfdQ3j14XfZbvCtNMfmX1Yfl0an0xE5fKN2yzKKJk0LQ==
+  version "14.204.1"
+  resolved "https://registry.yarnpkg.com/@naturalcycles/js-lib/-/js-lib-14.204.1.tgz#d81838e4a8cd889b734637c2b26a750d5758ef10"
+  integrity sha512-+2E30+MKFdlxnkbsBHBcbi8aTTPl3AZRe+NUzgimJoJw+7wJS0k6v2DVbrmQ1MCcEyQ4gV5jhOQT8iHEtDDSDw==
   dependencies:
     tslib "^2.0.0"
     zod "^3.20.2"
@@ -1658,9 +1658,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001565:
-  version "1.0.30001578"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001578.tgz#11741580434ce60aae4b4a9abee9f9f8d7bf5be5"
-  integrity sha512-J/jkFgsQ3NEl4w2lCoM9ZPxrD+FoBNJ7uJUpGVjIg/j0OwJosWM36EPDv+Yyi0V4twBk9pPmlFS+PLykgEvUmg==
+  version "1.0.30001579"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001579.tgz#45c065216110f46d6274311a4b3fcf6278e0852a"
+  integrity sha512-u5AUVkixruKHJjw/pj9wISlcMpgFWzSrczLZbrqBSxukQixmg0SJ5sZTpvaFvxU0HoQKd4yoyAogyrAz9pzJnA==
 
 chalk@5.3.0:
   version "5.3.0"
@@ -2008,9 +2008,9 @@ ecdsa-sig-formatter@1.0.11:
     safe-buffer "^5.0.1"
 
 electron-to-chromium@^1.4.601:
-  version "1.4.636"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.636.tgz#302cf4c3016d9d714ba246243a7c97b528e22fe7"
-  integrity sha512-NLE0GIy1OL9wRiKL20h9TkctBEYZuc99tquSS9MVdTahnuHputoETHeqDzgqGqyOY9NUH0g9wjfEuw5OD+wRcQ==
+  version "1.4.639"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.639.tgz#c6f9cc685f9efb2980d2cfc95a27f8142c9adf28"
+  integrity sha512-CkKf3ZUVZchr+zDpAlNLEEy2NJJ9T64ULWaDgy3THXXlPVPkLu3VOs9Bac44nebVtdwl2geSj6AxTtGDOxoXhg==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -3431,9 +3431,9 @@ jiti@^1.19.1:
   integrity sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==
 
 joi@^17.9.2:
-  version "17.11.1"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-17.11.1.tgz#f42951137d25c27f61807502b0af71f7abb885ba"
-  integrity sha512-671acnrx+w96PCcQOzvm0VYQVwNL2PVgZmDRaFuSsx8sIUmGzYElPw5lU8F3Cr0jOuPs1oM56p7W2a1cdDOwcw==
+  version "17.12.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.12.0.tgz#a3fb5715f198beb0471cd551dd26792089c308d5"
+  integrity sha512-HSLsmSmXz+PV9PYoi3p7cgIbj06WnEBNT28n+bbBNcPZXZFqCzzvGqpTBPujx/Z0nh1+KNQPDrNgdmQ8dq0qYw==
   dependencies:
     "@hapi/hoek" "^9.3.0"
     "@hapi/topo" "^5.1.0"
