@@ -19,9 +19,6 @@ import {
   _omit,
   _mapValues,
   AnyObject,
-  PartialObjectWithId,
-  AnyPartialObjectWithId,
-  Saved,
   ObjectWithId,
 } from '@naturalcycles/js-lib'
 import { _inspect, ReadableTyped } from '@naturalcycles/nodejs-lib'
@@ -73,7 +70,7 @@ export interface AirtableDBOptions extends CommonDBOptions {
   idField?: string
 }
 export type AirtableDBStreamOptions = CommonDBStreamOptions
-export interface AirtableDBSaveOptions<ROW extends PartialObjectWithId = AnyPartialObjectWithId>
+export interface AirtableDBSaveOptions<ROW extends ObjectWithId>
   extends AirtableDBOptions,
     CommonDBSaveOptions<ROW> {}
 
@@ -114,11 +111,11 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     // impossible to implement without having a baseId and a known Table name there
   }
 
-  override async getByIds<ROW extends PartialObjectWithId>(
+  override async getByIds<ROW extends ObjectWithId>(
     table: string,
     ids: string[],
     opt: AirtableDBOptions = {},
-  ): Promise<Saved<ROW>[]> {
+  ): Promise<ROW[]> {
     if (!ids.length) return []
 
     const { idField = 'id' } = opt
@@ -177,7 +174,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Does "upsert" always
    */
-  override async saveBatch<ROW extends PartialObjectWithId>(
+  override async saveBatch<ROW extends ObjectWithId>(
     table: string,
     rows: ROW[],
     opt?: AirtableDBSaveOptions<ROW>,
@@ -187,7 +184,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
     const existingRows = await this.getByIds<ROW & ObjectWithId & AirtableRecord>(
       table,
-      rows.map(r => r.id!),
+      rows.map(r => r.id),
       opt,
     )
     const existingRowById = _by(existingRows, r => r.id)
@@ -196,9 +193,9 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     await pMap(
       rows,
       async r => {
-        if (existingRowById[r.id!]) {
+        if (existingRowById[r.id]) {
           // console.log(`will update ${r.id} to ${existingRowById[r.id]!.airtableId}`)
-          await this.updateRecord(table, existingRowById[r.id!]!.airtableId, r)
+          await this.updateRecord(table, existingRowById[r.id]!.airtableId, r)
         } else {
           await this.createRecord(table, r)
         }
@@ -207,10 +204,10 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     )
   }
 
-  override async runQuery<ROW extends PartialObjectWithId>(
+  override async runQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt: AirtableDBOptions = {},
-  ): Promise<RunQueryResult<Saved<ROW>>> {
+  ): Promise<RunQueryResult<ROW>> {
     const selectOpts = dbQueryToAirtableSelectOptions<ROW>(q, opt)
     // console.log({selectOpts})
 
@@ -227,20 +224,20 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     }
   }
 
-  override async runQueryCount<ROW extends PartialObjectWithId>(
+  override async runQueryCount<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<number> {
     return (await this.runQuery(q.select([]), opt)).rows.length
   }
 
-  override async deleteByQuery<ROW extends PartialObjectWithId>(
+  override async deleteByQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBOptions,
   ): Promise<number> {
     const { rows } = await this.runQuery<ROW & AirtableRecord>(q.select([]), opt)
 
-    const tableApi = this.tableApi<PartialObjectWithId>(q.table)
+    const tableApi = this.tableApi<ObjectWithId>(q.table)
 
     await pMap(
       rows.map(r => r.airtableId),
@@ -258,10 +255,10 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   /**
    * Streaming is emulated by just returning the results of the query as a stream.
    */
-  override streamQuery<ROW extends PartialObjectWithId>(
+  override streamQuery<ROW extends ObjectWithId>(
     q: DBQuery<ROW>,
     opt?: AirtableDBStreamOptions,
-  ): ReadableTyped<Saved<ROW>> {
+  ): ReadableTyped<ROW> {
     const readable = new Readable({
       objectMode: true,
       read() {},
@@ -275,7 +272,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     return readable
   }
 
-  private tableApi<ROW extends PartialObjectWithId>(table: string): AirtableApiTable<ROW> {
+  private tableApi<ROW extends ObjectWithId>(table: string): AirtableApiTable<ROW> {
     let { baseId } = this.cfg
 
     if (!baseId) {
@@ -291,13 +288,13 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     return this.api.base(baseId)<ROW>(table)
   }
 
-  private async queryAirtableRecords<ROW extends PartialObjectWithId>(
+  private async queryAirtableRecords<ROW extends ObjectWithId>(
     table: string,
     selectOpts: AirtableApiSelectOpts<ROW>,
     opt: AirtableDBOptions,
     q?: DBQuery<ROW>,
-  ): Promise<Saved<ROW>[]> {
-    const records = await this.tableApi<Saved<ROW>>(table)
+  ): Promise<ROW[]> {
+    const records = await this.tableApi<ROW>(table)
       .select({
         // defaults
         pageSize: 100,
@@ -334,10 +331,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     return rows
   }
 
-  async createRecord<ROW extends PartialObjectWithId>(
-    table: string,
-    record: Partial<ROW>,
-  ): Promise<ROW> {
+  async createRecord<ROW extends ObjectWithId>(table: string, record: Partial<ROW>): Promise<ROW> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
     const raw = await this.tableApi<ROW>(table)
       .create(_omit(record, ['airtableId'] as any))
@@ -346,7 +340,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     return this.mapToAirtableRecord(raw)
   }
 
-  private async updateRecord<ROW extends PartialObjectWithId>(
+  private async updateRecord<ROW extends ObjectWithId>(
     table: string,
     airtableId: string,
     patch: Partial<ROW>,

@@ -1,5 +1,5 @@
 import { DBQuery, DBQueryFilterOperator } from '@naturalcycles/db-lib'
-import { _uniq, PartialObjectWithId } from '@naturalcycles/js-lib'
+import { _uniq, ObjectWithId } from '@naturalcycles/js-lib'
 import { AirtableApiSelectOpts } from './airtable.api'
 import { AirtableDBOptions } from './airtableDB'
 
@@ -10,7 +10,7 @@ const OP_MAP: Partial<Record<DBQueryFilterOperator, string>> = {
 /**
  * https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference
  */
-export function dbQueryToAirtableSelectOptions<ROW extends PartialObjectWithId>(
+export function dbQueryToAirtableSelectOptions<ROW extends ObjectWithId>(
   q: DBQuery<ROW>,
   opt: AirtableDBOptions,
 ): AirtableApiSelectOpts<ROW> {
