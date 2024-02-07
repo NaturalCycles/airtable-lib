@@ -43,7 +43,7 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
       .select({
         // defaults
         pageSize: 100,
-        view: this.cfg.view || 'Grid view',
+        view: this.cfg.view || 'PRODUCTION_DO_NOT_TOUCH',
         ...(sort?.length && { sort }),
         ...selectOpts,
       })

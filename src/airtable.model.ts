@@ -234,7 +234,7 @@ export interface AirtableTableCfg<T extends AirtableRecord = any> {
   sort?: AirtableApiSort<T>[]
 
   /**
-   * @default 'Grid view'
+   * @default 'PRODUCTION_DO_NOT_TOUCH'
    * Without view - airtable api returns records in wrongly sorted order (sorted by airtableId), not in the view order.
    */
   view?: string

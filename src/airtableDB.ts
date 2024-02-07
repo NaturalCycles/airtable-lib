@@ -298,7 +298,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       .select({
         // defaults
         pageSize: 100,
-        view: 'Grid view',
+        view: 'PRODUCTION_DO_NOT_TOUCH',
         // ...(sort?.length && { sort }),
         ...selectOpts,
       })
