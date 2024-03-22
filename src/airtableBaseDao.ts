@@ -69,12 +69,24 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
    */
   private _tableIdIndex?: StringMap<StringMap<AirtableRecord>>
 
+  /**
+   * Only defined while loading data.
+   * It exists to be able to return the same promise while loading data,
+   * to avoid issuing multiple requests to the connector.
+   * Upon completion it's set back to undefined.
+   */
+  private loadingDataPromise?: Promise<BASE>
+
   async getCache(): Promise<BASE> {
     if (!this._cache) {
-      const base = await this.getConnector(this.cfg.primaryConnector).fetch(this.cfg)
+      if (this.loadingDataPromise) return await this.loadingDataPromise
+      this.loadingDataPromise = this.getConnector(this.cfg.primaryConnector).fetch(this.cfg)
+
+      const base = await this.loadingDataPromise
       this.setCache(base, {
         preserveLastChanged: true,
       })
+      this.loadingDataPromise = undefined
     }
 
     return this._cache!
