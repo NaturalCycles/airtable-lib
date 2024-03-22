@@ -1,7 +1,7 @@
 {
   "name": "@naturalcycles/airtable-lib",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@naturalcycles/db-lib": "^9.1.0",
