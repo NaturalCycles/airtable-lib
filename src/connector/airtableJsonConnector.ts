@@ -24,11 +24,6 @@ export class AirtableJsonConnector<BASE = any> implements AirtableConnector<BASE
     return await fs2.readJsonAsync(`${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`)
   }
 
-  fetchSync(baseDaoCfg: AirtableBaseDaoCfg<BASE>, _opt: AirtableDaoOptions = {}): BASE {
-    const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
-    return require(jsonPath)
-  }
-
   async upload(base: BASE, baseDaoCfg: AirtableBaseDaoCfg<BASE>): Promise<void> {
     const jsonPath = `${this.cfg.cacheDir}/${baseDaoCfg.baseName}.json`
     await fs2.outputJsonAsync(jsonPath, base, { spaces: 2 })

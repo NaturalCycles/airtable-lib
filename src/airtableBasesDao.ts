@@ -14,12 +14,18 @@ export class AirtableBasesDao<BASE_MAP extends AnyObject = any> {
     return dao
   }
 
-  getCacheMap(): BASE_MAP {
+  async getCacheMap(): Promise<BASE_MAP> {
     const cacheMap = {} as BASE_MAP
 
-    this.baseDaos.forEach(baseDao => {
-      cacheMap[baseDao.cfg.baseName as keyof BASE_MAP] = baseDao.getCache()
-    })
+    await pMap(
+      this.baseDaos,
+      async baseDao => {
+        cacheMap[baseDao.cfg.baseName as keyof BASE_MAP] = await baseDao.getCache()
+      },
+      {
+        concurrency: 16,
+      },
+    )
 
     return cacheMap
   }

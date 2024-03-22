@@ -1,4 +1,4 @@
-import { InstanceId, StringMap, _LogMethod, _omit, AnyObject } from '@naturalcycles/js-lib'
+import { InstanceId, StringMap, _LogMethod, _omit, AnyObject, _assert } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import {
   AirtableBaseDaoCfg,
@@ -8,7 +8,6 @@ import {
   AirtableRecord,
 } from './airtable.model'
 import { sortAirtableBase } from './airtable.util'
-import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).
@@ -21,9 +20,6 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
   constructor(public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
     this.lastFetchedMap = new Map<symbol, number | undefined>()
-
-    // Default to JSON
-    this.cfg.lazyConnectorType ||= AIRTABLE_CONNECTOR_JSON
 
     cfg.connectors.forEach(c => {
       this.connectorMap.set(c.TYPE, c)
@@ -73,18 +69,20 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
    */
   private _tableIdIndex?: StringMap<StringMap<AirtableRecord>>
 
-  getCache(): BASE {
+  async getCache(): Promise<BASE> {
     if (!this._cache) {
-      if (!this.cfg.lazyConnectorType) {
-        throw new Error(`lazyConnectorType not defined for ${this.instanceId}`)
-      }
-
-      this.setCache(this.getConnector(this.cfg.lazyConnectorType).fetchSync(this.cfg), {
+      const base = await this.getConnector(this.cfg.primaryConnector).fetch(this.cfg)
+      this.setCache(base, {
         preserveLastChanged: true,
       })
     }
 
     return this._cache!
+  }
+
+  getCacheSync(): BASE {
+    _assert(this._cache, `getCacheSync is called, but cache was not preloaded`)
+    return this._cache
   }
 
   setCache(cache?: BASE, opt: AirtableDaoOptions = {}): void {
@@ -139,53 +137,58 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
     this.cacheUpdatedListeners.forEach(fn => fn(this._cache))
   }
 
-  private getAirtableIndex(): StringMap<AirtableRecord> {
+  private async getAirtableIndex(): Promise<StringMap<AirtableRecord>> {
     if (!this._airtableIdIndex) {
-      this.getCache()
+      await this.getCache()
     }
 
     return this._airtableIdIndex!
   }
 
-  private getTableIdIndex(): StringMap<StringMap<AirtableRecord>> {
+  private async getTableIdIndex(): Promise<StringMap<StringMap<AirtableRecord>>> {
     if (!this._tableIdIndex) {
-      this.getCache()
+      await this.getCache()
     }
 
     return this._tableIdIndex!
   }
 
-  getTableRecords<TABLE_NAME extends keyof BASE>(
+  async getTableRecords<TABLE_NAME extends keyof BASE>(
     tableName: TABLE_NAME,
     noAirtableIds = false,
-  ): BASE[TABLE_NAME] {
-    if (noAirtableIds) {
-      return ((this.getCache()[tableName] as any) || []).map((r: AirtableRecord) =>
-        _omit(r, ['airtableId']),
-      )
+  ): Promise<BASE[TABLE_NAME]> {
+    const base = (await this.getCache())[tableName] as any
+
+    if (noAirtableIds && base) {
+      return base.map((r: AirtableRecord) => _omit(r, ['airtableId']))
     }
-    return (this.getCache()[tableName] as any) || []
+
+    return base || []
   }
 
-  getById<T extends AirtableRecord>(table: string, id?: string): T | undefined {
-    return this.getTableIdIndex()[table]?.[id!] as T
+  async getById<T extends AirtableRecord>(table: string, id?: string): Promise<T | undefined> {
+    return (await this.getTableIdIndex())[table]?.[id!] as T
   }
 
-  getByIds<T extends AirtableRecord>(table: string, ids: string[]): T[] {
-    return ids.map(id => this.getTableIdIndex()[table]?.[id]) as T[]
+  async getByIds<T extends AirtableRecord>(table: string, ids: string[]): Promise<T[]> {
+    const index = (await this.getTableIdIndex())[table]
+
+    return ids.map(id => index?.[id]) as T[]
   }
 
-  requireById<T extends AirtableRecord>(table: string, id: string): T | undefined {
-    const r = this.getTableIdIndex()[table]?.[id] as T
+  async requireById<T extends AirtableRecord>(table: string, id: string): Promise<T | undefined> {
+    const r = (await this.getTableIdIndex())[table]?.[id] as T
     if (!r) {
       throw new Error(`requireById ${this.cfg.baseName}.${table}.${id} not found`)
     }
     return r
   }
 
-  requireByIds<T extends AirtableRecord>(table: string, ids: string[]): T[] {
+  async requireByIds<T extends AirtableRecord>(table: string, ids: string[]): Promise<T[]> {
+    const index = (await this.getTableIdIndex())[table]
+
     return ids.map(id => {
-      const r = this.getTableIdIndex()[table]?.[id] as T
+      const r = index?.[id] as T
       if (!r) {
         throw new Error(`requireByIds ${this.cfg.baseName}.${table}.${id} not found`)
       }
@@ -193,25 +196,28 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
     })
   }
 
-  getByAirtableId<T extends AirtableRecord>(airtableId?: string): T | undefined {
-    return this.getAirtableIndex()[airtableId!] as T
+  async getByAirtableId<T extends AirtableRecord>(airtableId?: string): Promise<T | undefined> {
+    return (await this.getAirtableIndex())[airtableId!] as T | undefined
   }
 
-  requireByAirtableId<T extends AirtableRecord>(airtableId: string): T {
-    const r = this.getAirtableIndex()[airtableId] as T
+  async requireByAirtableId<T extends AirtableRecord>(airtableId: string): Promise<T> {
+    const r = (await this.getAirtableIndex())[airtableId] as T | undefined
     if (!r) {
       throw new Error(`requireByAirtableId ${this.cfg.baseName}.${airtableId} not found`)
     }
     return r
   }
 
-  getByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
-    return airtableIds.map(id => this.getAirtableIndex()[id]) as T[]
+  async getByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): Promise<T[]> {
+    const index = await this.getAirtableIndex()
+    return airtableIds.map(id => index[id]) as T[]
   }
 
-  requireByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): T[] {
+  async requireByAirtableIds<T extends AirtableRecord>(airtableIds: string[] = []): Promise<T[]> {
+    const index = await this.getAirtableIndex()
+
     return airtableIds.map(id => {
-      const r = this.getAirtableIndex()[id]
+      const r = index[id]
       if (!r) {
         throw new Error(`requireByAirtableIds ${this.cfg.baseName}.${id} not found`)
       }
@@ -255,6 +261,7 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
 
   @_LogMethod({ logStart: true })
   async upload(connectorType: symbol, opt: AirtableDaoSaveOptions = {}): Promise<void> {
-    await this.getConnector(connectorType).upload(this.getCache(), this.cfg, opt)
+    const base = await this.getCache()
+    await this.getConnector(connectorType).upload(base, this.cfg, opt)
   }
 }

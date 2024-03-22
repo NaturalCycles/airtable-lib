@@ -133,10 +133,6 @@ export class AirtableRemoteConnector<BASE = any> implements AirtableConnector<BA
     )
   }
 
-  fetchSync(): never {
-    throw new Error('fetchSync not supported for AirtableRemoteConnector')
-  }
-
   private getTableDao<T extends AirtableRecord = AirtableRecord>(
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,
     tableName: keyof BASE,

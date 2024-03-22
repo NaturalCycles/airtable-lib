@@ -210,12 +210,16 @@ export interface AirtableDaoOptions {
 export interface AirtableBaseDaoCfg<BASE = any> {
   baseId: string
   baseName: string
-  connectors: AirtableConnector<BASE>[]
 
   /**
-   * @default AIRTABLE_CONNECTOR_JSON
+   * Primary connector that is used to access Airtable data.
+   *
+   * The `connectors` array is for other purposes, such as syncing data between connectors
+   * (e.g from Remote to Datastore, or Remote to Json files).
    */
-  lazyConnectorType?: symbol
+  primaryConnector: symbol
+
+  connectors: AirtableConnector<BASE>[]
 
   tableCfgMap: AirtableTableCfgMap<BASE>
 
@@ -259,7 +263,6 @@ export type AirtableTableCfgMap<BASE = any> = {
 export interface AirtableConnector<BASE = any> {
   TYPE: symbol
   fetch: (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions) => Promise<BASE>
-  fetchSync: (baseDaoCfg: AirtableBaseDaoCfg<BASE>, opt?: AirtableDaoOptions) => BASE
   upload: (
     base: BASE,
     baseDaoCfg: AirtableBaseDaoCfg<BASE>,

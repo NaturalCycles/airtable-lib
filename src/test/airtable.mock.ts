@@ -6,7 +6,7 @@ import {
   objectSchema,
   stringSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AirtableJsonConnector, AirtableRemoteConnector } from '..'
+import { AIRTABLE_CONNECTOR_JSON, AirtableJsonConnector, AirtableRemoteConnector } from '..'
 import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,
@@ -149,6 +149,7 @@ export function mockBaseDao(api: AirtableApi, baseId: string): AirtableBaseDao<T
   return new AirtableBaseDao<TestBase>({
     baseId,
     baseName,
+    primaryConnector: AIRTABLE_CONNECTOR_JSON,
     connectors: [
       new AirtableJsonConnector<TestBase>({ cacheDir }),
       new AirtableRemoteConnector<TestBase>(api),

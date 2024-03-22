@@ -17,7 +17,7 @@ test('getCache', async () => {
   expect(baseDao.lastChanged).toBeUndefined()
   expect(baseDao.lastFetchedMap.get(AIRTABLE_CONNECTOR_JSON)).toBeUndefined()
 
-  const cache = baseDao.getCache()
+  const cache = await baseDao.getCache()
   // console.log(cache)
 
   expect(cache).toMatchSnapshot()
@@ -33,10 +33,10 @@ test('cacheUpdated$', async () => {
 
   expect(updatedTimes).toBe(0)
 
-  baseDao.getCache() // should trigger cacheUpdated$
+  await baseDao.getCache() // should trigger cacheUpdated$
   expect(updatedTimes).toBe(1)
 
-  baseDao.getCache() // should NOT trigger cacheUpdated$
+  await baseDao.getCache() // should NOT trigger cacheUpdated$
   expect(updatedTimes).toBe(1)
 
   const fakeCache: any = { table1: [{ airtableId: 'asd' }] }
