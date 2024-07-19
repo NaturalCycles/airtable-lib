@@ -1,4 +1,4 @@
-import { AppError, InstanceId, pMap, _LogMethod, _mapValues } from '@naturalcycles/js-lib'
+import { _LogMethod, _mapValues, AppError, InstanceId, pMap } from '@naturalcycles/js-lib'
 import { getValidationResult, inspectAny } from '@naturalcycles/nodejs-lib'
 import {
   AirtableApi,
@@ -8,9 +8,9 @@ import {
 } from './airtable.api'
 import {
   AirtableDaoOptions,
+  AirtableErrorCode,
   AirtableRecord,
   AirtableTableCfg,
-  AirtableErrorCode,
 } from './airtable.model'
 import { stripQueryStringFromAttachments } from './airtable.util'
 

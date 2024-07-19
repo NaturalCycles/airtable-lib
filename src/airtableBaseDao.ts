@@ -1,4 +1,4 @@
-import { InstanceId, StringMap, _LogMethod, _omit, AnyObject, _assert } from '@naturalcycles/js-lib'
+import { _assert, _LogMethod, _omit, AnyObject, InstanceId, StringMap } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import {
   AirtableBaseDaoCfg,

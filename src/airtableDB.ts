@@ -13,13 +13,13 @@ import {
   RunQueryResult,
 } from '@naturalcycles/db-lib'
 import {
-  AppError,
-  pMap,
   _by,
-  _omit,
   _mapValues,
+  _omit,
   AnyObject,
+  AppError,
   ObjectWithId,
+  pMap,
 } from '@naturalcycles/js-lib'
 import { _inspect, ReadableTyped } from '@naturalcycles/nodejs-lib'
 import {
@@ -28,7 +28,7 @@ import {
   AirtableApiSelectOpts,
   AirtableApiTable,
 } from './airtable.api'
-import { AirtableRecord, AirtableErrorCode } from './airtable.model'
+import { AirtableErrorCode, AirtableRecord } from './airtable.model'
 import { stripQueryStringFromAttachments } from './airtable.util'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 

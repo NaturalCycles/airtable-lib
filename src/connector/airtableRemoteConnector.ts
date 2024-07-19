@@ -1,4 +1,4 @@
-import { pMap, StringMap, _filterObject, _mapValues } from '@naturalcycles/js-lib'
+import { _filterObject, _mapValues, pMap, StringMap } from '@naturalcycles/js-lib'
 import { AirtableApi } from '../airtable.api'
 import {
   AirtableAttachment,

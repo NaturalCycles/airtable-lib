@@ -1,4 +1,4 @@
-import { pMap, StringMap, _LogMethod, AnyObject } from '@naturalcycles/js-lib'
+import { _LogMethod, AnyObject, pMap, StringMap } from '@naturalcycles/js-lib'
 import { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model'
 import { AirtableBaseDao } from './airtableBaseDao'
 
