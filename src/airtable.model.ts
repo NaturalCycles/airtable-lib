@@ -14,7 +14,7 @@ export enum AirtableErrorCode {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',
 }
 
-// eslint-disable-next-line unused-imports/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: ok
 export type AirtableId<T = any> = string
 
 export const airtableIdSchema = stringSchema // todo: apply certain restrictions

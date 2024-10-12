@@ -23,7 +23,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: build
-        run: yarn build-prod
+        run: yarn build
 
       - name: release
         env:

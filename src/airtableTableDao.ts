@@ -238,9 +238,8 @@ export class AirtableTableDao<T extends AirtableRecord = any> implements Instanc
 
       if (throwOnValidationError) {
         throw error
-      } else {
-        console.log(error.message)
       }
+      console.log(error.message)
     }
 
     return value

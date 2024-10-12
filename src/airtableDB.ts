@@ -32,7 +32,7 @@ import { AirtableErrorCode, AirtableRecord } from './airtable.model'
 import { stripQueryStringFromAttachments } from './airtable.util'
 import { dbQueryToAirtableSelectOptions } from './query.util'
 
-// eslint-disable-next-line unused-imports/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: ok
 export interface AirtableDBCfg<BASE = any> {
   /**
    * Airtable apiKey
@@ -84,7 +84,8 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     ...commonDBFullSupport,
     bufferValues: false,
     nullValues: false,
-    updateByQuery: false,
+    patchByQuery: false,
+    increment: false,
     transactions: false,
     insertSaveMethod: false,
     updateSaveMethod: false,
