@@ -1,4 +1,13 @@
-import { _assert, _LogMethod, _omit, AnyObject, InstanceId, StringMap } from '@naturalcycles/js-lib'
+import {
+  _assert,
+  _LogMethod,
+  _omit,
+  AnyObject,
+  InstanceId,
+  localTime,
+  StringMap,
+  UnixTimestamp,
+} from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
 import {
   AirtableBaseDaoCfg,
@@ -19,7 +28,7 @@ import { sortAirtableBase } from './airtable.util'
 export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId {
   constructor(public cfg: AirtableBaseDaoCfg<BASE>) {
     this.connectorMap = new Map<symbol, AirtableConnector<BASE>>()
-    this.lastFetchedMap = new Map<symbol, number | undefined>()
+    this.lastFetchedMap = new Map<symbol, UnixTimestamp | undefined>()
 
     cfg.connectors.forEach(c => {
       this.connectorMap.set(c.TYPE, c)
@@ -36,12 +45,12 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
   /**
    * Unix timestamp of when this Base was last fetched (for given Connector).
    */
-  lastFetchedMap!: Map<symbol, number | undefined>
+  lastFetchedMap!: Map<symbol, UnixTimestamp | undefined>
 
   /**
    * Unix timestamp of when the cache of this Base was last changed. Initially `undefined`.
    */
-  lastChanged?: number
+  lastChanged?: UnixTimestamp
 
   /**
    * Push to this array to add a listener, it'll be fired every time Cache is changed
@@ -144,7 +153,7 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
 
     // Update
     if (!opt.preserveLastChanged && cacheWasDefined) {
-      this.lastChanged = Math.floor(Date.now() / 1000)
+      this.lastChanged = localTime.nowUnix()
     }
     this.cacheUpdatedListeners.forEach(fn => fn(this._cache))
   }
@@ -264,7 +273,7 @@ export class AirtableBaseDao<BASE extends AnyObject = any> implements InstanceId
     }
 
     if (!opt.preserveLastFetched) {
-      this.lastFetchedMap.set(connectorType, Math.floor(Date.now() / 1000))
+      this.lastFetchedMap.set(connectorType, localTime.nowUnix())
     }
 
     this.setCache(base, opt)
