@@ -9,16 +9,16 @@
     "lbt": "dev-lib lbt"
   },
   "dependencies": {
-    "@naturalcycles/db-lib": "^9.1.0",
-    "@naturalcycles/js-lib": "^14.0.0",
-    "@naturalcycles/nodejs-lib": "^13.1.0",
-    "airtable": "^0.12.1"
+    "@naturalcycles/db-lib": "^9",
+    "@naturalcycles/js-lib": "^14",
+    "@naturalcycles/nodejs-lib": "^13",
+    "airtable": "^0.12"
   },
   "devDependencies": {
-    "@naturalcycles/dev-lib": "^15.22.0",
-    "@types/node": "^22.7.5",
-    "dotenv": "^16.0.0",
-    "jest": "^29.0.2"
+    "@naturalcycles/dev-lib": "^15",
+    "@types/node": "^22",
+    "dotenv": "^16",
+    "jest": "^29"
   },
   "files": [
     "dist",
