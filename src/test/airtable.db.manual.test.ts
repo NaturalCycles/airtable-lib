@@ -1,14 +1,9 @@
-import {
-  CommonDBImplementationQuirks,
-  runCommonDaoTest,
-  runCommonDBTest,
-} from '@naturalcycles/db-lib/dist/testing'
+import 'dotenv/config'
+import type { CommonDBImplementationQuirks } from '@naturalcycles/db-lib/dist/testing/index.js'
+import { runCommonDaoTest, runCommonDBTest } from '@naturalcycles/db-lib/dist/testing/index.js'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
-import { AirtableDB } from '../airtableDB'
-
-jest.setTimeout(60000)
-
-require('dotenv').config()
+import { describe, test } from 'vitest'
+import { AirtableDB } from '../airtableDB.js'
 
 const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID } = requireEnvKeys(
   'AIRTABLE_API_KEY',
@@ -19,6 +14,7 @@ const db = new AirtableDB({
   apiKey: AIRTABLE_API_KEY,
   baseId: AIRTABLE_BASE_ID,
 })
+await db.ping()
 
 const quirks: CommonDBImplementationQuirks = {
   allowExtraPropertiesInResponse: true,

@@ -1,5 +1,9 @@
 import { fs2 } from '@naturalcycles/nodejs-lib'
-import { AirtableBaseDaoCfg, AirtableConnector, AirtableDaoOptions } from '../airtable.model'
+import type {
+  AirtableBaseDaoCfg,
+  AirtableConnector,
+  AirtableDaoOptions,
+} from '../airtable.model.js'
 
 export const AIRTABLE_CONNECTOR_JSON = Symbol('AIRTABLE_CONNECTOR_JSON')
 

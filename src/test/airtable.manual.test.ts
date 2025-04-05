@@ -1,8 +1,10 @@
+import 'dotenv/config'
 import { _omit } from '@naturalcycles/js-lib'
 import { requireEnvKeys } from '@naturalcycles/nodejs-lib'
-import { AirtableDB } from '../airtableDB'
-import { AirtableLib } from '../airtableLib'
-import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../index'
+import { expect, test } from 'vitest'
+import { AirtableDB } from '../airtableDB.js'
+import { AirtableLib } from '../airtableLib.js'
+import { AIRTABLE_CONNECTOR_JSON, AIRTABLE_CONNECTOR_REMOTE } from '../index.js'
 import {
   mockBaseDao,
   mockBasesDao,
@@ -10,11 +12,7 @@ import {
   mockTable2,
   mockTableDao1,
   mockTableDao2,
-} from './airtable.mock'
-
-jest.setTimeout(60000)
-
-require('dotenv').config()
+} from './airtable.mock.js'
 
 const { AIRTABLE_API_KEY, AIRTABLE_BASE_ID } = requireEnvKeys(
   'AIRTABLE_API_KEY',
@@ -41,7 +39,7 @@ test('delete, create, update, get', async () => {
   const records = mockTable1()
   const rec1 = records[0]!
 
-  const tableDao = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
+  const tableDao = mockTableDao1(await airtableLib.api(), AIRTABLE_BASE_ID)
 
   const deleteResult = await tableDao.deleteRecord('nonExistingId')
   expect(deleteResult).toBe(false)
@@ -71,7 +69,7 @@ test('delete, create, update, get', async () => {
 })
 
 test('getById', async () => {
-  const tableDao = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
+  const tableDao = mockTableDao1(await airtableLib.api(), AIRTABLE_BASE_ID)
 
   // const v = await tableDao.getRecordById('name_1', {idField: 'name'})
   const v = await tableDao.getByIds(['name_1', 'name_2'], { idField: 'name' })
@@ -83,8 +81,8 @@ test('integration: table1, table2', async () => {
   const mocks1 = mockTable1()
   const mocks2 = mockTable2()
 
-  const tableDao1 = mockTableDao1(airtableLib.api(), AIRTABLE_BASE_ID)
-  const tableDao2 = mockTableDao2(airtableLib.api(), AIRTABLE_BASE_ID)
+  const tableDao1 = mockTableDao1(await airtableLib.api(), AIRTABLE_BASE_ID)
+  const tableDao2 = mockTableDao2(await airtableLib.api(), AIRTABLE_BASE_ID)
 
   await tableDao1.deleteAllRecords()
   await tableDao2.deleteAllRecords()
@@ -94,13 +92,13 @@ test('integration: table1, table2', async () => {
 })
 
 test('fetchRemoteBase', async () => {
-  const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  const baseDao = mockBaseDao(await airtableLib.api(), AIRTABLE_BASE_ID)
   const base = await baseDao.fetch(AIRTABLE_CONNECTOR_REMOTE)
   console.log(JSON.stringify(base, null, 2))
 })
 
 test('fetchRemoteBasesToJson', async () => {
-  const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  const basesDao = mockBasesDao(await airtableLib.api(), AIRTABLE_BASE_ID)
   await basesDao.fetchAll(AIRTABLE_CONNECTOR_REMOTE)
   await basesDao.uploadAll(AIRTABLE_CONNECTOR_JSON)
 
@@ -110,13 +108,13 @@ test('fetchRemoteBasesToJson', async () => {
 })
 
 test('uploadJsonToRemoteBases', async () => {
-  const basesDao = mockBasesDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  const basesDao = mockBasesDao(await airtableLib.api(), AIRTABLE_BASE_ID)
   await basesDao.fetchAll(AIRTABLE_CONNECTOR_JSON)
   await basesDao.uploadAll(AIRTABLE_CONNECTOR_REMOTE, { deleteAllOnUpload: false, upsert: true })
 }, 120000)
 
 test('getAirtableCacheFromJson', async () => {
-  const baseDao = mockBaseDao(airtableLib.api(), AIRTABLE_BASE_ID)
+  const baseDao = mockBaseDao(await airtableLib.api(), AIRTABLE_BASE_ID)
   await baseDao.fetch(AIRTABLE_CONNECTOR_JSON)
 
   // console.log(cache.getBase())

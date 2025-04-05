@@ -1,14 +1,12 @@
+import type { AnySchema, ArraySchema, JoiValidationError } from '@naturalcycles/nodejs-lib'
 import {
-  AnySchema,
-  ArraySchema,
   arraySchema,
   integerSchema,
-  JoiValidationError,
   objectSchema,
   stringSchema,
   urlSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AirtableApiSort } from './airtable.api'
+import type { AirtableApiSort } from './airtable.api.js'
 
 export enum AirtableErrorCode {
   AIRTABLE_ERROR = 'AIRTABLE_ERROR',

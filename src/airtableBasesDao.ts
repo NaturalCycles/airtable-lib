@@ -1,6 +1,7 @@
-import { _LogMethod, AnyObject, pMap, StringMap } from '@naturalcycles/js-lib'
-import { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model'
-import { AirtableBaseDao } from './airtableBaseDao'
+import type { AnyObject, StringMap } from '@naturalcycles/js-lib'
+import { _LogMethod, pMap } from '@naturalcycles/js-lib'
+import type { AirtableDaoOptions, AirtableDaoSaveOptions } from './airtable.model.js'
+import type { AirtableBaseDao } from './airtableBaseDao.js'
 
 /**
  * Allows to perform operations with MANY bases at once, e.g fetch from all bases, upload all bases, etc.

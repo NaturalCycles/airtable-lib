@@ -1,18 +1,15 @@
-import { _LogMethod, _mapValues, AppError, InstanceId, pMap } from '@naturalcycles/js-lib'
+import type { InstanceId } from '@naturalcycles/js-lib'
+import { _LogMethod, _mapValues, AppError, pMap } from '@naturalcycles/js-lib'
 import { getValidationResult, inspectAny } from '@naturalcycles/nodejs-lib'
-import {
+import type {
   AirtableApi,
   AirtableApiRecord,
   AirtableApiSelectOpts,
   AirtableApiTable,
-} from './airtable.api'
-import {
-  AirtableDaoOptions,
-  AirtableErrorCode,
-  AirtableRecord,
-  AirtableTableCfg,
-} from './airtable.model'
-import { stripQueryStringFromAttachments } from './airtable.util'
+} from './airtable.api.js'
+import type { AirtableDaoOptions, AirtableRecord, AirtableTableCfg } from './airtable.model.js'
+import { AirtableErrorCode } from './airtable.model.js'
+import { stripQueryStringFromAttachments } from './airtable.util.js'
 
 export class AirtableTableDao<T extends AirtableRecord = any> implements InstanceId {
   constructor(

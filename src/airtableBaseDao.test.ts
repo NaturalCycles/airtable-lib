@@ -1,7 +1,8 @@
-import { MOCK_TS_2018_06_21, mockTime } from '@naturalcycles/dev-lib/dist/testing'
-import { AirtableLib } from './airtableLib'
-import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector'
-import { mockBaseDao } from './test/airtable.mock'
+import { MOCK_TS_2018_06_21, mockTime } from '@naturalcycles/dev-lib/dist/testing/index.js'
+import { beforeEach, expect, test } from 'vitest'
+import { AirtableLib } from './airtableLib.js'
+import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector.js'
+import { mockBaseDao } from './test/airtable.mock.js'
 
 beforeEach(() => {
   mockTime()
@@ -12,7 +13,7 @@ const airtableLib = new AirtableLib({
 })
 
 test('getCache', async () => {
-  const baseDao = mockBaseDao(airtableLib.api(), 'baseId')
+  const baseDao = mockBaseDao(await airtableLib.api(), 'baseId')
 
   expect(baseDao.lastChanged).toBeUndefined()
   expect(baseDao.lastFetchedMap.get(AIRTABLE_CONNECTOR_JSON)).toBeUndefined()
@@ -26,7 +27,7 @@ test('getCache', async () => {
 })
 
 test('cacheUpdated$', async () => {
-  const baseDao = mockBaseDao(airtableLib.api(), 'baseId')
+  const baseDao = mockBaseDao(await airtableLib.api(), 'baseId')
 
   let updatedTimes = 0
   baseDao.cacheUpdatedListeners.push(() => updatedTimes++)

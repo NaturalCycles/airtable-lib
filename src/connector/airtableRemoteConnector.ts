@@ -1,6 +1,7 @@
-import { _filterObject, _mapValues, pMap, StringMap } from '@naturalcycles/js-lib'
-import { AirtableApi } from '../airtable.api'
-import {
+import type { StringMap } from '@naturalcycles/js-lib'
+import { _filterObject, _mapValues, pMap } from '@naturalcycles/js-lib'
+import type { AirtableApi } from '../airtable.api.js'
+import type {
   AirtableAttachment,
   AirtableAttachmentUpload,
   AirtableBaseDaoCfg,
@@ -8,9 +9,9 @@ import {
   AirtableDaoOptions,
   AirtableDaoSaveOptions,
   AirtableRecord,
-} from '../airtable.model'
-import { isArrayOfAttachments } from '../airtable.util'
-import { AirtableTableDao } from '../airtableTableDao'
+} from '../airtable.model.js'
+import { isArrayOfAttachments } from '../airtable.util.js'
+import { AirtableTableDao } from '../airtableTableDao.js'
 
 export const AIRTABLE_CONNECTOR_REMOTE = Symbol('AIRTABLE_CONNECTOR_JSON')
 

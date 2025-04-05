@@ -6,20 +6,23 @@ import {
   objectSchema,
   stringSchema,
 } from '@naturalcycles/nodejs-lib'
-import { AIRTABLE_CONNECTOR_JSON, AirtableJsonConnector, AirtableRemoteConnector } from '..'
-import { AirtableApi } from '../airtable.api'
+import type { AirtableApi } from '../airtable.api.js'
+import type { AirtableAttachment, AirtableRecord } from '../airtable.model.js'
 import {
-  AirtableAttachment,
   airtableAttachmentsSchema,
   airtableMultipleLinkSchema,
-  AirtableRecord,
   airtableRecordSchema,
   airtableSingleLinkSchema,
-} from '../airtable.model'
-import { AirtableBaseDao } from '../airtableBaseDao'
-import { AirtableBasesDao } from '../airtableBasesDao'
-import { AirtableTableDao } from '../airtableTableDao'
-import { cacheDir } from '../paths.cnst'
+} from '../airtable.model.js'
+import { AirtableBaseDao } from '../airtableBaseDao.js'
+import { AirtableBasesDao } from '../airtableBasesDao.js'
+import { AirtableTableDao } from '../airtableTableDao.js'
+import {
+  AIRTABLE_CONNECTOR_JSON,
+  AirtableJsonConnector,
+} from '../connector/airtableJsonConnector.js'
+import { AirtableRemoteConnector } from '../connector/airtableRemoteConnector.js'
+import { cacheDir } from '../paths.cnst.js'
 
 export interface BaseMap {
   TestBase: TestBase

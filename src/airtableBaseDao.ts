@@ -1,22 +1,14 @@
-import {
-  _assert,
-  _LogMethod,
-  _omit,
-  AnyObject,
-  InstanceId,
-  localTime,
-  StringMap,
-  UnixTimestamp,
-} from '@naturalcycles/js-lib'
+import type { AnyObject, InstanceId, StringMap, UnixTimestamp } from '@naturalcycles/js-lib'
+import { _assert, _LogMethod, _omit, localTime } from '@naturalcycles/js-lib'
 import { md5 } from '@naturalcycles/nodejs-lib'
-import {
+import type {
   AirtableBaseDaoCfg,
   AirtableConnector,
   AirtableDaoOptions,
   AirtableDaoSaveOptions,
   AirtableRecord,
-} from './airtable.model'
-import { sortAirtableBase } from './airtable.util'
+} from './airtable.model.js'
+import { sortAirtableBase } from './airtable.util.js'
 
 /**
  * Holds cache of Airtable Base (all tables, all records, indexed by `airtableId` for quick access).

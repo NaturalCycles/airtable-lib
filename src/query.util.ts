@@ -1,7 +1,8 @@
-import { DBQuery, DBQueryFilterOperator } from '@naturalcycles/db-lib'
-import { _uniq, ObjectWithId } from '@naturalcycles/js-lib'
-import { AirtableApiSelectOpts } from './airtable.api'
-import { AirtableDBOptions } from './airtableDB'
+import type { DBQuery, DBQueryFilterOperator } from '@naturalcycles/db-lib'
+import type { ObjectWithId } from '@naturalcycles/js-lib'
+import { _uniq } from '@naturalcycles/js-lib'
+import type { AirtableApiSelectOpts } from './airtable.api.js'
+import type { AirtableDBOptions } from './airtableDB.js'
 
 const OP_MAP: Partial<Record<DBQueryFilterOperator, string>> = {
   '==': '=',

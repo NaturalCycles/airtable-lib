@@ -1,13 +1,14 @@
 import { AppError } from '@naturalcycles/js-lib'
-import { AirtableErrorCode } from './airtable.model'
-import { AirtableLib } from './airtableLib'
-import { mockTableDao1 } from './test/airtable.mock'
+import { expect, test } from 'vitest'
+import { AirtableErrorCode } from './airtable.model.js'
+import { AirtableLib } from './airtableLib.js'
+import { mockTableDao1 } from './test/airtable.mock.js'
 
 test('wrong apiKey should throw', async () => {
   const airtableLib = new AirtableLib({
     apiKey: 'apiKey123',
   })
-  const tableDao = mockTableDao1(airtableLib.api(), 'someBaseId')
+  const tableDao = mockTableDao1(await airtableLib.api(), 'someBaseId')
 
   // await expect(airtableService.getRecords('someBaseId.someTable')).rejects.toThrow(AppError)
   const err = await tableDao.getRecords().catch(err2 => err2)
@@ -26,7 +27,9 @@ test('api', async () => {
     apiKey: 'apiKey123',
   })
 
-  const api = airtableLib.api()
+  const api = await airtableLib.api()
   // console.log(api)
   expect(api).toBeDefined()
+  expect(api.base).toBeDefined()
+  expect(typeof api.base).toBe('function')
 })

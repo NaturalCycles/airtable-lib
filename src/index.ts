@@ -1,45 +1,47 @@
-import {
+import type {
   AirtableAttachment,
-  airtableAttachmentSchema,
-  airtableAttachmentsSchema,
   AirtableBaseDaoCfg,
   AirtableConnector,
   AirtableDaoOptions,
-  AirtableErrorCode,
   AirtableId,
-  airtableIdSchema,
   AirtableLibCfg,
-  airtableMultipleLinkSchema,
   AirtableRecord,
-  airtableRecordSchema,
-  airtableSingleLinkSchema,
   AirtableTableCfg,
   AirtableTableCfgMap,
   AirtableThumbnail,
   AirtableThumbnails,
-  airtableThumbnailSchema,
-} from './airtable.model'
-import { sortAirtableBase } from './airtable.util'
-import { AirtableBaseDao } from './airtableBaseDao'
-import { AirtableBasesDao } from './airtableBasesDao'
+} from './airtable.model.js'
 import {
-  AirtableDB,
+  airtableAttachmentSchema,
+  airtableAttachmentsSchema,
+  AirtableErrorCode,
+  airtableIdSchema,
+  airtableMultipleLinkSchema,
+  airtableRecordSchema,
+  airtableSingleLinkSchema,
+  airtableThumbnailSchema,
+} from './airtable.model.js'
+import { sortAirtableBase } from './airtable.util.js'
+import { AirtableBaseDao } from './airtableBaseDao.js'
+import { AirtableBasesDao } from './airtableBasesDao.js'
+import type {
   AirtableDBCfg,
   AirtableDBOptions,
   AirtableDBSaveOptions,
   AirtableDBStreamOptions,
-} from './airtableDB'
-import { AirtableLib } from './airtableLib'
-import { AirtableTableDao } from './airtableTableDao'
+} from './airtableDB.js'
+import { AirtableDB } from './airtableDB.js'
+import { AirtableLib } from './airtableLib.js'
+import { AirtableTableDao } from './airtableTableDao.js'
+import type { AirtableJsonConnectorCfg } from './connector/airtableJsonConnector.js'
 import {
   AIRTABLE_CONNECTOR_JSON,
   AirtableJsonConnector,
-  AirtableJsonConnectorCfg,
-} from './connector/airtableJsonConnector'
+} from './connector/airtableJsonConnector.js'
 import {
   AIRTABLE_CONNECTOR_REMOTE,
   AirtableRemoteConnector,
-} from './connector/airtableRemoteConnector'
+} from './connector/airtableRemoteConnector.js'
 
 export type {
   AirtableAttachment,

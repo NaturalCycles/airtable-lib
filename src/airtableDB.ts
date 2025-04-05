@@ -1,36 +1,33 @@
 import { Readable } from 'node:stream'
-import {
-  BaseCommonDB,
+import type {
   CommonDB,
-  commonDBFullSupport,
   CommonDBOptions,
   CommonDBSaveOptions,
   CommonDBStreamOptions,
   CommonDBSupport,
-  CommonDBType,
   DBQuery,
-  queryInMemory,
   RunQueryResult,
 } from '@naturalcycles/db-lib'
 import {
-  _by,
-  _mapValues,
-  _omit,
-  AnyObject,
-  AppError,
-  ObjectWithId,
-  pMap,
-} from '@naturalcycles/js-lib'
-import { _inspect, ReadableTyped } from '@naturalcycles/nodejs-lib'
-import {
+  BaseCommonDB,
+  commonDBFullSupport,
+  CommonDBType,
+  queryInMemory,
+} from '@naturalcycles/db-lib'
+import { _Memo, type AnyObject, type ObjectWithId } from '@naturalcycles/js-lib'
+import { _by, _mapValues, _omit, AppError, pMap } from '@naturalcycles/js-lib'
+import type { ReadableTyped } from '@naturalcycles/nodejs-lib'
+import { _inspect } from '@naturalcycles/nodejs-lib'
+import type {
   AirtableApi,
   AirtableApiRecord,
   AirtableApiSelectOpts,
   AirtableApiTable,
-} from './airtable.api'
-import { AirtableErrorCode, AirtableRecord } from './airtable.model'
-import { stripQueryStringFromAttachments } from './airtable.util'
-import { dbQueryToAirtableSelectOptions } from './query.util'
+} from './airtable.api.js'
+import type { AirtableRecord } from './airtable.model.js'
+import { AirtableErrorCode } from './airtable.model.js'
+import { stripQueryStringFromAttachments } from './airtable.util.js'
+import { dbQueryToAirtableSelectOptions } from './query.util.js'
 
 // biome-ignore lint/correctness/noUnusedVariables: ok
 export interface AirtableDBCfg<BASE = any> {
@@ -93,20 +90,22 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   constructor(public cfg: AirtableDBCfg) {
     super()
+  }
+
+  @_Memo()
+  async api(): Promise<AirtableApi> {
     // lazy-loading the library
-    const airtableApi = require('airtable') as AirtableApi
+    const airtableApi = (await import('airtable')).default as any as AirtableApi
 
     airtableApi.configure({
       // endpointURL: 'https://api.airtable.com',
-      apiKey: cfg.apiKey,
+      apiKey: this.cfg.apiKey,
       // Default is 5 minutes, we override the default to 40 seconds
-      requestTimeout: cfg.requestTimeout || 40_000,
+      requestTimeout: this.cfg.requestTimeout || 40_000,
     })
 
-    this.api = airtableApi
+    return airtableApi
   }
-
-  api: AirtableApi
 
   override async ping(): Promise<void> {
     // impossible to implement without having a baseId and a known Table name there
@@ -157,7 +156,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     ).map(r => r.airtableId)
 
     // step 2: delete by airtableIds
-    const tableApi = this.tableApi<ObjectWithId>(table)
+    const tableApi = await this.tableApi<ObjectWithId>(table)
 
     await pMap(
       airtableIds,
@@ -238,7 +237,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
   ): Promise<number> {
     const { rows } = await this.runQuery<ROW & AirtableRecord>(q.select([]), opt)
 
-    const tableApi = this.tableApi<ObjectWithId>(q.table)
+    const tableApi = await this.tableApi<ObjectWithId>(q.table)
 
     await pMap(
       rows.map(r => r.airtableId),
@@ -273,7 +272,7 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     return readable
   }
 
-  private tableApi<ROW extends ObjectWithId>(table: string): AirtableApiTable<ROW> {
+  private async tableApi<ROW extends ObjectWithId>(table: string): Promise<AirtableApiTable<ROW>> {
     let { baseId } = this.cfg
 
     if (!baseId) {
@@ -286,7 +285,8 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
       table = a[1]!
     }
 
-    return this.api.base(baseId)<ROW>(table)
+    const api = await this.api()
+    return api.base(baseId)<ROW>(table)
   }
 
   private async queryAirtableRecords<ROW extends ObjectWithId>(
@@ -295,7 +295,8 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     opt: AirtableDBOptions,
     q?: DBQuery<ROW>,
   ): Promise<ROW[]> {
-    const records = await this.tableApi<ROW>(table)
+    const tableApi = await this.tableApi<ROW>(table)
+    const records = await tableApi
       .select({
         // defaults
         pageSize: 100,
@@ -334,7 +335,8 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
 
   async createRecord<ROW extends ObjectWithId>(table: string, record: Partial<ROW>): Promise<ROW> {
     // pre-save validation is skipped, cause we'll need to "omit" the `airtableId` from schema
-    const raw = await this.tableApi<ROW>(table)
+    const tableApi = await this.tableApi<ROW>(table)
+    const raw = await tableApi
       .create(_omit(record, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { record }))
 
@@ -346,7 +348,8 @@ export class AirtableDB extends BaseCommonDB implements CommonDB {
     airtableId: string,
     patch: Partial<ROW>,
   ): Promise<ROW> {
-    const raw = await this.tableApi<ROW>(table)
+    const tableApi = await this.tableApi<ROW>(table)
+    const raw = await tableApi
       .update(airtableId, _omit(patch, ['airtableId'] as any))
       .catch(err => this.onError(err, table, { airtableId, patch }))
 
