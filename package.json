@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@naturalcycles/db-lib": "^10",
-    "@naturalcycles/js-lib": "^14",
-    "@naturalcycles/nodejs-lib": "^13",
+    "@naturalcycles/js-lib": "^15",
+    "@naturalcycles/nodejs-lib": "^14",
     "airtable": "^0.12"
   },
   "devDependencies": {
-    "@naturalcycles/dev-lib": "^17",
+    "@naturalcycles/dev-lib": "^18",
     "@types/node": "^22",
     "@vitest/coverage-v8": "^3",
     "dotenv": "^16",

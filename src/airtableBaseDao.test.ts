@@ -1,4 +1,4 @@
-import { MOCK_TS_2018_06_21, mockTime } from '@naturalcycles/dev-lib/dist/testing/index.js'
+import { MOCK_TS_2018_06_21, mockTime } from '@naturalcycles/dev-lib/dist/testing/time.js'
 import { beforeEach, expect, test } from 'vitest'
 import { AirtableLib } from './airtableLib.js'
 import { AIRTABLE_CONNECTOR_JSON } from './connector/airtableJsonConnector.js'
